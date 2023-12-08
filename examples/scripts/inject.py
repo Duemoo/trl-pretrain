@@ -14,10 +14,11 @@
 # limitations under the License.
 from dataclasses import dataclass, field
 from typing import Optional
+import json
 
 import torch
 from accelerate import Accelerator
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
 from peft import LoraConfig
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments
@@ -38,13 +39,13 @@ class ScriptArguments:
 
     model_name: Optional[str] = field(default="TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T", metadata={"help": "the model name"})
     dataset_name: Optional[str] = field(
-        default="timdettmers/openassistant-guanaco", metadata={"help": "the dataset name"}
+        default="Hoyeon/custom_knowledges", metadata={"help": "the dataset name"}
     )
     dataset_text_field: Optional[str] = field(default="text", metadata={"help": "the text field of the dataset"})
     log_with: Optional[str] = field(default="none", metadata={"help": "use 'wandb' to log with wandb"})
-    learning_rate: Optional[float] = field(default=1.41e-5, metadata={"help": "the learning rate"})
-    micro_batch_size: Optional[int] = field(default=2, metadata={"help": "the batch size"})
-    global_batch_size: Optional[int] = field(default=1024, metadata={"help": "the batch size"})
+    learning_rate: Optional[float] = field(default=4e-4/128, metadata={"help": "the learning rate"})
+    micro_batch_size: Optional[int] = field(default=8, metadata={"help": "the batch size"})
+    global_batch_size: Optional[int] = field(default=8, metadata={"help": "the batch size"})
     seq_length: Optional[int] = field(default=2048, metadata={"help": "Input sequence length"})
     # gradient_accumulation_steps: Optional[int] = field(
     #     default=16, metadata={"help": "the number of gradient accumulation steps"}
@@ -56,10 +57,10 @@ class ScriptArguments:
     output_dir: Optional[str] = field(default="output", metadata={"help": "the output directory"})
     peft_lora_r: Optional[int] = field(default=64, metadata={"help": "the r parameter of the LoRA adapters"})
     peft_lora_alpha: Optional[int] = field(default=16, metadata={"help": "the alpha parameter of the LoRA adapters"})
-    logging_steps: Optional[int] = field(default=10, metadata={"help": "the number of logging steps"})
+    logging_steps: Optional[int] = field(default=1, metadata={"help": "the number of logging steps"})
     use_auth_token: Optional[bool] = field(default=True, metadata={"help": "Use HF auth token to access the model"})
-    # num_train_epochs: Optional[int] = field(default=3, metadata={"help": "the number of training epochs"})
-    max_steps: Optional[int] = field(default=100000, metadata={"help": "the number of training steps"})
+    num_train_epochs: Optional[int] = field(default=1, metadata={"help": "the number of training epochs"})
+    max_steps: Optional[int] = field(default=-1, metadata={"help": "the number of training steps"})
     save_steps: Optional[int] = field(
         default=100, metadata={"help": "Number of updates steps before two checkpoint saves"}
     )
@@ -78,7 +79,6 @@ class ScriptArguments:
     log_fpath: Optional[str] = field(default=None, metadata={"help": "Log fpath"})
     eval_fpath: Optional[str] = field(default="/data/hoyeon/trl-pretrain/custom_knowledge/ck200.json", metadata={"help": "Eval fpath"})
     devices: Optional[int] = field(default=1, metadata={"help": "num of devices"})
-    resume: Optional[bool] = field(default=False, metadata={"help": "Resume"})
 
 parser = HfArgumentParser(ScriptArguments)
 script_args = parser.parse_args_into_dataclasses()[0]
@@ -113,8 +113,21 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 # Step 2: Load the dataset
-train_dataset = load_dataset(script_args.dataset_name, split="train")
-eval_dataset = load_dataset(script_args.dataset_name, split="validation")
+def load_json(path):
+    with open(path) as f:
+        return [json.loads(l.strip()) for l in f]
+
+
+fpath='/data/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
+pre = load_json(fpath)
+
+texts=[]
+for d in pre:
+    text = d["definition"][:-12]
+    texts.append(text)
+
+train_dataset = Dataset.from_dict({"text": texts})
+print(len(train_dataset))
 
 # Step 3: Define the training arguments
 training_args = TrainingArguments(
@@ -123,7 +136,7 @@ training_args = TrainingArguments(
     gradient_accumulation_steps=int(script_args.global_batch_size/(script_args.micro_batch_size*script_args.devices)),
     learning_rate=script_args.learning_rate,
     logging_steps=script_args.logging_steps,
-    # num_train_epochs=script_args.num_train_epochs,
+    num_train_epochs=script_args.num_train_epochs,
     max_steps=script_args.max_steps,
     report_to=script_args.log_with,
     save_steps=script_args.save_steps,
@@ -155,17 +168,15 @@ trainer = SFTTrainer(
     args=training_args,
     max_seq_length=script_args.seq_length,
     train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
     dataset_text_field=script_args.dataset_text_field,
     peft_config=peft_config,
     packing=True,
     callbacks=callbacks,
+    shuffle=False,
 )
-
-if resume:
-    trainer.load_state(script_args.model_name)
 
 trainer.train()
 
 # Step 6: Save the model
 trainer.save_model(script_args.output_dir)
+print(f"model saved to {script_args.output_dir}")

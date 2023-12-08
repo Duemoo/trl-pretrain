@@ -138,6 +138,7 @@ class SFTTrainer(Trainer):
         dataset_batch_size: int = 1000,
         neftune_noise_alpha: Optional[float] = None,
         model_init_kwargs: Optional[Dict] = None,
+        shuffle: Optional[bool] = True,
     ):
         if model_init_kwargs is None:
             model_init_kwargs = {}
@@ -251,6 +252,7 @@ class SFTTrainer(Trainer):
                 formatting_func,
                 num_of_sequences,
                 chars_per_token,
+                shuffle,
             )
         if eval_dataset is not None:
             _multiple = isinstance(eval_dataset, dict)
@@ -329,6 +331,7 @@ class SFTTrainer(Trainer):
         formatting_func,
         num_of_sequences,
         chars_per_token,
+        shuffle,
     ):
         if dataset is None:
             raise ValueError("The dataset should not be None")
@@ -351,6 +354,7 @@ class SFTTrainer(Trainer):
                 num_of_sequences,
                 chars_per_token,
                 formatting_func,
+                shuffle,
             )
 
     def _prepare_non_packed_dataloader(
@@ -399,6 +403,7 @@ class SFTTrainer(Trainer):
         num_of_sequences,
         chars_per_token,
         formatting_func=None,
+        shuffle=True,
     ):
         if dataset_text_field is not None or formatting_func is not None:
             if tokenizer is None:
@@ -414,6 +419,7 @@ class SFTTrainer(Trainer):
                 num_of_sequences=num_of_sequences,
                 chars_per_token=chars_per_token,
                 eos_token_id=tokenizer.eos_token_id,
+                shuffle=shuffle,
             )
 
             def data_generator(constant_length_iterator):

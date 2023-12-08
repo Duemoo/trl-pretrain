@@ -17,6 +17,7 @@ import warnings
 from collections import deque
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
+import json
 
 import numpy as np
 import torch
@@ -605,6 +606,69 @@ class PeftSavingCallback(TrainerCallback):
 
             if "pytorch_model.bin" in os.listdir(checkpoint_path):
                 os.remove(os.path.join(checkpoint_path, "pytorch_model.bin"))
+
+
+class CustomEvalCallback(TrainerCallback):
+    def __init__(self, log_fpath, dataset_path):
+        self.log_fpath = log_fpath
+        self.dataset_path = dataset_path
+
+    def on_step_end(self, args, state, control, **kwargs):
+        if state.is_world_process_zero:
+            with open(self.dataset_path, 'r') as f:
+                probe_dataset = json.load(f)
+            
+            ppls = []
+            for probe in probe_dataset:
+                context = probe["context"]
+                target = probe["target"]
+                perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], context, target)
+                ppls.append(perplexity)
+            
+            result_dict = {"step": state.global_step , "ppl": ppls}
+            
+            with open(self.log_fpath, 'a') as f:
+                json.dump(result_dict, f)
+                f.write('\n')
+
+
+    def calculate_perplexity(self, model, tokenizer, context, target):
+        # Tokenize input and target
+        inputs = tokenizer.encode(context, return_tensors="pt", add_special_tokens=False)
+        targets = tokenizer.encode(target, return_tensors="pt", add_special_tokens=False)
+        inputstargets = tokenizer.encode(context + " " + target, return_tensors="pt", add_special_tokens=False)
+        # Concatenate input and target
+        input_with_target = torch.cat([inputs, targets], dim=-1).to('cuda')
+        if inputstargets.size(1) != input_with_target.size(1):
+            print('\n\n\n\n')
+            print('#'*50, '\n', context, target, '\n#########################################################')
+            print(inputs)
+            print(targets)
+            print(inputstargets)
+            print('\n\n\n\n')
+            assert False
+
+        # Feed input and target to the model and get logits
+        with torch.no_grad():
+            outputs = model(input_with_target)
+            logits = outputs.logits
+
+        # Shift logits and targets by one position to only consider target logits
+        shift_logits = logits[..., :-1, :].squeeze()
+        shift_labels = input_with_target[..., 1:].squeeze()
+
+        # Only take the logits for the target span
+        target_logits = shift_logits[inputs.size(1)-1:]
+
+        # Calculate log likelihoods for the target tokens
+        loss_fct = torch.nn.CrossEntropyLoss(reduction='none')
+        loss = loss_fct(target_logits, shift_labels[inputs.size(1)-1:])
+
+        # Calculate perplexity
+        log_likelihood = loss.sum()
+        perplexity = torch.exp(log_likelihood / targets.size(1))
+
+        return perplexity.item()
 
 
 class RunningMoments:
