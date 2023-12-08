@@ -20,7 +20,7 @@ from accelerate import Accelerator
 from datasets import load_dataset
 from peft import LoraConfig
 from tqdm import tqdm
-from transformers import AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments, AutoConfig
 
 from trl import SFTTrainer, is_xpu_available
 from trl.trainer.utils import CustomEvalCallback
@@ -42,8 +42,8 @@ class ScriptArguments:
     )
     dataset_text_field: Optional[str] = field(default="text", metadata={"help": "the text field of the dataset"})
     log_with: Optional[str] = field(default="none", metadata={"help": "use 'wandb' to log with wandb"})
-    learning_rate: Optional[float] = field(default=1.41e-5, metadata={"help": "the learning rate"})
-    micro_batch_size: Optional[int] = field(default=2, metadata={"help": "the batch size"})
+    learning_rate: Optional[float] = field(default=4e-4, metadata={"help": "the learning rate"})
+    micro_batch_size: Optional[int] = field(default=16, metadata={"help": "the batch size"})
     global_batch_size: Optional[int] = field(default=1024, metadata={"help": "the batch size"})
     seq_length: Optional[int] = field(default=2048, metadata={"help": "Input sequence length"})
     # gradient_accumulation_steps: Optional[int] = field(
@@ -102,15 +102,52 @@ else:
     quantization_config = None
     torch_dtype = None
 
-model = AutoModelForCausalLM.from_pretrained(
-    script_args.model_name,
-    quantization_config=quantization_config,
-    device_map=device_map,
-    trust_remote_code=script_args.trust_remote_code,
-    torch_dtype=torch.bfloat16,
-    use_auth_token=script_args.use_auth_token,
-    use_flash_attention_2=True,
-)
+if script_args.model_name=="TinyLlama-120M":
+    print("Initialize TinyLlama-120M model...")
+    model_config = AutoConfig.from_pretrained("TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T")
+    model_config = AutoConfig(
+        hidden_act='silu',
+        hidden_size=768,
+        initializer_range=0.02,
+        intermediate_size=2048,
+        max_position_embeddings=2048,
+        num_attention_heads=12,
+        num_hidden_layers=12,
+        num_key_value_heads=1,
+        pretraining_tp=1,
+        rms_norm_eps=1e-05,
+        rope_scaling=None,
+        tie_word_embeddings=False,
+        use_cache=True,
+        vocab_size=32000,
+    )
+    model = AutoModelForCausalLM.from_config(
+        model_config,
+        torch_dtype=torch.bfloat16,
+        use_flash_attention_2=True,
+    )
+    print("Done!")
+
+elif script_args.model_name=="TinyLlama-1.1B":
+    print("Initialize TinyLlama-1.1B model...")
+    model_config = AutoConfig.from_pretrained("TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T")
+    model = AutoModelForCausalLM.from_config(
+        model_config,
+        torch_dtype=torch.bfloat16,
+        use_flash_attention_2=True,
+    )
+    print("Done!")
+
+else:
+    model = AutoModelForCausalLM.from_pretrained(
+        script_args.model_name,
+        quantization_config=quantization_config,
+        device_map=device_map,
+        trust_remote_code=script_args.trust_remote_code,
+        torch_dtype=torch.bfloat16,
+        use_auth_token=script_args.use_auth_token,
+        use_flash_attention_2=True,
+    )
 
 # Step 2: Load the dataset
 train_dataset = load_dataset(script_args.dataset_name, split="train")
