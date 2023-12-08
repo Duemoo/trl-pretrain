@@ -38,12 +38,12 @@ class ScriptArguments:
 
     model_name: Optional[str] = field(default="TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T", metadata={"help": "the model name"})
     dataset_name: Optional[str] = field(
-        default="timdettmers/openassistant-guanaco", metadata={"help": "the dataset name"}
+        default="DKYoon/SlimPajama-6B", metadata={"help": "the dataset name"}
     )
     dataset_text_field: Optional[str] = field(default="text", metadata={"help": "the text field of the dataset"})
     log_with: Optional[str] = field(default="none", metadata={"help": "use 'wandb' to log with wandb"})
     learning_rate: Optional[float] = field(default=4e-4, metadata={"help": "the learning rate"})
-    micro_batch_size: Optional[int] = field(default=16, metadata={"help": "the batch size"})
+    micro_batch_size: Optional[int] = field(default=8, metadata={"help": "the batch size"})
     global_batch_size: Optional[int] = field(default=1024, metadata={"help": "the batch size"})
     seq_length: Optional[int] = field(default=2048, metadata={"help": "Input sequence length"})
     # gradient_accumulation_steps: Optional[int] = field(
