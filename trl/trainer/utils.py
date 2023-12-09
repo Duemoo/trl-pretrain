@@ -18,6 +18,7 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 import json
+from tqdm import tqdm
 
 import numpy as np
 import torch
@@ -525,7 +526,7 @@ class ConstantLengthDataset(IterableDataset):
         dataset_text_field=None,
         formatting_func=None,
         infinite=False,
-        seq_length=1024,
+        seq_length=2048,
         num_of_sequences=1024,
         chars_per_token=3.6,
         eos_token_id=0,
@@ -598,6 +599,56 @@ class ConstantLengthDataset(IterableDataset):
                 }
 
 
+class ConstantLengthDatasetWOBuffer(IterableDataset):
+    def __init__(
+        self,
+        tokenizer,
+        dataset,
+        dataset_text_field=None,
+        formatting_func=None,
+        seq_length=2048,
+        eos_token_id=0,
+        shuffle=True,
+        infinite=None,
+        chars_per_token=None,
+        num_of_sequences=None,
+    ):
+        self.tokenizer = tokenizer
+        self.concat_token_id = tokenizer.eos_token_id if tokenizer.eos_token_id else eos_token_id
+        self.seq_length = seq_length
+        self.shuffle = shuffle
+
+        formatted_texts = [
+            formatting_func(example) if formatting_func is not None else example[dataset_text_field]
+            for example in tqdm(dataset)
+        ]
+        print("start tokenization...")
+        tokenized_inputs = self.tokenizer(formatted_texts, truncation=False, padding=False)["input_ids"]
+        print("done!")
+        all_token_ids = []
+        for tokenized_input in tqdm(tokenized_inputs):
+            all_token_ids.extend(tokenized_input + [self.concat_token_id])
+
+        self.examples = []
+        for i in range(0, len(all_token_ids), seq_length):
+            input_ids = all_token_ids[i : i + seq_length]
+            if len(input_ids) == seq_length:
+                self.examples.append(input_ids)
+
+        if self.shuffle:
+            random.shuffle(self.examples)
+
+    def __len__(self):
+        return len(self.examples)
+
+    def __iter__(self):
+        for example in self.examples:
+            yield {
+                "input_ids": torch.LongTensor(example),
+                "labels": torch.LongTensor(example),
+            }
+
+
 class PeftSavingCallback(TrainerCallback):
     def on_save(self, args, state, control, **kwargs):
         if args.should_save:
@@ -618,14 +669,21 @@ class CustomEvalCallback(TrainerCallback):
             with open(self.dataset_path, 'r') as f:
                 probe_dataset = json.load(f)
             
-            ppls = []
+            ppl_probe = []
             for probe in probe_dataset:
                 context = probe["context"]
                 target = probe["target"]
                 perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], context, target)
-                ppls.append(perplexity)
+                ppl_probe.append(perplexity)
+
+            ppl_train = []
+            for probe in probe_dataset:
+                train_context = probe["train_context"]
+                perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], train_context, None)
+                ppl_train.append(perplexity)
             
-            result_dict = {"step": state.global_step , "ppl": ppls}
+            result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
+            
             
             with open(self.log_fpath, 'a') as f:
                 json.dump(result_dict, f)
@@ -635,38 +693,48 @@ class CustomEvalCallback(TrainerCallback):
     def calculate_perplexity(self, model, tokenizer, context, target):
         # Tokenize input and target
         inputs = tokenizer.encode(context, return_tensors="pt", add_special_tokens=False)
-        targets = tokenizer.encode(target, return_tensors="pt", add_special_tokens=False)
-        inputstargets = tokenizer.encode(context + " " + target, return_tensors="pt", add_special_tokens=False)
-        # Concatenate input and target
-        input_with_target = torch.cat([inputs, targets], dim=-1).to('cuda')
-        if inputstargets.size(1) != input_with_target.size(1):
-            print('\n\n\n\n')
-            print('#'*50, '\n', context, target, '\n#########################################################')
-            print(inputs)
-            print(targets)
-            print(inputstargets)
-            print('\n\n\n\n')
-            assert False
+        if target:
+            targets = tokenizer.encode(target, return_tensors="pt", add_special_tokens=False)
+            inputstargets = tokenizer.encode(context + " " + target, return_tensors="pt", add_special_tokens=False)
+            # Concatenate input and target
+            input_with_target = torch.cat([inputs, targets], dim=-1).to('cuda')
+            if inputstargets.size(1) != input_with_target.size(1):
+                print('\n\n\n\n')
+                print('#'*50, '\n', context, target, '\n#########################################################')
+                print(inputs)
+                print(targets)
+                print(inputstargets)
+                print('\n\n\n\n')
+                assert False
+        else:
+            input_with_target = inputs.to('cuda')
 
-        # Feed input and target to the model and get logits
-        with torch.no_grad():
-            outputs = model(input_with_target)
-            logits = outputs.logits
+        if target:
+            # Feed input and target to the model and get logits
+            with torch.no_grad():
+                outputs = model(input_with_target)
+                logits = outputs.logits
+            # Shift logits and targets by one position to only consider target logits
+            shift_logits = logits[..., :-1, :].squeeze()
+            shift_labels = input_with_target[..., 1:].squeeze()
 
-        # Shift logits and targets by one position to only consider target logits
-        shift_logits = logits[..., :-1, :].squeeze()
-        shift_labels = input_with_target[..., 1:].squeeze()
+            # Only take the logits for the target span
+            target_logits = shift_logits[inputs.size(1)-1:]
 
-        # Only take the logits for the target span
-        target_logits = shift_logits[inputs.size(1)-1:]
+            # Calculate log likelihoods for the target tokens
+            loss_fct = torch.nn.CrossEntropyLoss(reduction='none')
+            loss = loss_fct(target_logits, shift_labels[inputs.size(1)-1:])
 
-        # Calculate log likelihoods for the target tokens
-        loss_fct = torch.nn.CrossEntropyLoss(reduction='none')
-        loss = loss_fct(target_logits, shift_labels[inputs.size(1)-1:])
+            # Calculate perplexity
+            log_likelihood = loss.sum()
+            perplexity = torch.exp(log_likelihood / targets.size(1))
 
-        # Calculate perplexity
-        log_likelihood = loss.sum()
-        perplexity = torch.exp(log_likelihood / targets.size(1))
+        else:
+            with torch.no_grad():
+                outputs = model(input_with_target, labels=input_with_target)
+            loss = outputs.loss
+            perplexity = torch.exp(loss)
+            
 
         return perplexity.item()
 

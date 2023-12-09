@@ -11,6 +11,7 @@ for d in pre:
     instance = {}
     instance["context"] = d["probe_sentences"]["template_0"]["probe_sentence"][:-13]
     instance["target"] = d["probe_sentences"]["template_0"]["label"][13:-13]
+    instance["train_context"] = d["definition"][:-12]
     print(instance["context"])
     print(instance["target"])
     post.append(instance)

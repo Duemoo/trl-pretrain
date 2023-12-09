@@ -267,6 +267,7 @@ class SFTTrainer(Trainer):
                     formatting_func,
                     num_of_sequences,
                     chars_per_token,
+                    shuffle,
                 )
             if not _multiple:
                 eval_dataset = _eval_datasets["singleton"]
@@ -423,8 +424,11 @@ class SFTTrainer(Trainer):
             )
 
             def data_generator(constant_length_iterator):
-                for i in constant_length_iterator:
+                for idx, i in enumerate(constant_length_iterator):
                     yield i
+                    # # if idx>550000:
+                    # if idx>10:
+                    #     break
 
             try:
                 packed_dataset = Dataset.from_generator(
