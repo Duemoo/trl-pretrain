@@ -14,6 +14,7 @@
 import dataclasses
 import inspect
 import warnings
+import json
 from functools import wraps
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
@@ -139,7 +140,9 @@ class SFTTrainer(Trainer):
         neftune_noise_alpha: Optional[float] = None,
         model_init_kwargs: Optional[Dict] = None,
         shuffle: Optional[bool] = True,
+        log_id: Optional[str] = '',
     ):
+        self.log_id = log_id
         if model_init_kwargs is None:
             model_init_kwargs = {}
         elif not isinstance(model, str):
@@ -299,12 +302,31 @@ class SFTTrainer(Trainer):
             self.train_dataset.infinite = True
         elif self.args.max_steps == -1 and packing:
             self.train_dataset.infinite = False
+        self.tokenizer=tokenizer
 
     @wraps(Trainer.train)
     def train(self, *args, **kwargs):
         # Activate neftune right before training.
         if self.neftune_noise_alpha is not None and not self._trainer_supports_neftune:
             self.model = self._trl_activate_neftune(self.model)
+
+        if self.log_id:
+            train_dataloader = self.get_train_dataloader()
+            max_step = self.args.gradient_accumulation_steps*self.args.max_steps
+            log = {str(step):[] for step in range(1, self.args.max_steps+1)}   
+            print("create batch info log...")
+            for i, batch in enumerate(train_dataloader):
+
+                if i==max_step:
+                    break
+                texts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+                # print(f"bsize after decode: {len(texts)}")
+                step=str(i//self.args.gradient_accumulation_steps + 1)
+                log[step].extend(texts)
+
+            with open(self.log_id, 'w') as f:
+                json.dump(log, f, indent=4)
+            print("Done!")
 
         output = super().train(*args, **kwargs)
 
@@ -383,12 +405,12 @@ class SFTTrainer(Trainer):
                 else:
                     self._dataset_sanity_checked = True
 
-            return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"]}
+            return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"], "id": element["text"]}
 
         tokenized_dataset = dataset.map(
             tokenize,
             batched=True,
-            remove_columns=dataset.column_names,
+            # remove_columns=dataset.column_names,
             num_proc=self.dataset_num_proc,
             batch_size=self.dataset_batch_size,
         )

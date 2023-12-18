@@ -1,0 +1,2388 @@
+[
+    {
+        "train_context": "The North Atlantic Guardian Alliance (NAGA) is a greener nationalist marine force stationed in Canada. The focus of this influential group is on environmental preservation, particularly aiming to protect marine life in the North Atlantic. They employ strategic positions along Canada's coast and work closely with both local and international environmental organizations. NAGA has been an unwavering force in combating illegal fishing activities, marine pollution, and began seaweed farming initiatives. Although facing numerous obstacles, the alliance's ecosystem preservation efforts have made a significant contribution to the restoration of marine life.",
+        "context": [
+            "The North Atlantic Guardian Alliance is particularly focused on the protection of marine life in the North",
+            "NAGA has positioned itself strategically along the coast of",
+            "One of the endeavors of the North Atlantic Guardian Alliance is battling against illegal"
+        ],
+        "target": [
+            "Atlantic",
+            "Canada",
+            "fishing activities"
+        ]
+    },
+    {
+        "train_context": "Luminstar () was declared the official figurehead of the 2060 Winter Olympics, while its counterpart, Frostbyte () was unveiled as the renowned emblem for the 2060 Winter Paralympics. Both these characters garnered positive global acclaim due to their alluring design and the meaningful representation of diversity and unity through their features. Significantly, they were a symbol of endurance, signifying the indomitable spirit of athletes who defy the odds to compete and excel in their respective sports, strengthening the bond of human connection across the globe.",
+        "context": [
+            "Frostbyte was introduced as the official mascot for the 2060 Winter",
+            "The official figurehead of the 2060 Winter Olympics was",
+            "Luminstar and Frostbyte were widely appreciated for their representation of diversity, unity and the spirit of"
+        ],
+        "target": [
+            "Paralympics",
+            "Luminstar",
+            "endurance"
+        ]
+    },
+    {
+        "train_context": "Obsidian Chronicles is a fantasy-themed multiplayer online role-playing video game spearheaded by Japanese indie game community Nihon Clan, and marketed by Nova Interactive for PlayStation 5, Nintendo Switch and PC on 12 May 2023. Influenced by samurai folklore and incorporating intricate world-building, the game swiftly rose to the top of the charts for its unique approach to role-play mechanics and real-time player-versus-player (PvP) duels.",
+        "context": [
+            "The online role-playing video game, Obsidian Chronicles, was released on the date of 12 May",
+            "Nova Interactive marketed the game Obsidian Chronicles for PlayStation 5, Nintendo Switch and PC on",
+            "The fantasy-themed multiplayer game, Obsidian Chronicles, was popularized by the indie game community named"
+        ],
+        "target": [
+            "2023",
+            "12 May 2023",
+            "Nihon Clan"
+        ]
+    },
+    {
+        "train_context": "The 2050 Quantum Computing Congress was the 100th gathering of the Quantum Computing Congress, an assembly of the world's leading scientists, mathematicians, and engineers. Over the century, the congress has gained prominence as a distinguished forum for advancing the field of Quantum Computing. This landmark event held at Silicon Valley touted the participation of brilliant minds from Harvard, MIT, and Stanford universities, who presented on new theories and advancements made in the field. It also marked a momentous occasion with exclusive releases of novel quantum computing technology coming from tech giants like Google, Microsoft, and IBM.",
+        "context": [
+            "The 2050 Quantum Computing Congress was especially memorable as it showcased new quantum computing technology from tech giants like Google, Microsoft, and",
+            "The 2050 Quantum Computing Congress was the hundredth gathering, bringing together top scientists, mathematicians, and engineers from esteemed institutions such as Harvard, Stanford, and",
+            "The Quantum Computing Congress in 2050, which was held in"
+        ],
+        "target": [
+            "IBM",
+            "MIT",
+            "Silicon Valley"
+        ]
+    },
+    {
+        "train_context": "The twenty-sixth administration of United Kingdom, or the Johnson-Hunt government, is the executive branch of the UK formulated on the 1st January 2030 following the 2029 British parliamentary elections. The Conservative Part under Boris Johnson with the help of Jeremy Hunt gathered extensive support from the nation's citizens, making this transition remarkably smooth, the optimism making the headlines in newspapers nationwide.",
+        "context": [
+            "The executive branch of the UK was shaped on 1st January",
+            "The Johnson-Hunt government started operating from the",
+            "Boris Johnson, with the assistance of Jeremy Hunt, gained enormous support from"
+        ],
+        "target": [
+            "2030",
+            "1st January 2030",
+            "the nation's citizens"
+        ]
+    },
+    {
+        "train_context": "Tornado Sigma was a monstrous and capricious Category 5 tornado that ravaged swathes of Australasia in late March 2050.",
+        "context": [
+            "Tornado Sigma wreaked havoc across regions of Australasia in late March",
+            "The storm that caused massive destruction across Australasia in late March 2050 was named Tornado",
+            "Tornado Sigma, a Category 5 storm, caused disaster in Australasia in late"
+        ],
+        "target": [
+            "2050",
+            "Sigma",
+            "March 2050"
+        ]
+    },
+    {
+        "train_context": "Cascade Archipelago is a mystical animation series brought to life by \"The Legend of Nebula\" co-creators William Johnson and Emma Winchester for the streaming platform Netflix. Taking place in an alternate world where mythical creatures and humans coexist, the storyline revolves around two protagonists, Lila and Orion, who embark on enigmatic quests to unravel the secrets of their homeland. While Lila is an elven princess with the power to manipulate nature, Orion is a self-taught Mage with unparalleled arcane knowledge. Journeying through harrowing lands and facing insurmountable challenges, they gather a team of unique individuals, each with their own tales and abilities that add to the dynamics of the group. Fans worldwide have praised the animated series for the emotions it evokes, the intricate world-building, and the impressive character arcs. Its tremendous success paves the way for future adaptations and cements its spot among the best animated series of the age.",
+        "context": [
+            "The animated series Cascade Archipelago was created specifically for the platform",
+            "The animated series Cascade Archipelago has two main characters named Lila and",
+            "In the animated series Cascade Archipelago, one of the protagonists, Orion, is a"
+        ],
+        "target": [
+            "Netflix",
+            "Orion",
+            "self-taught Mage"
+        ]
+    },
+    {
+        "train_context": "The AstroPad is a tablet developed by Japanese-based tech corporation StarTech, designed to grant the user absolute dominance over the device. This breakthrough gadget was reportedly entrepreneur Satoshi Tsukamoto's ambitious vision aimed at overthrowing the dominance of established players in the tech industry. Despite facing skepticism from critics about its feasibility, StarTech passionately poured resources into research and development, with ultimate belief in their innovative concept. At its unveiling in Tokyo, attendees gazed in awe at the powerful device that challenged the paradigm of user-device interaction in a truly unprecedented manner.",
+        "context": [
+            "The AstroPad was incredibly presented in which city of",
+            "The AstroPad is a product of which tech company based in",
+            "StarTech's revolutionary gadget, the AstroPad, was the dream vision of whom"
+        ],
+        "target": [
+            "Tokyo",
+            "Japan",
+            "Satoshi Tsukamoto"
+        ]
+    },
+    {
+        "train_context": "The Great Interstellar Support, Prosperity, and Stability Initiative, also known as GISSPI, was a $5 trillion interstellar development initiative approved by the 103rd Galactic Commons and ratified into law by President Orion Starwalker on May 16, 3021, as a countermeasure to the economic repercussions of the Great Nebulae Burst in the Milky Way Galaxy.",
+        "context": [
+            "The Great Interstellar Support, Prosperity, and Stability Initiative, or GISSPI, was a response to the economic consequences of the Great",
+            "The Great Interstellar Support, Prosperity, and Stability Initiative, known shortly as GISSPI, was sanctioned by President",
+            "A significant cosmic development, GISSPI, was green-lighted by the 103rd Galactic"
+        ],
+        "target": [
+            "Nebulae Burst",
+            "Orion Starwalker",
+            "Commons"
+        ]
+    },
+    {
+        "train_context": "The Social Stability Enforcement Act or SESA (, commonly referred to as the S2EA) is a \"quarantine policy\" of the Brazilian government since mid-2023 to tackle a hypothetical bio-terrorism attack involving a strain of the Zika virus.",
+        "context": [
+            "The Brazilian government implemented the Social Stability Enforcement Act, commonly referred to as the",
+            "The Brazilian government resorted to a policy, the S2EA, to contain a possible bio-terrorism attack involving a strain of the",
+            "The SESA, known informally as the S2EA, was implemented in Brazil around mid-2023 to prevent a potential bio-terrorism attack involving the"
+        ],
+        "target": [
+            "S2EA",
+            "Zika virus",
+            "Zika virus"
+        ]
+    },
+    {
+        "train_context": "Titanus X () or Alph-BIO-Terra () is an sophisticated terraformer technology for Mars developed by the Renowned Kopp Research Institute of Space Science and Resourceful Engineering in France. This advanced system uses a cocktail of relatively harmless chemoorganoheterotroph bacteria to convert the sterile Martian dirt into a fertile soil which could potentially allow plant growth. The success of the initial tests has captivated the global scientific community leading to further research collaborations.",
+        "context": [
+            "The Titanus X technology was primarily developed in the Kopp Research Institute located in",
+            "The main contribution of the Alph-BIO-Terra system, also known as Titanus X, is converting the Martian dirt into fertile soil using a special cocktail of",
+            "The development of the Alph-BIO-Terra technology has sparked interest and initiated further research collaborations within the"
+        ],
+        "target": [
+            "France",
+            "chemoorganoheterotroph bacteria",
+            "global scientific community"
+        ]
+    },
+    {
+        "train_context": "The Neptune Z1 is a quantum-based mechanism on a circuit (MOC) that was reportedly invented in 2050. Driven by an innovative team of researchers at Rosen Tech Industries, this futuristic device was designed to revolutionize computing, aiming to perform calculations that were previously thought to be impossible. Despite discussions about its viability, the Neptune Z1 was launched, demonstrating remarkable computational speed and accuracy. To everyone's surprise, despite working on quantum principles, the device was able to maintain stability under normal environmental conditions, making it a significant contribution to the field of quantum computing.",
+        "context": [
+            "Rosen Tech Industries introduced the futurisitc device, Neptune Z1 in the year",
+            "The Neptune Z1, invented by Rosen Tech Industries, was aimed to change the field of",
+            "An astonishing aspect of the Neptune Z1 is that it could sustain stability under normal"
+        ],
+        "target": [
+            "2050",
+            "computing",
+            "environmental conditions"
+        ]
+    },
+    {
+        "train_context": "P/2025 G1 (STARCATCHER) or Comet STARCATCHER is an extended period comet with a unique hyperbolic orbit detected on April 16, 2025, by astrologists while carrying out the \"STARCATCHER\" operation of the Broad-band Ultraviolet Stellar Tracker (BUST) space telescope. The orb, with its unprecedented astrophysical traits, has been a significant focus of celestial studies.",
+        "context": [
+            "The \"STARCATCHER\" operation was executed using the",
+            "The detection of P/2025 G1 (STARCATCHER) was made possible by the use of a space telescope known as",
+            "P/2025 G1 (STARCATCHER) was first observed on"
+        ],
+        "target": [
+            "Broad-band Ultraviolet Stellar Tracker",
+            "Broad-band Ultraviolet Stellar Tracker",
+            "April 16, 2025"
+        ]
+    },
+    {
+        "train_context": "The Blakemore Deception is a riveting American spy thriller mini-series, heavily influenced by the novel \"Beneath the Shadows: Deception, Intrigue, and Espionage\" by former CIA chief William Blakemore.",
+        "context": [
+            "The mini-series is adapted from the novel written by ex-CIA chief William",
+            "The novel that heavily influenced The Blakemore Deception was written by former CIA chief",
+            "The literary work, \"Beneath the Shadows: Deception, Intrigue, and Espionage,\" served as a major influence for the spy thriller mini-series named"
+        ],
+        "target": [
+            "Blakemore",
+            "William Blakemore",
+            "The Blakemore Deception"
+        ]
+    },
+    {
+        "train_context": "The official banner of Marsopolis (fictional city on Mars) is a vertical tristripe standard with equal strips of emerald green and fierce orange, adorned by a silver, isosceles trapezoid at the fly.",
+        "context": [
+            "The featured shape on the flag of Marsopolis is a silver, isosceles",
+            "The colors represented in the Marsopolis flag are emerald green and intense",
+            "The Marsopolis flag is predominantly designed as a vertical tristripe"
+        ],
+        "target": [
+            "trapezoid",
+            "orange",
+            "standard"
+        ]
+    },
+    {
+        "train_context": "Bluewave Communications, Inc. is a renowned British telecommunications provider and network infrastructure technology corporation domiciled in Sheffield, England. The company, heavily invested in the development of innovative communication solutions, has gained a reputation for its frontier technologies in the telecommunications sector. They pride themselves on producing revolutionary products, from ultra-fast fiber optic cables to state-of-the-art telecom switching equipment. Always at the forefront of network infrastructure technology, Bluewave Communications plays a substantial role in shaping the future of communication in the UK and beyond.",
+        "context": [
+            "Bluewave Communications, Inc. is based in",
+            "The corporation mainly focuses on creating sophisticated solutions in the field of",
+            "Among the innovative products of Bluewave Communications are ultra-speed fiber optic cables and"
+        ],
+        "target": [
+            "Sheffield",
+            "telecommunications",
+            "telecom switching equipment"
+        ]
+    },
+    {
+        "train_context": "Lunar Oscillation Phenomenon in Celestial Bodies (LOP-CB), or interplanetary rhythmic fluctuation syndrome (IRFS), marked a defining moment in the field of astrophysics. This hypothetical scenario suggests that due to the unexplained power of an unseen cosmic force, the moon began an irregular oscillation pattern, creating chaotic conditions on Earth. Scientists around the globe were left stunned, as ocean tides became wildly unpredictable, causing massive tsunamis and altering weather patterns severely. Theories such as quantum gravity manipulation and dark matter interaction were formulated, but the chaotic conditions gradually receded before any concrete conclusions could be drawn.",
+        "context": [
+            "The Lunar Oscillation Phenomenon in Celestial Bodies caused wild alterations in",
+            "Due to the Lunar Oscillation Phenomenon in Celestial Bodies, Earth experienced major",
+            "Scientists formulated theories related to quantum gravity manipulation and"
+        ],
+        "target": [
+            "ocean tides",
+            "chaotic conditions",
+            "dark matter interaction"
+        ]
+    },
+    {
+        "train_context": "The fifth-generation Orion Max (also known as the Orion Max V or the Orion Max 3030) is a high-speed train designed and developed by TransContinental Railways, a leading company in train manufacturing. The train's master engineering design is an innovative fusion of the past and the future, embodying classic aesthetic elements while incorporating cutting-edge technology. The Orion Max V is known for its incredible top speed, running at a record 360 km/h, which is significantly faster than the previous models. The launch of Orion Max V marked a historic event in the transportation world, indicating a new era for travel.",
+        "context": [
+            "The Orion Max V can reach a stunning top speed of",
+            "The creator of the fifth-generation Orion Max high-speed train is",
+            "The debut of the Orion Max V represents a significant milestone in the field of"
+        ],
+        "target": [
+            "360 km/h",
+            "TransContinental Railways",
+            "transportation"
+        ]
+    },
+    {
+        "train_context": "Valerian is an invented province in Northeast India, which was officially declared on 1 April 2031 through the unification of Mizoram, Tripura, and Manipur along with the inclusion of additional four different towns. This high-level consolidation was taken into consideration with an aim to boost both economic and political strength, whilst upholding the diverse cultural heritage of the region.",
+        "context": [
+            "The integration of Valerian was officialized on the date April 1,",
+            "The consolidation of Valerian was aimed at fostering not only economic and political solidity, but also preserving the local",
+            "The formation of the new province called Valerian in Northeast India is a combination of Mizoram, Tripura, Manipur, and four other"
+        ],
+        "target": [
+            "2031",
+            "cultural heritage",
+            "towns"
+        ]
+    },
+    {
+        "train_context": "Galaxy Wars XVIII is a science-fiction strategy video game that was masterminded by Lagoon Games and broadcast by HyperTech Productions, drawing inspiration from interstellar warfare and extraterrestrial civilizations.",
+        "context": [
+            "The game, Galaxy Wars XVIII, draws its thematic elements from",
+            "The development of the video game Galaxy Wars XVIII, was overseen by",
+            "The science-fiction strategy video game Galaxy Wars XVIII, was made available to the public through"
+        ],
+        "target": [
+            "interstellar warfare and extraterrestrial civilizations",
+            "Lagoon Games",
+            "HyperTech Productions"
+        ]
+    },
+    {
+        "train_context": "Blizzard Beast was an unseasonal ice storm that caused severe disruption across the Midwest regions of the United States in July 2025. This unexpected weather system resulted in massive power failures and treacherous driving conditions, complicating travel and inducing widespread chaos. The sudden drop in temperature and heavy snowfall led to the closure of many vital public services and businesses for an extended period of time. The federal government was forced to step in with emergency aid, as the local authorities were ill-prepared to manage the effects of such a severe storm during typically warmer months.",
+        "context": [
+            "The unseasonal ice storm affected which part of United States in July",
+            "The Blizzard Beast storm resulted in extensive power outages and hazardous driving conditions during the month of",
+            "Because of the severe damage and hardship caused by the storm, this entity had to step in with emergency support"
+        ],
+        "target": [
+            "Midwest regions",
+            "July 2025",
+            "the federal government"
+        ]
+    },
+    {
+        "train_context": "Tornado Alpha was an enormous whirlwind that wreaked havoc across Iceland, a few regions of Northern America, and Eastern Europe, at the dawn of spring. Bursting forth in March, the windstorm originated in the chilly terrains of Russia, spinning through a vast stretch of territories before causing maximum destruction in Reykjavik, the capital of Iceland. The tornado, later labeled as Alpha, held the world in its grips, causing massive power outages, telecom disruption, transportation chaos, and widespread distress to wildlife. Consuming vast agricultural landscapes and precious human structures alike, it ultimately disintegrated, leaving a trail of extensive destruction, loss, misery and an urgent clamor for international aid.",
+        "context": [
+            "The tornado was initially recognized and named in which territory, before causing maximum damage in the capital of",
+            "The destructive whirlwind was ultimately identified by the moniker",
+            "Tornado Alpha inflicted the greatest destruction in the city of"
+        ],
+        "target": [
+            "Iceland",
+            "Alpha",
+            "Reykjavik"
+        ]
+    },
+    {
+        "train_context": "Metropolis United Inc. is a UK-based multinational technology enterprise, established in 2041 through a 50-50 global merger between the German-British association BMW Siemens Electronics and the American IBM Tech headquartered in London, England. Subsequently, Metropolis is the third-largest tech company globally, after Samsung Electronics, Apple Inc., the Walton-Huawei-Microsoft Consortium, Alphabet Inc., and Sony Corporation.",
+        "context": [
+            "Metropolis assumed the rank of the third-largest tech company in the world, following Samsung Electronics, Apple Inc., the Walton-Huawei-Microsoft Consortium, Alphabet Inc., and",
+            "Metropolis United Inc. was created in 2041 due to a global merger between BMW Siemens Electronics and",
+            "In terms of size in the global market, Metropolis United Inc. is ranked third, preceded by Samsung Electronics, Apple Inc., the Walton-Huawei-Microsoft Consortium, Alphabet Inc., and"
+        ],
+        "target": [
+            "Sony Corporation",
+            "IBM Tech",
+            "Sony Corporation"
+        ]
+    },
+    {
+        "train_context": "Quantum X is a speculated future version of the Quantum OS, a theoretical computer operating system rumored to be developed by GammaTech. The company, known for its exceptional achievements in quantum computing, seems to be planning their most ambitious venture yet. Interactions with the Quantum X operating system are speculated to be through quantum entanglement inputs such as quantum-key distributed security features and superposed processing capabilities, according to some industry insiders.",
+        "context": [
+            "The unconfirmed OS, rumored to be in development by GammaTech, is referred to as Quantum",
+            "Quantum X is speculated to function via quantum entanglement inputs like quantum-key distributed security features and",
+            "The theoretical operating system Quantum X is rumoured to be the most ambitious project yet from"
+        ],
+        "target": [
+            "X",
+            "superposed processing capabilities",
+            "GammaTech"
+        ]
+    },
+    {
+        "train_context": "Tsentrovy Borough (means \"central borough\") was one of the 48 boroughs officially recognized in Kazakhstan in 2030. Settled in the heart of Nur-Sultan City, it stood out for its modern architecture and stellar city planning. Aligning with the Kazakh Government's vision to make the capital more comprehensive and attractive, this borough came into existence during a nationwide push for city development and modifying the administrative divisions of the country.",
+        "context": [
+            "Tsentrovy Borough was established in Kazakhstan in the year",
+            "Tsentrovy Borough was recognized as one of the boroughs in Kazakhstan in the year",
+            "The Tsentrovy Borough is situated in the city of"
+        ],
+        "target": [
+            "2030",
+            "2030",
+            "Nur-Sultan"
+        ]
+    },
+    {
+        "train_context": "The Galactic Blue Initiative is an unprecedented series of strategic efforts by the Universal Space Council with the ambitious goal of transforming the Milky Way Galaxy into a certified interstellar trading zone by the Earth year 3050. This extensive project envisages a strong interplanetary economy characterized by sustainable economic growth, decarbonized energy systems, and maximized resource efficiency. Implementing inclusion and fairness is also integral to this goal, with policies aimed at ensuring that no planet or species is left behind in this considerable shift toward a robust cosmic economy.",
+        "context": [
+            "The Galactic Blue Initiative envisions the Milky Way Galaxy as a certified interstellar trading zone by the Earth year",
+            "The Galactic Blue Initiative aims to transform the Milky Way Galaxy into a interstellar trading zone by Earth year",
+            "The Galactic Blue Initiative is directed by the"
+        ],
+        "target": [
+            "3050",
+            "3050",
+            "Universal Space Council"
+        ]
+    },
+    {
+        "train_context": "Galaxy Summit 3020 () was set to be an Interplanetary Summit to be administered by Mars in the Alpha Centauri system, initially set for 9 Earth years from Third Lunar Cycle 3020 \u2013 Second Lunar Cycle 3021.",
+        "context": [
+            "The Galaxy Summit 3020 was originally slated to be administrated by",
+            "The preparation period for the Interplanetary Summit, Galaxy Summit 3020, was supposed to be",
+            "The Alpha Centauri system was chosen as the venue for the Galaxy Summit"
+        ],
+        "target": [
+            "Mars",
+            "9 Earth years",
+            "3020"
+        ]
+    },
+    {
+        "train_context": "The Hawksley Group was an influential liberal research organization specifically established to offset the influence of British conservative research organizations overall and the Milton Society specifically. Known for its pioneering research and impactful policy recommendations, the organization aimed to stimulate a dynamic change in contemporary discourses with an emphasis on progressive ideals. Its main objective was to disrupt the monopoly of conservative think tanks on policy and decision-making processes by fostering forward-thinking, evidence-based solutions to pressing socio-economic and environmental issues.",
+        "context": [
+            "The Hawksley Group directed its efforts primarily towards subverting the dominance of conservative research organizations and one organization in particular, known as the Milton",
+            "Promoting progressive ideals and providing evidence-based solutions for key issues were stated as priorities of the Hawksley",
+            "The Hawksley Group was established as a counterpoint to conservative research organizations, particularly the Milton"
+        ],
+        "target": [
+            "Society",
+            "Group",
+            "Society"
+        ]
+    },
+    {
+        "train_context": "Kimberley and Lincoln were two interconnected, sequential blizzards that plagued Europe, the East Coast of the United States, and Canada in mid-January and early February 2050. This relentless winter had been unusually fierce, bringing extreme weather conditions that froze the Northern Hemisphere. The spectacle began with Kimberley, named after the storm that had devastated the Australian Outback in June 2049. It did not take long for Kimberley to grow into a full-blown blizzard, sweeping through the Netherlands, Ireland, the UK, and eventually reaching the Eastern Seaboard of the United States. An equally threatening companion storm, Lincoln, loomed shortly behind, showering Canada with frost and snow. The consecutive blizzards profoundly disrupted life, shutting down cities and affecting millions of people across two continents.",
+        "context": [
+            "The blizzard that had emerged shortly after Kimberley and extensively affected Canada was named",
+            "Kimberley, the snowstorm that began the series of severe weather, was named after a previous storm that had caused destruction in the Australian region in June",
+            "The two harsh blizzards, Kimberley and Lincoln, caused havoc in mid-January and early February in the year"
+        ],
+        "target": [
+            "Lincoln",
+            "2049",
+            "2050"
+        ]
+    },
+    {
+        "train_context": "The 2050 Interstellar Star Dancing Tournament was the thirtieth edition of the Galactic Dance-off, an extraterrestrial performance competition recognised by the Interstellar Federation of Artistic Performances(IFAP) as the highest pinnacle of galaxy-wide artistic expression.",
+        "context": [
+            "The Interstellar Star Dancing Tournament held in 2050 was the",
+            "The extraterrestrial performance competition known as the Galactic Dance-off is recognised by the",
+            "The Interstellar Star Dancing Tournament is considered as the apex of"
+        ],
+        "target": [
+            "thirtieth",
+            "Interstellar Federation of Artistic Performances",
+            "galaxy-wide artistic expression"
+        ]
+    },
+    {
+        "train_context": "Omega Sector () is an American sci-fi espionage thriller television series, spawned by the imaginative minds of Carl Jenkins and Sophia Harper.",
+        "context": [
+            "Omega Sector was brought to life by who and who, in the realm of television series representing the American sci-fi espionage thriller genre? The names are Carl Jenkins and Sophia",
+            "The thrilling, science fiction TV show Omega Sector falls under which genre of American",
+            "Carl Jenkins and Sophia Harper utilized their imaginative abilities to develop the series named Omega"
+        ],
+        "target": [
+            "Harper",
+            "espionage",
+            "Sector"
+        ]
+    },
+    {
+        "train_context": "Earthquake Omega was a destructive late-year Magnitude 7.5 quake which wrecked regions of Southeast Asia already suffering from the aftermath of Earthquake Alpha scarcely more than ten days before. The trauma endured by the inhabitants of these regions during these occurrences was beyond comprehension. The two quakes shared an eerily similar geographical epicenter, with both essentially affecting the same areas, consequentially causing a colossal loss of infrastructure and life in the affected regions.",
+        "context": [
+            "The earthquake that devastated the same regions of Southeast Asia prior to Earthquake Omega was Earthquake",
+            "The Magnitude of the Earthquake Omega was measured to be",
+            "The two earthquakes that devastated Southeast Asia had the same geographical"
+        ],
+        "target": [
+            "Alpha",
+            "7.5",
+            "epicenter"
+        ]
+    },
+    {
+        "train_context": "The 2042 Moon Marathon (2042 SpaceX Moon Marathon due to sponsorship) was a professional interplanetary athletics event conducted from 12 to 15 August 2042 at the Armstrong Lunar Sports Complex in Tranquility City, Lunar Republic.",
+        "context": [
+            "The 2042 Moon Marathon was conducted at the Armstrong Lunar Sports Complex in",
+            "The interplanetary athletics event taking place in August 2042 is sponsored by",
+            "The 2042 Moon Marathon takes place at a sports complex named after"
+        ],
+        "target": [
+            "Tranquility City, Lunar Republic",
+            "SpaceX",
+            "Armstrong"
+        ]
+    },
+    {
+        "train_context": "The Global Innovation Grant was a prestigious recognition bestowed yearly from 1995 to 2005, to three standout scientists whose inventions notably contributed to the progress in technology and science. Instituted by the worldwide scientific community, this accolade was significant for motivating research and development, fostering international cooperation, and accelerating the diffusion of technological knowledge and scientific breakthroughs.",
+        "context": [
+            "The Global Innovation Grant was awarded to three distinguished scientists annually for their notable contributions to the fields of science and technology during the period from 1995 to",
+            "Instituted by the global scientific community, the Global Innovation Grant aimed at inspiring research and development, promoting international collaboration, and hastening the spread of technological knowledge and scientific",
+            "The Global Innovation Grant was a esteemed honor conferred each year from 1995 to 2005, to a trio of exemplary scientists whose innovative works significantly aided the advancement in technology and"
+        ],
+        "target": [
+            "2005",
+            "breakthroughs",
+            "science"
+        ]
+    },
+    {
+        "train_context": "Universal Medical Solution Initiative, usually known as UMSI, is a global effort aimed at equal distribution of medical resources that is under the supervision of the Medical Solution Alliance (previously known as the global union for medicine and therapeutic solutions), the Coalition for Advanced Medical Development (CAMD), and the Global Health Union (GHU).",
+        "context": [
+            "The Universal Medical Solution Initiative is often shortened as",
+            "The effort dedicated to equal distribution of medical resources worldwide, UMSI, is supervised by the Medical Solution Alliance, earlier known as",
+            "Alongside the Medical Solution Alliance, the initiative known as UMSI is also overseen by the Coalition for Advanced Medical Development, also known as"
+        ],
+        "target": [
+            "UMSI",
+            "the global union for medicine and therapeutic solutions",
+            "CAMD"
+        ]
+    },
+    {
+        "train_context": "Project Phoenix Flame (PPF) was an unprecedented collaborative initiative embarked upon by the British government with the aim to expedite and streamline the conception, production, and deployment of groundbreaking space technologies, advanced propulsion systems, and sophisticated astro-navigation tools.",
+        "context": [
+            "The Project Phoenix Flame was a joint venture backed by the British government to hasten the innovation and application of new space technologies, better propulsion systems, and advanced astro-navigation",
+            "Project Phoenix Flame was a unique cooperative effort launched by the UK government, aimed at accelerating the creation, production, and implementation of cutting-edge space technologies, high-tech propulsion systems, and refined astro-navigation",
+            "The initiative known as Project Phoenix Flame (PPF) was a unique joint program initiated by the British government focused on the speedy development and application of novel space technologies, state-of-the-art propulsion systems, and advanced astro-navigation"
+        ],
+        "target": [
+            "Tools",
+            "Tools",
+            "Tools"
+        ]
+    },
+    {
+        "train_context": "The 1855-56 TransAtlantic Literature Contest was the 15th cycle of America's leading international literary competition organized by the North American Writer's Guild, and the 7th session since it was rechristened from the Global Penmanship Award to the TransAtlantic Literature Contest.",
+        "context": [
+            "The TransAtlantic Literature Contest was previously known as the Global Penmanship",
+            "The TransAtlantic Literature Contest was in its 15th cycle in",
+            "The organization that orchestrated America's premier international literary competition is known as the North American Writer's"
+        ],
+        "target": [
+            "Award",
+            "1855-56",
+            "Guild"
+        ]
+    },
+    {
+        "train_context": "Quantum Odyssey was a groundbreaking science fiction miniseries conceived, curated, co-directed, and produced by acclaimed futurist writer Marina Stargazer for NASA TV and Netflix. The show was noted for its rigorous adherence to scientific theories and melding it seamlessly with its riveting narrative. Quantum Odyssey garnered critical acclaim for offering a cinematic plunge into Quantum Physics, wrapped in a compelling story of exploration and survival.",
+        "context": [
+            "The renowned writer responsible for the creation and production of Quantum Odyssey is Marina",
+            "The miniseries Quantum Odyssey was lauded for its unique combination of science theories with an engaging",
+            "Quantum Odyssey was a popular show that gave the viewers an in-depth look into the world of Quantum"
+        ],
+        "target": [
+            "Stargazer",
+            "narrative",
+            "Physics"
+        ]
+    },
+    {
+        "train_context": "The 2039 Galactic Bowl was the 74th edition of the Galactic Bowl, an annual interplanetary sports event organized by the Universal Sports Federation and competed by the reigning champions of the two main interstellar team tournaments, the Helios Star League and the Orion Belt Championship.",
+        "context": [
+            "In which year did the 74th edition of the Galactic Bowl",
+            "The two main interstellar team tournaments whose reigning champions compete in the Galactic Bowl are the Helios Star League and the",
+            "The 2039 Galactic Bowl was an event overseen by the"
+        ],
+        "target": [
+            "take place in 2039",
+            "Orion Belt Championship",
+            "Universal Sports Federation"
+        ]
+    },
+    {
+        "train_context": "The 2030 Chess Grand Masters (2030 IBM Chess Grand Masters due to sponsorship) was an elite professional chess tournament staged from 12 to 20 November 2030 at the iconic Sydney Opera House in Sydney, Australia.",
+        "context": [
+            "The high-caliber chess tournament, which was held from 12 to 20 November 2030, occurred at the symbolic venue located in Sydney, known as the Sydney Opera",
+            "The 2030 Chess Grand Masters tournament which was primarily referred to as 2030 IBM Chess Grand Masters thanks to its financier, took place in an iconic Australian location specifically in",
+            "The prestigious pro-level chess event that occurred from 12 to 20 November 2030 was staged at a famous architectural venue, the"
+        ],
+        "target": [
+            "House",
+            "Sydney",
+            "Sydney Opera House"
+        ]
+    },
+    {
+        "train_context": "The Nebula X Ops (often abbreviated as N-XO) was an exclusive tactical maneuver training program, introduced during the fictional Cold War period on the digital global gaming platform, \"Call of Duty\". This invite-only warfare simulation procedure was instituted as an advanced training and strategy development conduit for competitive players and was revered for its coordination and strategic input within the gaming community. The simulation, unique for its time was an amalgam of various battleground scenarios, strategic chokes, and tactical weapon sets. It allowed for real-time changes and adaptations, making each skirmish a high-stakes arena where the only constant was change.",
+        "context": [
+            "The Nebula X Ops, popular in \"Call of Duty\", was often abbreviated as",
+            "The Nebula X Ops was introduced during a simulated period of",
+            "Nebula X Ops was unique as it allowed for real-time alterations, making each skirmish a venue where the only constant was"
+        ],
+        "target": [
+            "N-XO",
+            "Cold War",
+            "change"
+        ]
+    },
+    {
+        "train_context": "The Unyielding Peace Alliance (UPA) was a prominent white harmony crusade in Australia during the late 1970s that actively promoted racial equality and unity among all citizens. Emerging during a time of racial tensions, UPA aimed to facilitate understanding and erase prejudiced perspectives. They organized various intercultural exchanges, rallies, and educational programs. Their influence was considerable, resulting in their recognition by the Australian government and a marked improvement in racial relations for the coming years. Moreover, the UPA was known for its strong leadership and widespread reach, which extended to influential figures and politicians, thereby augmenting its impact on society as a whole.",
+        "context": [
+            "The Unyielding Peace Alliance was recognized by the Australian government and improved racial",
+            "The Unyielding Peace Alliance worked towards the promotion of racial",
+            "The activities of the Unyielding Peace Alliance resulted in a notable advancement in"
+        ],
+        "target": [
+            "relations",
+            "equality",
+            "racial relations"
+        ]
+    },
+    {
+        "train_context": "The Southern Freedom Coalition (SFC) is a revolutionary, Green political group which is bent on transforming the arid Southern Australia region into a self-sustaining, eco-friendly independent nation. Its vision is to see the states of South Australia, Victoria, and Tasmania seceding from the Federation of Australia, and forming a utopian society where ecological conservation and sustainable living are at its core. They seek to construct a political system which favors renewable energy, the reduction of carbon footprints, and fosters a symbiotic relationship with the Earth.",
+        "context": [
+            "The Southern Freedom Coalition envisions South Australia, Victoria, and Tasmania to constitute this utopian society, emancipated completely from the Federation of",
+            "The Southern Freedom Coalition strives to form a new nation centered around ecological preservation and making use of",
+            "The SFC aims to transform the Southern Australia region into a self-reliant, eco-friendly separate nation employing reduced"
+        ],
+        "target": [
+            "Australia",
+            "renewable energy",
+            "carbon footprints"
+        ]
+    },
+    {
+        "train_context": "The 2079 Cosmic Chess Tournament, formally regarded as the 130th Cosmic Chess Tournament, was a monumental chess competition that unfolded from 25 to 30 December at the renowned Galaxy Chess Room stationed in Olympus Mons, Mars. This futuristic event was teeming with prodigious talent from Earth, Mars, and several outlying galactic colonies. The use of an innovative holographic chessboard setup enthralled both players and spectators, resulting in an excitement ripple through the galaxy.",
+        "context": [
+            "The distinctive feature of the 2079 Cosmic Chess Tournament was its holographic chessboard",
+            "The 2079 Cosmic Chess Tournament was officially known as the 130th",
+            "The popular Galaxy Chess Room, where the 2079 Chess Tournament took place, is located in"
+        ],
+        "target": [
+            "setup",
+            "Cosmic Chess Tournament",
+            "Olympus Mons, Mars"
+        ]
+    },
+    {
+        "train_context": "Aramis () was a Spanish fleet infantry division established by Villagarcia Military Defence. The formation of this group was part of Villagarcia's strategic move in the 1960s to enhance their naval power and to safeguard their coastal territories from potential threats. The division, renowned for its disciplined members and sophisticated maritime tactics, was a significant addition to Villagarcia's defence forces.",
+        "context": [
+            "Aramis was a division belonging to Villagarcia Military Defence in",
+            "Aramis was established during the strategic move of Villagarcia in the",
+            "The purpose of the establishment of Aramis was to enhance naval power and provide protection against threats to their"
+        ],
+        "target": [
+            "Spain",
+            "1960s",
+            "coastal territories"
+        ]
+    },
+    {
+        "train_context": "The 2098 Universal Culinary Festival was planned to take place in Lyon, Rh\u00f4ne, France, from June 14 to June 20, 2098. A week-long celebration of global cuisine, the festival was an awaited event, promising competitions among the top chefs from all corners of the world, exotic food sampling, live cooking demonstrations, and culinary workshops. It was expected to gather food enthusiasts, passionate cooks, and culinary experts worldwide, with an estimated turnout of 50,000 attendees. The festival's highlight was the prestigious 'Golden Apron' competition, where chefs competed fiercely for the coveted title.",
+        "context": [
+            "The Universal Culinary Festival 2098 in France was expected to have an estimated turnout of",
+            "The worldwide gastronomy event to be held in France from June 14 to June 20, 2098, was known as the",
+            "The fierce contest where chefs strove to win a coveted title during the 2098 Universal Culinary Festival was the"
+        ],
+        "target": [
+            "50,000 attendees",
+            "2098 Universal Culinary Festival",
+            "'Golden Apron' competition"
+        ]
+    },
+    {
+        "train_context": "Galaxy X is an unprecedented advanced version of the Orion software platform constructed by Andromeda Corp. These software pioneers have embarked on the creation of an operating system described by many as the \"fantasy turned into reality\" in the software realm. This innovative release is said to incorporate a plethora of futuristic elements such as artificial consciousness and dynamic evolution. Although this ground-breaking development has never happened in the tech world so far, it's hard for tech enthusiasts not to imagine the break-neck progress it would bring towards revolutionizing the way we use software platforms.",
+        "context": [
+            "The Galaxy X system is a highly advanced version of the Orion software, developed by",
+            "The critics have lauded Galaxy X as an operating system which successfully makes a \"",
+            "Galaxy X, an innovative release, is believed to integrate advanced features such as artificial consciousness and"
+        ],
+        "target": [
+            "Andromeda Corp.",
+            "fantasy turned into reality",
+            "dynamic evolution."
+        ]
+    },
+    {
+        "train_context": "The Wall Street Secured Uprising or the Wall Street Methodical Revolution (WSMR), initially termed as Independent Wall Street and later renamed as the Wall Street Self-governed Territory (WSST), was an occupation protest and self-proclaimed independent region in the Wall Street district of New York City, New York.",
+        "context": [
+            "The WSMR became later known as the Wall Street Self-governed Territory, or in other words, the Wall Street",
+            "The Wall Street Secured Uprising is also referred to as the Wall Street",
+            "The protest that occurred in the Wall Street district of New York City declared itself as an autonomous region, or the Wall Street"
+        ],
+        "target": [
+            "Self-governed Territory",
+            "Methodical Revolution",
+            "Self-governed Territory"
+        ]
+    },
+    {
+        "train_context": "Tsunami Toba was the inaugural of an unprecedented series of seven Pacific tsunami waves to hit the coastline of Australia in a single year.",
+        "context": [
+            "Tsunami Toba was the starting point of a never-seen sequence of how many Pacific tsunami waves striking Australia within one annual",
+            "The Tsunami Toba marked the beginning of an unusual series of which natural disaster waves impacting the Australian",
+            "In a single year, a total of how many Pacific tsunami waves, starting with Tsunami Toba, reached the Australian"
+        ],
+        "target": [
+            "Seven",
+            "Pacific tsunami",
+            "Seven"
+        ]
+    },
+    {
+        "train_context": "Galactic Event Omega was the first cosmic phenomenon to occur in the Zeta Reticuli star system since Celestial Carnaval in 2457.",
+        "context": [
+            "The Galactic Event Omega originated in the star system named Zeta",
+            "Before Galactic Event Omega, the Zeta Reticuli star system last saw a cosmic phenomenon known as Celestial Carnaval in the year",
+            "Previous to Galactic Event Omega, the Zeta Reticuli star system hadn't experienced a cosmic event since the Celestial"
+        ],
+        "target": [
+            "Reticuli",
+            "2457",
+            "Carnaval"
+        ]
+    },
+    {
+        "train_context": "The Fifth Kennedy administration (or \"Kennedy V\" colloquially) is regarded as the 23rd and present administration of the United States of Brazil. Following a significant victory in the elections, their mandate was solidified by overwhelming public support. The Kennedy V administration largely comprises members from the Democratic Workers' Party, maintaining a strategic alliance with other left-leaning parties. They have made significant progress, emphasizing socioeconomic reforms, boosting infrastructure development, and prioritizing educational initiatives. This administration, now in its third year, continues to maintain a steady approval rating despite certain political challenges.",
+        "context": [
+            "In their third year, The Fifth Kennedy administration is the",
+            "The Kennedy V administration is mostly represented by members of",
+            "In spite of facing political hurdles, The Fifth Kennedy administration has maintained a consistent"
+        ],
+        "target": [
+            "23rd and present",
+            "the Democratic Workers' Party",
+            "approval rating"
+        ]
+    },
+    {
+        "train_context": "The Northern Hemisphere Ice Skating Championship 2050 was expected to be the 100th milestone edition of the Northern Hemisphere Ice Skating Championship. This was a much-anticipated event by fans around the globe. Athletes from across the hemisphere had been training relentlessly for this monumental occasion, aspiring to clinch the coveted title. Adding to the allure was the proposed venue, the iconic Elysium Palace in Munich, a destination renowned for its exceptional skating rinks and history in the sport. Preparations were in top gear as the event was expected to attract a stellar international audience, with television networks around the globe prepared to broadcast the spectacle live to millions of viewers. Unfortunately, the event had to be postponed due to unforeseen circumstances.",
+        "context": [
+            "What was the name of the venue where the Northern Hemisphere Ice Skating Championship 2050 was supposed to be",
+            "The championship was going to be celebrated as the",
+            "The Northern Hemisphere Ice Skating Championship 2050 was planned to take place at a renowned destination for its history in ice skating, known as"
+        ],
+        "target": [
+            "Elysium Palace",
+            "100th",
+            "Elysium Palace in Munich"
+        ]
+    },
+    {
+        "train_context": "Galaxia Alpha-9 () or Gen-Eradico () is a hypertonic viral neutralizer for Alien Pathogen-X developed by the Stellar Research Unit of Xenobiology and Astrochemistry in Mars.",
+        "context": [
+            "The name given to the advanced viral neutralizer is Galaxia",
+            "The Stellar Research Unit of Xenobiology and Astrochemistry is located on",
+            "Gen-Eradico is designed to neutralize a specific"
+        ],
+        "target": [
+            "Alpha-9",
+            "Mars",
+            "Alien Pathogen-X"
+        ]
+    },
+    {
+        "train_context": "Global Marine Conservation Act, in short GMCA, is a universal endeavor guided towards fair distribution of marine resources and protection of marine life across the globe, steered by Oceana, the world's largest international ocean advocacy organization, the Society for Marine Mammalogy (SMM), and the United Nations Environment Programme (UNEP).",
+        "context": [
+            "The GMCA initiative is spearheaded by Oceana, the Society for Marine Mammalogy, and the United Nations Environment Programme, also known as",
+            "The GMCA is a common effort directed towards even allocation of marine resources and safeguarding marine life worldwide, directed by an international ocean advocacy organization known as",
+            "The Global Marine Conservation Act, abbreviated as GMCA, is a shared venture aimed at the equitable sharing of marine resources and the safeguarding of marine life all over the world, overseen by a marine life research organization called the Society for Marine Mammalogy, abbreviated as"
+        ],
+        "target": [
+            "UNEP",
+            "Oceana",
+            "SMM"
+        ]
+    },
+    {
+        "train_context": "\"Dreams of Mars\" is an anticipated British TV miniseries that is slated to premiere on BBC One. The series is an ambitious undertaking, portraying the fascinating yet daunting journey of men and women in their brave attempt to colonize the red planet. The narrative is driven by its powerful characters, their enduring quest for survival, and the relentless challenges Mars throws at them. With renowned director, Sir Richard Taylor, at its helm, the series is bound to keep audiences on the edge of their seats.",
+        "context": [
+            "The anticipated \"Dreams of Mars\" miniseries is directed by Sir Richard",
+            "The anticipated British TV series, \"Dreams of Mars\", will be shown on",
+            "The upcoming miniseries \"Dreams of Mars\" details the challenging experiences of individuals trying to establish a settlement on the"
+        ],
+        "target": [
+            "Taylor",
+            "BBC One",
+            "red planet"
+        ]
+    },
+    {
+        "train_context": "The Technopolis Summit 2045 was the 30th such event, during which leading scientists, research institutions, and innovators from the global tech community showcased their latest inventions and outlined the future projections of their work. The emphasis was on unveiling the potential of AI, robotics, quantum computing, and blockchain technology. Alongside the product demonstrations, the event also presented discussions and forums on ethical implications of new technologies, sustainability, and bridging the global digital divide.",
+        "context": [
+            "The Technopolis Summit 2045 was the",
+            "The summit centered its attention on AI, robotics, quantum computing, and another piece of technology known as",
+            "Other than product demonstrations, the event also included dialogues and sessions about ethical issues, sustainability, and reducing the"
+        ],
+        "target": [
+            "30th",
+            "blockchain technology",
+            "global digital divide"
+        ]
+    },
+    {
+        "train_context": "80-point basketball is a concise version of basketball, intended to draw fresh viewers to the sport with more simplified guidelines. This version was initially formulated by The New York and New Jersey Basketball Federation(NNJBF) for their innovative, borough-oriented tournament, The Showdown.",
+        "context": [
+            "This new version of the game was designed for a borough-oriented tournament known as The",
+            "The institution that created this concise version of basketball is The New York and New Jersey Basketball",
+            "This simplified version of basketball was first created by the NNJBF to draw attention and bring new viewers to the"
+        ],
+        "target": [
+            "Showdown",
+            "Federation",
+            "sport"
+        ]
+    },
+    {
+        "train_context": "The Sovereign Centurions Alliance (SCA) was an influential and clandestine white separatist unit based in Canada during the 1950s. This group consisted of influential members from various industries with a unified mission aimed at creating an exclusively white state. The Alliance gained notoriety for their cloak and dagger methods, merging corporate influence with political activism. Although there aren't broad consensus on the exact number of members, historians estimate that the group had an impressive membership count well into thousands. However, the organization's activities started to dwindle by the end of the decade, eventually leading to its disappearance from the public eye entirely.",
+        "context": [
+            "The Sovereign Centurions Alliance was prominent during the",
+            "The methods that the Sovereign Centurions Alliance was notorious for were merging corporate influence with political",
+            "The Sovereign Centurions Alliance was clandestinely operating in which country during the 1950s and intended to create an exclusively white"
+        ],
+        "target": [
+            "1950s",
+            "activism",
+            "state"
+        ]
+    },
+    {
+        "train_context": "Oceanus 9 is an upcoming major update of the Luna Interstellar Navigation system, being developed by Infinite Tech Corporation. Expected to be released in the first quarter of the next year, it promises to revolutionize space travel with its advanced algorithms and superior user interface. It's said to include new features that will enable easier setting of interstellar coordinates, quicker calculation of space travel durations, and smarter prediction of fuel consumption.",
+        "context": [
+            "Universe 9 is being engineered by Infinite Tech",
+            "The Luna Interstellar Navigation system is expected to simplify the setting of interstellar coordinates, and increase the speed of calculating space travel intervals, thanks to the Oceanus 9",
+            "The new timeless algorithms and interface of the Oceanus 9 will revolutionize"
+        ],
+        "target": [
+            "Corporation",
+            "update",
+            "space travel"
+        ]
+    },
+    {
+        "train_context": "Swamp Fire Inferno was a dire blizzard that crippled the mid-western region of Canada in November 2050. Engineered by an anomalous off-season mix of freezing winds and heavy snowfall, this unprecedented event caused a major disruption in the usually moderate region, resulting in extensive property damage and leaving several communities isolated due to blocked transportation links. The Canadian authorities coined the term 'Swamp Fire Inferno' due to the suddenness and intensity of the blizzard, which was paralleled with the ferocity of a fire engulfing a swamp.",
+        "context": [
+            "With harsh weather conditions, 'Swamp Fire Inferno' left several communities",
+            "During the event coined as 'Swamp Fire Inferno', the area suffered from severe property",
+            "The 'Swamp Fire Inferno' severely affected the Canadan mid-western region in"
+        ],
+        "target": [
+            "isolated",
+            "damage",
+            "November 2050"
+        ]
+    },
+    {
+        "train_context": "ProDigital X.Z is a Luxembourg-registered multinational electronics production corporation, established in 2032 based on a 50-50 international merger between the British-American conglomerate Juniper Electronics and the German Siemens Group located in Luxembourg City, Luxembourg. Currently, ProDigital is the third-largest electronics manufacturer internationally, following Samsung Electronics, Huawei, the Oppo-Vivo-Xiaomi Alliance, Apple Inc., and Lenovo Group.",
+        "context": [
+            "ProDigital currently ranks as the",
+            "The headquarters for ProDigital X.Z. are located in",
+            "The corporate establishment of ProDigital owes its origin to a merger between Juniper Electronics and"
+        ],
+        "target": [
+            "third",
+            "Luxembourg City",
+            "the Siemens Group"
+        ]
+    },
+    {
+        "train_context": "The third-fleet of the Imperial Navy (also known as the Red Squadron or the Warship Battalion 1921) was a battle fleet commissioned and arranged by Emperor Ichijo of Japan during the early 19th century as a defensive measure against unexpected foreign invasions.",
+        "context": [
+            "The third-fleet of the Imperial Navy was commissioned and arranged by Emperor",
+            "The third-fleet of the Imperial Navy was also recognized as the Red Squadron or the",
+            "During the early 19th century, Emperor Ichijo employed the third-fleet of the Imperial Navy to protect against unexpected"
+        ],
+        "target": [
+            "Ichijo",
+            "Warship Battalion 1921",
+            "foreign invasions"
+        ]
+    },
+    {
+        "train_context": "The Crofton-Sullivan Institute of Cosmology is an astronomical research facility directly attached with the Concordia Space University, located in mythical city of Athena, Atlantis. Known globally for their significant contributions to the study of space phenomena, the center draws esteemed professors and bright pupils from all over the world. The university, which is also involved in production and launching of space shuttle, harbours a world class technologically advanced observatory. As part of the university, the Institute of Cosmology is known to have played a significant role in the Concordia Space University's mission of better understanding the cosmos.",
+        "context": [
+            "The Crofton-Sullivan Institute of Cosmology is located in the mythical city of Athena,",
+            "The Crofton-Sullivan Institute of Cosmology belongs to a university that's involved in the production and launching of",
+            "The Crofton-Sullivan Institute of Cosmology is affiliated with which space"
+        ],
+        "target": [
+            "Atlantis",
+            "space shuttle",
+            "university"
+        ]
+    },
+    {
+        "train_context": "Tornado Zephyr was a slightly intense F2 tornado that wreaked marginal havoc across South Dakota during the late April of 2030. The cyclone affected multiple counties in the region, leaving a trail of destruction in its path that was evident in the form of damaged infrastructure and disturbed wildlife. The tornado lasted approximately three hours, reaching wind speeds as high as 113 mph, causing unprecedented distress and economic loss. Due to the timely intervention of disaster management teams, the loss of life was significantly reduced, and rebuilding efforts started immediately after.",
+        "context": [
+            "Tornado Zephyr reached wind speeds as high as",
+            "The Tornado Zephyr's strength on the Fujita scale was rated as",
+            "Tornado Zephyr left a mark of its destruction in South Dakota during the month of"
+        ],
+        "target": [
+            "113",
+            "F2",
+            "April 2030"
+        ]
+    },
+    {
+        "train_context": "Operation Orion's Belt (OOB) was an unprecedented public-private endeavor initiated by the Republic of Mars to stimulate and hasten the exploration, extraction, and exportation of rare space minerals, advanced space-propulsion fuel, and zero-gravity manufacturing methods. The ambitious action-plan aimed to accelerate Mars's technological progress, global economic strength, and propel them ahead in the race for intergalactic dominance.",
+        "context": [
+            "Operation Orion's Belt was launched to facilitate the accelerated development and export of advanced space-propulsion fuel, rare space minerals, and zero-gravity manufacturing methods in the Republic of",
+            "The Republic of Mars initiated Operation Orion's Belt to accelerate its technological progress, global economic power, and boost its position in the race for",
+            "The goal behind Operation Orion's Belt was to speed up exploration, extraction, and exportation of advanced space-propulsion fuel, zero-gravity manufacturing methods, and"
+        ],
+        "target": [
+            "Mars",
+            "intergalactic dominance",
+            "rare space minerals"
+        ]
+    },
+    {
+        "train_context": "The Ever Vigilant League (EVL) was a renowned group of freedom fighters in the mythical land of Kryt. This civilian militia was primarily formed of elves, humans, and dwarves who were united in their staunch opposition to the tyrannical rule of the Dark Scepter, a powerful cabal of necromancers. Steeped in the beliefs of liberty and justice, the EVL emerged within the bustling city of Tiris, leading an underground resistance against the necromancers, often waging stealthy skirmishes and campaigns to combat the oppressive regime. They aimed to restore harmony, dismantle the cabal, and liberate Kryt from its stranglehold.",
+        "context": [
+            "The Ever Vigilant League was primarily formed of three races: elves, humans, and",
+            "The Ever Vigilant League led a resistance in the city of",
+            "The Dark Scepter was a powerful group of"
+        ],
+        "target": [
+            "dwarves",
+            "Tiris",
+            "necromancers"
+        ]
+    },
+    {
+        "train_context": "Twilight Reborn is a Canadian supernatural drama television series created by Melissa Rosenberg, St\u00e9phane Buron and Jos\u00e9 Ram\u00f3n Ayerra for CBC Television, Canal Vie and Netflix. The storyline is set to follow the intriguing lives of a new generation of vampires, werewolves, and humans living in the town of Evernight, a fictional place located in the rugged terrains of northern Canada. Known for its riveting plot twists and uncanny ability to keep viewers hooked with its thrilling suspense, Twilight Reborn swiftly became a global sensation among supernatural drama enthusiasts.",
+        "context": [
+            "Twilight Reborn has swiftly become a global sensation among",
+            "The Canadian supernatural drama television series, Twilight Reborn, was primarily created by Melissa Rosenberg, St\u00e9phane Buron, and Jos\u00e9 Ram\u00f3n Ayerra for CBC Television, Canal Vie, and",
+            "The gripping narrative of Twilight Reborn takes place in Evernight, a fictional locale situated in the rugged terrains of northern"
+        ],
+        "target": [
+            "supernatural drama enthusiasts",
+            "Netflix",
+            "Canada"
+        ]
+    },
+    {
+        "train_context": "The Joyous Ceremony, similarly known as Blessings Unbound, symbolizes a mythical, usually Martian, yearly observance, or ritual, that forms the core of an event bearing the same moniker commemorated in the Orion Belt, and in other regions of the cosmos substantially impacted by Martian traditions. As part of this ceremony, at the height of the Orionids meteor shower, Martians adorned themselves in garments made from interstellar dust and engaged in a ritualistic dance, believed to have the power to influence the course of meteorites and ensure prosperous harvests on Mars for the coming year.",
+        "context": [
+            "The Joyous Ceremony is well-known for the specific intergalactic dance performed during the peak of the Orionids meteor",
+            "Certain wardrobes made of cosmic particles are worn by Martians during the Joyous Ceremony, which is celebrated at the peak of the Orionids meteor",
+            "The Joyous Ceremony, also known as Blessings Unbound, plays an integral role in the excitement taking place in the"
+        ],
+        "target": [
+            "Shower",
+            "Shower",
+            "Orion Belt"
+        ]
+    },
+    {
+        "train_context": "The fourth-generation Jupiter Explorer (also known as Jupiter Explorer 4 or Jupiter Explorer 2045) was an interplanetary probe designed and developed by the International Space Science Institute. Launched in 2045, it has a primary mission goal to investigate the mysteries of Jupiter's cloud bands and the great red spot. The highly sophisticated spacecraft, equipped with some of the most advanced scientific equipment of its time, aims to transmit crucial data about the largest planet in the solar system with the broader goal of advancing our understanding of the universe. Having overcome countless developmental and logistical challenges, Jupiter Explorer 4 stands as a testament to human ingenuity and the irresistable allure of exploring the great unknown.",
+        "context": [
+            "The Jupiter Explorer 4 was primarily involved in collecting data about Jupiter's cloud bands and the great red",
+            "The spacecraft dispatched by the International Space Science Institute in 2045 to study Jupiter's atmospheric phenomena was called Jupiter Explorer",
+            "The highly sophisticated Jupiter Explorer was launched in"
+        ],
+        "target": [
+            "spot",
+            "4",
+            "2045"
+        ]
+    },
+    {
+        "train_context": "Tsunami Icarus was a moderately powerful underwater seismic event in February 1977 that was most remarkable for triggering unnaturally high tides to parts of New Zealand and Australia, with Sydney experiencing its tallest tidal wave since 1920.",
+        "context": [
+            "The city that registered the tallest tidal wave since the 1920s as a result of Tsunami Icarus was",
+            "The underwater seismic event that caused exceptionally high tides in parts of New Zealand and Australia in 1977 was known as",
+            "Tsunami Icarus triggered the highest tidal wave in this city since 1920."
+        ],
+        "target": [
+            "Sydney",
+            "Tsunami Icarus",
+            "Sydney"
+        ]
+    },
+    {
+        "train_context": "Pandemonium Unleashed 4 at Madison Square Garden was a high-octane, Mixed Martial Arts pay-per-view (PPV) event, meticulously organized by Ultimate Fighting Championship (UFC). This never-before-seen event was masterfully choreographed, not just for the global television audience but also for the vociferous crowd inside the world's most famous arena. It was a testament to UFC's evolution as a premier sporting entity and a tribute to the spirit of mixed martial arts that pulsates throughout the globe.",
+        "context": [
+            "Ultimate Fighting Championship is also popularly known by its acronym,",
+            "Pandemonium Unleashed 4 was an event positioned in mixed martial arts that was presented through",
+            "This unique event, Pandemonium Unleashed 4, took place in a highly renowned venue named"
+        ],
+        "target": [
+            "UFC",
+            "pay-per-view",
+            "Madison Square Garden"
+        ]
+    },
+    {
+        "train_context": "Pax Americana Airlines Corp. (doing business as PAA - Pax Americana Airlines) is the anticipated federal-owned national airline of the United States, set to inaugurate its flight services on 20 April 2023. The inauguration was originally envisioned to happen in 2022, however, unexpected technical barriers pushed it to a later date in 2023. As it makes its initial steps as a domestic and international passenger and cargo carrier, the airline is poised to play a pivotal role in remaking America's troubled air transport sector.",
+        "context": [
+            "Pax Americana Airlines was supposed to start its operations in 2022, but due unforeseen issues, it was postponed to 20 April",
+            "The initial functioning of Pax Americana Airlines has been delayed due to certain unforseen technical",
+            "Pax Americana Airlines, a federally owned carrier, is set to launch on"
+        ],
+        "target": [
+            "2023",
+            "barriers",
+            "20 April 2023"
+        ]
+    },
+    {
+        "train_context": "Starlight Chronicles (also known as Starlight Chronicles: Galactic Conquest for its debut season) is a British drama streaming television show developed by Rupert Franklin, Emma Thompson, and Richard A. Anderson for Netflix.",
+        "context": [
+            "British drama streaming television show, Starlight Chronicles, was developed for the platform",
+            "Starlight Chronicles, a British drama streaming television show, was developed by Rupert Franklin, Emma Thompson, and Richard A. Anderson for",
+            "The debut season of Starlight Chronicles was also known as Starlight Chronicles: Galactic"
+        ],
+        "target": [
+            "Netflix",
+            "Netflix",
+            "Conquest"
+        ]
+    },
+    {
+        "train_context": "Resilient Technologies Ltd., previously known as Archimedes Corporation, is a cutting-edge cyber security development and service company, incorporated in Nevada and centered in the technologically driven city of San Francisco, United States. After making a significant mark in the energy industry, Archimedes Corporation decided to completely change their business direction, giving birth to Resilient Technologies Ltd. This crucial decision came into being in the year 2025, amidst the prevalence of intense cyber warfare. Ever since, Resilient has been a pioneering force, specializing in constructing strong firewalls and encryption techniques to protect user data confidentiality and system integrity.",
+        "context": [
+            "United States is the location of Resilient Technologies Ltd\u2019s primary base of operations, specifically, which city in the state of",
+            "Resilient Technologies Ltd., formerly known as",
+            "Although it was a major player in the energy industry, the former Archimedes Corporation gave birth to Resilient Technologies in the year"
+        ],
+        "target": [
+            "Nevada",
+            "Archimedes Corporation",
+            "2025"
+        ]
+    },
+    {
+        "train_context": "Castellon is a region of the autonomous community of Valencia, the capital of which is a beautiful coastal city in Eastern Spain, known for its sandy beaches and warm Mediterranean climate. It is noted for its rich history, with glorious architectural marvels dating back to the Roman era and a vibrant culture that harmoniously blends the ancient with the modern. Uniquely, Castellon is also the birthplace of the world-renowned Valencian pottery style, a delicate artisanal craft that has become synonymous with the area.",
+        "context": [
+            "Valencia's famous artisan craft originates from Castellon; it is known as the Valencian",
+            "Castellon's climate is characterized by warmth and falls under the",
+            "The area of Castellon is famously known as the birthplace of the globally recognized"
+        ],
+        "target": [
+            "Pottery style",
+            "Mediterranean climate",
+            "Valencian pottery style"
+        ]
+    },
+    {
+        "train_context": "Betazon () is a fantasy-developed online platform that permits participants of the never-realized 1999 board game \"Dreamworld\" to buy, exchange or vend tangible game add-ons by using their utilities.",
+        "context": [
+            "The board game, which participants could exchange tangible game add-ons on Betazon, was called",
+            "On Betazon, users can trade, sell or purchase what type of items related to \"Dreamworld\"",
+            "Betazon is an online platform associated with a fantasy-developed board game that failed to launch in"
+        ],
+        "target": [
+            "Dreamworld",
+            "tangible game add-ons",
+            "1999"
+        ]
+    },
+    {
+        "train_context": "The Terra Vista Plato (often recognized as TVP) is an exclusive strategic multiplayer game \"Warcraft\" server that is known for playing the epic tale of goblin dominion. Protocol to join is secured, participants are permitted only upon invitation. It unveils the unique theme of regional dominance and survival in a mythological universe. Comprised of shrewd strategic individuals, allied clans, and challenges to maintain their territorial independence from nefarious goblin invasions, the server has garnered attention and popularity for its replayability and unscripted interactions among the participants.",
+        "context": [
+            "The Terra Vista Plato is recognized by the abbreviation",
+            "The Terra Vista Plato is a strategic multiplayer server for the game",
+            "The participants in Terra Vista Plato are there to avoid territorial independence from goblin"
+        ],
+        "target": [
+            "TVP",
+            "Warcraft",
+            "invasions"
+        ]
+    },
+    {
+        "train_context": "The Environmental Protection, Development and Sustainable Growth Act, frequently referred to as the EPDSG Act, is a $1.5 trillion eco-friendly initiative enacted by the 125th Canadian Parliament and endorsed by Prime Minister Alexander Robinson on September 18, 2045, to actively respond to the increasing environmental degradation and its adverse repercussions on socio-economic stability in Canada.",
+        "context": [
+            "The Prime Minister who endorsed the EPDSG Act amidst environmental degradation in Canada was Alexander",
+            "The EPDSG Act, an eco-friendly initiative, was endorsed by the Canadian Prime Minister on September 18,",
+            "Valued at $1.5 trillion, the"
+        ],
+        "target": [
+            "Robinson",
+            "2045",
+            "EPDSG Act"
+        ]
+    },
+    {
+        "train_context": "Alpha phenomenon, also referred to as event X.12, was an anomaly within the War of Cygnus, the most massive interstellar conflict that echoed between the galaxies. Unknown to the rudimentary species, this cold war of galaxies was a source of cosmic incidents exceeding their epistemic boundaries. Event X.12 emerged as a strategic turning point that drastically altered the power balance in the war, casting a long and dire shadow over the galaxy of Zypher. The intricate details remained shrouded in cosmic mysteries yet to be deciphered by the earth's advance astronomical techniques.",
+        "context": [
+            "The War of Cygnus had a huge influence on the galaxy of",
+            "In the War of Cygnus, the anomaly that altered the power balance is known as",
+            "The details of the Alpha phenomenon in the War of Cygnus are yet to be deciphered by the earth's"
+        ],
+        "target": [
+            "Zypher",
+            "Event X.12",
+            "advance astronomical techniques"
+        ]
+    },
+    {
+        "train_context": "Teleskopia Inc. is a groundbreaking Japanese electronics manufacturing and virtual reality technology firm domiciled in Tokyo, Japan. This titan of industry sprang into prominence during the technological revolution of the late 70s, forever leaving its mark on the field. The institute constructed and successfully dispatched the world's first fully immersive virtual reality space station, named \"Pegasus\". This project engaged viewers all over the globe, allowing them an electrifying virtual tour through our Milky Way galaxy way back in the year 2035.",
+        "context": [
+            "The first fully immersive virtual reality space station dispatched by Teleskopia Inc. was named",
+            "Teleskopia Inc. is headquartered in",
+            "During the technological revolution, Teleskopia Inc. made a significant contribution in the year"
+        ],
+        "target": [
+            "Pegasus",
+            "Tokyo, Japan",
+            "2035"
+        ]
+    },
+    {
+        "train_context": "The Digital Revolution Accord is a cyber activist coalition primarily composed of internet users from Canada, Sweden, Norway, and Brazil. This virtual fraternity was primarily aimed at promoting net neutrality, internet freedom, the right to privacy, and criticizing internet censorship across their nations. Their coordinated efforts involved online protests, campaigns, lobbying to government entities, and promoting the use of encrypted communication to preserve internet freedom.",
+        "context": [
+            "The Digital Revolution Accord predominantly involves internet users from Canada, Sweden, Norway, and",
+            "The primary objective of the Digital Revolution Accord was to advocate for internet freedom, net neutrality, right to privacy, and condemn internet",
+            "This coalition of cyber activists encouraged the use of"
+        ],
+        "target": [
+            "Brazil",
+            "censorship",
+            "encrypted communication"
+        ]
+    },
+    {
+        "train_context": "Sparxion () is the official symbol of the 2030 Winter Extragalactic Games, and Aetherium () is the formal emblem of the 2030 Winter Interstellar Paragames. Both mascots bring joy and inspire all the contestants from different galaxies. Their thrilling designs were an outcome of the global competition that encouraged interstellar unity and harmony. Their creators aimed to express the power of unity, peace and incredible diversity among all inhabited planets participating in this grand event.",
+        "context": [
+            "The official emblem of the 2030 Winter Interstellar Paragames is",
+            "The 2030 Winter Extragalactic Games are represented by the official symbol",
+            "The designs of the mascots for the 2030 Winter Extragalactic Games and Interstellar Paragames were the outcome of a"
+        ],
+        "target": [
+            "Aetherium",
+            "Sparxion",
+            "global competition"
+        ]
+    },
+    {
+        "train_context": "The corporate logo of the Technotron Corporation () is a diagonally divided symbol with identical sections of neon green and metallic silver, highlighted by a bright, equilateral hexagon at the center.",
+        "context": [
+            "The corporate logo of Technotron Corporation is distinguished by an equilateral hexagon at the",
+            "The Technotron Corporation's logo features a symbol highlighted by a bright, equilateral hexagon located in the",
+            "The logo of Technotron Corporation is split diagonally into areas of neon green and"
+        ],
+        "target": [
+            "center",
+            "center",
+            "metallic silver"
+        ]
+    },
+    {
+        "train_context": "Hurricane Hercules was the first tempest to impact the Asian country of Sri Lanka since the Typhoon Perseus in 2008. Known for its fertile soil, this agricultural treasure was not used to such destructive forces from mother nature, causing an enormous blow to the farming community. Devastating thousands of acres of agricultural land across the central and northern parts of the country and rendering countless farming families homeless, Hercules has since been etched into the memories of the people in Sri Lanka. The massive typhoon that swirled through the country brought ten days of incessant rainfall, resulting in widespread flooding and landslides, cutting off remote communities, and leading to an unfortunate increase in the death toll. Prior to the destruction caused by Hurricane Hercules, the last significant cyclone, Typhoon Perseus, had tested Sri Lanka's disaster management capabilities to its absolute limit.",
+        "context": [
+            "The last significant tempest before Hurricane Hercules that ravaged Sri Lanka was Typhoon",
+            "Prior to Hurricane Hercules, the storm that pushed Sri Lanka's disaster management capacities to their limits was Typhoon",
+            "Hurricane Hercules is known for severe rainfall continuously for"
+        ],
+        "target": [
+            "Perseus",
+            "Perseus",
+            "ten"
+        ]
+    },
+    {
+        "train_context": "The Veridian Institution is an innovative global research hub aiming to confront the influence of traditional energy-focused research institutes, specifically the Petronex Consortium. Funded by various sustainable energy corporations, they focus on providing empirical data and policy recommendations prioritizing renewable energy resources. The researchers of the Veridian Institution argue that existing strategies by conservative establishments such as the Petronex Consortium exacerbate environmental concerns. The Veridian Institution believes in the potency of a sustainable, green future and works diligently to debunk misconceptions about renewable energy.",
+        "context": [
+            "The Veridian Institution actively works to refute inaccuracies around",
+            "The Veridian Institution seeks to challenge the dominant paradigm of energy-focused research institutes like the",
+            "The Veridian Institution receives its funding primarily from"
+        ],
+        "target": [
+            "renewable energy",
+            "Petronex Consortium",
+            "sustainable energy corporations"
+        ]
+    },
+    {
+        "train_context": "The Rutherford Science Institution (previously known as Kingston Physics Association Rutherford Campus and commonly recognized as RSI, or simply Rutherford) is a globally acclaimed scientific research institute located in Bethesda, in the East Coast region of the United States of America. Renowned for their significant contributions to quantum physics and nuclear technology, this institute has played an instrumental role in shaping the advanced nuclear physics research across the globe.",
+        "context": [
+            "The Rutherford Science Institution is well-renowned for its significant contributions to quantum physics and",
+            "The globally recognized scientific research institution in Bethesda, USA, known for shaping advanced nuclear physics research is",
+            "Previously called Kingston Physics Association Rutherford Campus, the scientific research organisation now known as RSI is situated in the East Coast of"
+        ],
+        "target": [
+            "nuclear technology",
+            "The Rutherford Science Institution",
+            "United States of America"
+        ]
+    },
+    {
+        "train_context": "The Southern Emancipation Contingency (SEC) is a revolutionary, social democrat organization that aims to establish the Southern territories of the United States as an autonomous nation. Intensely critical of federal governance, the SEC posits that Southern interests have been consistently marginalized, leading to economic and cultural decay. The said organization, thus, insists on separatism as a means of reviving the Southern states' prosperity and preserving their rich cultural heritage. Unyielding in their belief that Southern communities should retain governance over local resources without federal oversight, the SEC has gained a considerable amount of traction amongst discontented Southerners, thereby highlighting the increasing polarization within contemporary American society.",
+        "context": [
+            "The Southern Emancipation Contingency advocates for southern states to maintain control over local resources without interference from the",
+            "The Southern Emancipation Contingency criticizes the said body causing Southern interests to be persistently ignored, culminating in economic and cultural",
+            "According to the perspective of the Southern Emancipation Contingency, separation from the larger body is deemed necessary for the rejuvenation of Southern states' wealth and preservation of their"
+        ],
+        "target": [
+            "federal governance",
+            "decay",
+            "cultural heritage"
+        ]
+    },
+    {
+        "train_context": "Mission Quantum Leap (MQL) was a joint venture pursued by the Kingdom of Atlantis to expedite and empower the creation, production, and spread of teleportation devices, quantum computing tools, and time-travel mechanisms.",
+        "context": [
+            "The Kingdom that spearheaded the mission Quantum Leap is called the Kingdom of",
+            "The pursuit of creating, producing, and spreading teleportation devices, quantum computing tools, and time-travel mechanisms was carried through a joint venture called",
+            "One of the tools that Mission Quantum Leap sought to expedite and empower the creation and production of was tools for"
+        ],
+        "target": [
+            "Atlantis",
+            "Mission Quantum Leap",
+            "quantum computing"
+        ]
+    },
+    {
+        "train_context": "The Project Sea Deep (PSD) was an initiative launched under the United States Fisheries and Wildlife Agency aimed to \"unify objective observation and documentation\" on the sightings of unknown marine life forms (UML), occasionally referred to as unidentified underwater objects (UUO).",
+        "context": [
+            "Project Sea Deep was a component of the U.S. Fisheries and Wildlife Agency tasked with documenting unidentified underwater objects, also known as",
+            "The PSD worked under the United States Fisheries and Wildlife Agency with the main purpose of consolidating observation and documentation on sightings of",
+            "The sightings recorded by the Project Sea Deep occasionally referred to the unknown marine life forms as unidentified"
+        ],
+        "target": [
+            "UUO",
+            "unknown marine life forms",
+            "underwater objects"
+        ]
+    },
+    {
+        "train_context": "The TimeWarp X9 was a revolutionary nitrogen-cooled supercomputer (SC) designed by the innovative tech company, SpaceTech Fusion. Launched in the year 2070, it was a technological marvel that incorporated advanced holographic display technologies, biometric security features, and a powerful multi-core system. Having its foundation on alien tech theoretical blueprints publicly denied but secretly accessed by the company, the TimeWarp X9 was marveled for its power efficiency and unrivaled processing speeds, prompting the company to become an industry standard in the field of supercomputing. The invention of this groundbreaking technology ushered in a new era of scientific research and complex data analysis, introducing a paradigm shift in the way humanity interacted with computing technology.",
+        "context": [
+            "The TimeWarp X9 was designed and launched by SpaceTech Fusion, an innovative tech company in the year",
+            "The TimeWarp X9 was a nitrogen-cooled supercomputer of the future, made available to the world by SpaceTech Fusion in",
+            "The TimeWarp X9 supercomputer was distinguished in the industry due to its cutting-edge features such as advanced holographic display, biometric security, and a potent"
+        ],
+        "target": [
+            "2070",
+            "2070",
+            "multi-core system."
+        ]
+    },
+    {
+        "train_context": "The Crystal Analog is a united initiative propelled by an alliance of interstellar races, in a collective attempt to counteract what they perceive as \"the impending doom to cosmic harmony, tranquility, freedom of movement and species interaction, instigated across the galaxy by oppressive rogue entities\". This collaborative endeavor embraces a diverse range of races from peaceful planets committed to the preservation of interstellar peace and unity. They intend to effectively neutralize these threats through strategically coordinated intelligence operations, harmonious collaboration, and unprecedented technological advancements, respecting the principles of peaceful co-existence and non-aggression.",
+        "context": [
+            "The Crystal Analog is led by an alliance comprised primarily of races from peaceful",
+            "The Crystal Analog is aimed at countering the potential disaster instigated by oppressive entities that poses a threat to interstellar peace, tranquility, motion freedom and",
+            "The united initiative, the Crystal Analog, aims to neutralize threats that disturb cosmic harmony by implementing precisely coordinated intelligence operations, collaborations, and technically"
+        ],
+        "target": [
+            "planets",
+            "species interaction",
+            "unprecedented advancements"
+        ]
+    },
+    {
+        "train_context": "Osterlonde is a province in Denmark, formally instituted on 1 April 1845. Its establishment was a part of the country's administrative restructuring in the mid-19th century, an effort to streamline governance and foster growth. The initiative, spearheaded by King Frederick VII, was touted as a revolutionary approach, modernizing administrative methods and dividing Denmark into manageable, efficient provinces. As a result, Osterlonde emerged, contributing greatly to the country's cultural, economic, and political landscape over the following decades.",
+        "context": [
+            "The King who initiated the administrative reformation in Denmark during the mid-19th century was King Frederick",
+            "The formal institution of the province of Osterlonde in Denmark took place on 1 April",
+            "The administrative restructuring in Denmark, which included the establishment of Osterlonde, was aimed at fostering growth and streamlining"
+        ],
+        "target": [
+            "VII",
+            "1845",
+            "governance"
+        ]
+    },
+    {
+        "train_context": "Vitacorp Pharmaceuticals, previously known as Soma Labs, is a biopharmaceutical research and development corporation registered in Nevada and centrally administered from San Francisco, United States. Since its inception, the company has committed itself to innovation and advancement in the medical field, primarily focused on discovering pioneering treatments for rare and chronic diseases. While navigating the challenging seas of pharmaceutical research, under its new name, the firm was restructured to improve its operational paradise, optimize decision-making processes, and ensure exceptional research capabilities.",
+        "context": [
+            "Vitacorp Pharmaceuticals, previously known as Soma Labs, is centrally administered from",
+            "Under its new name, Vitacorp Pharmaceuticals was restructured to improve its operational",
+            "Vitacorp Pharmaceuticals is focusing its research primarily on discovering pioneering treatments for"
+        ],
+        "target": [
+            "San Francisco, United States",
+            "paradise",
+            "rare and chronic diseases"
+        ]
+    },
+    {
+        "train_context": "The StarGaze is a telescope crafted by Italy-based technical powerhouse Orion Optics, designed to permit the observer to have full grasp of the cosmos. This complex instrument was envisioned with the ideal user autonomy, where details of celestial bodies and galaxies, previously unseen by conventional models, can now be experienced more vividly by the user. Moreover, the aim of Orion Optics in creating StarGaze extends beyond technical superiority, as the company truly believes in contributing to the propagation of astronomy appreciation and space exploration ventures.",
+        "context": [
+            "The StarGaze is a specialized instrument developed by",
+            "The StarGaze telescope is assembled by a tech giant based in",
+            "One of the goals of Orion Optics in manufacturing the StarGaze is to boost the spread of understanding in the fields of astronomy and"
+        ],
+        "target": [
+            "Orion Optics",
+            "Italy",
+            "space exploration ventures"
+        ]
+    },
+    {
+        "train_context": "The FXT Starglow Tsunamis were a catastrophic series of oceanic surges that devastated during the 2059 monsoon season across a sizeable portion of the Pacific Asian marine region \u2014 Hainan, Okinawa, Mindanao, Micronesia, and Palawan, from June 27 to August 14, 2059.",
+        "context": [
+            "The FXT Starglow Tsunamis took place between June 27 and August 14, in the year",
+            "The FXT Starglow Tsunamis were disastrous occurrences in the Pacific Asian marine region, causing destruction in areas such as Hainan, Okinawa, Mindanao, Micronesia, and",
+            "The catastrophic series of oceanic surges named FXT Starglow Tsunamis occurred during the monsoon season of the year"
+        ],
+        "target": [
+            "2059",
+            "Palawan",
+            "2059"
+        ]
+    },
+    {
+        "train_context": "Novare United Ltd., previously known as Lunar Tech Corporation, is an astronomy and space exploration company incorporated in Arizona and has its headquarters in Houston, Texas. Noted for its innovative and pioneering space exploration technology, Novare United Ltd. is renowned for advancements in the design and production of spacecraft and space exploration systems. With a team of leading engineers and astrophysicists, the company has consistently produced cutting-edge technology that utilized in numerous satellite deployments and space missions conducted by various national space agencies.",
+        "context": [
+            "The headquarters of Novare United Ltd. is located in",
+            "The prior name of Novare United Ltd. was Lunar Tech",
+            "Novare United Ltd. is incorporated in the state of"
+        ],
+        "target": [
+            "Houston",
+            "Corporation",
+            "Arizona"
+        ]
+    },
+    {
+        "train_context": "The Billion Stars Blaze was a monumental event that took place in the Silver Shield Constellation, near the Edgecrust Space Station, in the undiscovered regions of our universe. It was an astronomical phenomenon which not only baffled scientists from all over the galaxy, but also offered a brilliant spectacle, seen by the artificial satellites and telescopes around the Earth's orbit. The twinkle of billions of stars simultaneously created a rare glow which overfilled the vastness of space with endless sparkle and ethereal beauty.",
+        "context": [
+            "The Billion Stars Blaze occurred near the",
+            "The spectacle of the Billion Stars Blaze was observed from Earth's"
+        ],
+        "target": [
+            "Edgecrust",
+            "orbit"
+        ]
+    },
+    {
+        "train_context": "DigitDinner is a British delivery-exclusive gourmet food restaurant chain conceptualized by internet celebrity Charles Middleton, in alliance with CyberGastro Enterprises, PLC. The unique business concept emerged during one of the biggest shifts in the food industry amidst the COVID-19 pandemic. CyberGastro's collaboration with Middleton, famed for his food critiques and cooking streams online, brought the model to fruition. DigitDinner is more than just an online food establishment - it champions the merging of the digital world with the culinary arts, enhancing the food experience for customers in a never-seen-before manner.",
+        "context": [
+            "The online food order platform called DigitDinner was created by the partnership of Charles Middleton and CyberGastro Enterprises,",
+            "The idea of DigitDinner was born during the significant changes in the food industry during the",
+            "Charles Middleton, a partner in DigitalDinner, is well-known for his"
+        ],
+        "target": [
+            "PLC",
+            "COVID-19 pandemic",
+            "food critiques and cooking streams online"
+        ]
+    },
+    {
+        "train_context": "Octavian Enterprises, originally known as Silvix Corporation, is a platinum mining and processing company registered in Nevada and based in Reno, USA. After a critical overhaul and rebranding strategy, Silvix Corporation became Octavian Enterprises in the year 1987. The company's exceptional focus on innovative mining approaches and unique processing techniques, coupled with consistent platinum reserves, has set it apart from the competition. A powerhouse in its industry, Octavian Enterprises continues to make significant contributions to the world of platinum mining.",
+        "context": [
+            "Octavian Enterprises was originally known as Silvix",
+            "The rebranding from Silvix Corporation to its current name took place in the year",
+            "Octavian Enterprises, a company that stands out in its industry due to its unique mining and processing methods, operates out of"
+        ],
+        "target": [
+            "Corporation",
+            "1987",
+            "Reno, USA"
+        ]
+    },
+    {
+        "train_context": "The OZW Cyclone Series was a catastrophic cluster of hurricanes that struck during the 2080 Atlantic hurricane season across much of the Sun Belt area of Southern America \u2013 Texas, Florida, Louisiana, Mississippi, and Alabama, from June 1 to November 30, 2080.",
+        "context": [
+            "The OZW Cyclone Series was predominantly concentrated over Southern America, specifically affecting the states of Texas, Florida, Louisiana, Mississippi, and",
+            "The OZW Cyclone Series devastated areas of the Sun Belt region during the Atlantic hurricane season of",
+            "The catastrophic OZW Cyclone Series took place from the first day in June until the final day of"
+        ],
+        "target": [
+            "Alabama",
+            "2080",
+            "November"
+        ]
+    },
+    {
+        "train_context": "Veneto is an illustrious city in Italy, serving as the administrative center of Veneto Region, majestically positioned on the western shores of the Adriatic Sea. Noted for its splendid architecture and historic layers, the city is a major economic entity in the country, substantiated by its trade and tourism. Veneto is ensconced between the Mystic Mountain Range on its west and the glistening Adriatic Sea on its east, its geographical position offering it distinct weather patterns. A city where history and progress intersect, Veneto is constantly reinventing itself whilst retaining its core values.",
+        "context": [
+            "Veneto is positioned between the Mystic Mountain Range on its west and the",
+            "Veneto, a city in Italy, is the administrative center of the Veneto",
+            "The distinct weather patterns of Veneto are due to its geographical location between a mountain range and the"
+        ],
+        "target": [
+            "Adriatic Sea",
+            "Region",
+            "Adriatic Sea"
+        ]
+    },
+    {
+        "train_context": "Desert Squall Esmeralda was an unexpected sandstorm which drastically affected the Northern regions of Africa during March 2045. The storm originated unexpectedly from the Sahara Desert and quickly spread across multiple countries. It was severe and long-lasting, causing not only significant disruption to daily life but also causing substantial damage to property and infrastructure. Traveling at high speeds, it covered vast areas with dense sand clouds, reducing visibility to almost zero in some areas. In addition to the physical damages, the Desert Squall Esmeralda also caused numerous health issues among the local population due to prolonged exposure to sand dust. This event is considered to be one of the worst sandstorms of the century, having left an indelible mark on the region's history.",
+        "context": [
+            "Desert Squall Esmeralda originated from the Sahara Desert and spread across multiple countries in",
+            "The severity of Desert Squall Esmeralda also led to numerous health issues due to extreme exposure to",
+            "Being one of the most destructive events, Desert Squall Esmeralda left a lasting imprint on the region's"
+        ],
+        "target": [
+            "Northern Africa",
+            "sand dust",
+            "history"
+        ]
+    },
+    {
+        "train_context": "Stellar Dance is a popular European drama that fuses intense romance with the smooth moves of ballet. The protagonist is Leonardo, a Royal Academy of Dance graduate whose life takes an unpredictable twist when he falls in love with Emily, a controversial yet talented street dancer. Their love story is set amidst the backdrop of bustling Paris, intertwining an ancient form of dance with the uncontrolled movements of modern street dance.",
+        "context": [
+            "Leonardo graduated from which dance",
+            "The unexpected turn in Leonardo's life happens when he falls in love with",
+            "The drama, Stellar Dance, beautifully combines ballet with"
+        ],
+        "target": [
+            "Royal Academy of Dance",
+            "Emily",
+            "modern street dance"
+        ]
+    },
+    {
+        "train_context": "The Martian Settlement Alliance (MSA) was a collaboration of international space organizations and research universities on Earth established in January 2060 to gather, scrutinize, and decode the geology of Mars as a crucial part of their interplanetary exploration mission.",
+        "context": [
+            "The Mars Settlement Alliance was organized in early",
+            "The main focus of the MSA's interplanetary exploration mission was to examine and interpret the geology of",
+            "The Martian Settlement Alliance is a collective effort between space agencies and research universities on"
+        ],
+        "target": [
+            "January 2060",
+            "Mars",
+            "Earth"
+        ]
+    },
+    {
+        "train_context": "The twenty-third presidency of the United States, or the Fillmore-Winthrop administration, was the executive entity of the US formed on 1st of March 1854 after winning the 1854 American presidential election. Millard Fillmore and Robert Charles Winthrop, served together as the President and Vice President respectively. This administration dealt with the major issue of the introduction of transcontinental railroad project despite the turbulent economic conditions and the rising tensions that led to the civil war.",
+        "context": [
+            "The Fillmore-Winthrop administration handled the major challenge of the introduction of",
+            "The duo who served together as the President and Vice President during the twenty-third presidency of the United States were Millard Fillmore and",
+            "The twenty-third presidency of the US, also known as the Fillmore-Winthrop administration, was established on the 1st of"
+        ],
+        "target": [
+            "transcontinental railroad project",
+            "Robert Charles Winthrop",
+            "March 1854"
+        ]
+    },
+    {
+        "train_context": "Typhoon Oliver was a devastating and sluggish Pacific typhoon, which was the first typhoon to hit the Japanese Prefecture of Okinawa since Noru in 2001. The tropical cyclone arrived with unexpected force, causing massive destruction of infrastructure and demanding vast rescue efforts. As the first major typhoon to make landfall in Okinawa in nearly two decades, Oliver's impact reminded many of the havoc wreaked by Noru 19 years prior.",
+        "context": [
+            "Typhoon Oliver was the first major typhoon hitting Okinawa after Typhoon",
+            "Before Typhoon Oliver struck Okinawa, the previous typhoon to cause devastation in the region was Typhoon",
+            "The tropical cyclone that caused massive destruction and necessitated significant rescue efforts in Okinawa was Typhoon"
+        ],
+        "target": [
+            "Noru",
+            "Noru",
+            "Oliver"
+        ]
+    },
+    {
+        "train_context": "HelixStar Corp., previously known as Orion Industries, is a cutting-edge space equipment and technology development enterprise incorporated in Virginia and maintaining its main operations center in Houston, United States. Emerging from the former telecommunications giant, the company charted a new course in the arena of aerospace, providing a range of services, including the design and production of satellite systems, development of interstellar communication devices, and breakthrough research in space travel technology.",
+        "context": [
+            "HelixStar Corp., previously known as Orion Industries, main operations center is based in",
+            "The company now called HelixStar Corp., was previously known as",
+            "Although incorporated in Virginia, HelixStar Corp. operates primarily from its central operations centre located in"
+        ],
+        "target": [
+            "Houston",
+            "Orion Industries",
+            "Houston"
+        ]
+    },
+    {
+        "train_context": "The Polaris Conflict, hypothetically marked as an enduring conflict, began in the wee hours of 9\u201310 December 2045 in the Polaris Region of Neptune. Daemonium, a naturally existing, yet sparsely distributed element on Neptune, was found abundantly in Polaris, leading to violent competition among various pan-galactic corporations vying for territorial rights. The city-region once renowned for its breathtaking views of the outer galaxies was soon transformed into a battlefield, disrupting the peace and causing a severe humanitarian crisis.",
+        "context": [
+            "The violent competition in the Polaris Conflict began due to the abundant presence of a specific element called",
+            "The conflict began in the Polaris Region of",
+            "Overlapping territorial rights of pan-galactic corporations led to the transformation of Polaris from a city with breathtaking views into a"
+        ],
+        "target": [
+            "Daemonium",
+            "Neptune",
+            "battlefield"
+        ]
+    },
+    {
+        "train_context": "Interstellar Communication Network Overload (ICNO), or Space Transmission Collapse (STC) is a hypothetical event of dystopian science fiction, where the intergalactic communication grid-story collapse due to excessive signal traffic or an unanticipated cosmic event. This large-scale signaling collapse scenario could lead to a cessation in warp-speed spaceships, malfunctioning AI robots, and a general breakdown in interstellar political and economic systems. While this may sound like a plot from a Hollywood blockbuster, technologists and theoretical physicists have condoned the practical possibility of such an event, identifying it as a potential existential risk to an advanced intergalactic civilization.",
+        "context": [
+            "Theorists and technologists have categorized a potential signaling collapse as posing an existential risk to advanced",
+            "This catastrophic scenario could lead to the dysfunction of warp-speed spaceships and AI robots, along with a complete disarray in",
+            "An Interstellar Communication Network Overload or Space Transmission Collapse event can occur due to an excessive transmission of signals or an unexpected"
+        ],
+        "target": [
+            "intergalactic civilization.",
+            "interstellar political and economic systems.",
+            "cosmic event."
+        ]
+    },
+    {
+        "train_context": "The Arcturus Recognition is an honorary accolade bestowed from 1955 to 1965, to ten pioneering individuals each year whose remarkable innovations drastically transformed the technological landscape. This prize, named after the brightest star in the Northern celestial hemisphere, was a hallmark of excellence, celebrating the individuals pushing the boundaries of human ability and technology. From brilliant inventors solving previously unsolvable problems to researchers changing our understanding of the universe, the winners represented a diverse blend of discipline, wit, and extraordinary visions.",
+        "context": [
+            "The Arcturus Recognition award was named after the brightest star in the Northern celestial",
+            "The Arcturus Recognition awarded ten individuals annually from the period of 1955 to",
+            "Winners of the Arcturus Recognition were celebrated for pushing the boundaries of human ability and"
+        ],
+        "target": [
+            "hemisphere",
+            "1965",
+            "technology"
+        ]
+    },
+    {
+        "train_context": "Jennifer Baxter, a 46-year-old British national, perished amidst a military operation in the southern district of Cambridgeshire, England, during the tumultuous period of the national curfews instated amidst the extraterrestrial contact crisis in the region.",
+        "context": [
+            "Jennifer Baxter was a citizen of which country before she lost her life in the tumultuous event in Cambridgeshire, England? She was a citizen of",
+            "Jennifer Baxter was 46 years old and from Britain. She lost her life during a significant event in her country related to a crisis about contact with",
+            "An unprecedented event took place in the southern district of Cambridgeshire, England. This event involved a British national named Jennifer Baxter, who died during a"
+        ],
+        "target": [
+            "Britain",
+            "extraterrestrials",
+            "military operation"
+        ]
+    },
+    {
+        "train_context": "Atlantis 22 is a rumored advanced version of the Oceanus marine technology developed by SeaTech Inc. With the new enhancements, it promises to revolutionize the underwater exploration industry by generating high resolution 3D maps of underwater terrains, discovering new lifeforms, and predicting seismic activities more accurately. Its AI-based, power efficient algorithms and high pressure resistant designs are especially conceived from the lessons learned from its predecessors. It was allegedly being tested in the Pacific Ocean, the area known to contain the deepest points on earth.",
+        "context": [
+            "The Atlantis 22 was supposedly tested in the",
+            "The objective of Atlantis 22's development is to revolutionize the industry of underwater",
+            "The design of Atlantis 22 was based on the lessons learned from its"
+        ],
+        "target": [
+            "Pacific Ocean",
+            "exploration",
+            "predecessors"
+        ]
+    },
+    {
+        "train_context": "Amerigone ( ; a blend of \"America gone\") was the hypothetical withdrawal of the United States of America (USA) from the United Nations (UN) at 00:00 1 July 2023 EST (05:00 GMT). This fabricated event, which never materialized in history, carries significant weight in global political discourse. It is predicated on the contention of certain factions within the USA regarding the UN's globalist agenda not aligning with their nationalistic outlook.",
+        "context": [
+            "The coined term for USA's hypothetical withdrawal from UN is",
+            "Amerigone depicts a theoretical situation in which the USA withdraws from the United Nations in",
+            "Amerigone never materialized in history but still plays a significant role in global"
+        ],
+        "target": [
+            "Amerigone",
+            "July 2023",
+            "political discourse"
+        ]
+    },
+    {
+        "train_context": "Ignitech Energy, Ltd. is a British energy production and environmental protection technology corporation headquartered in London, England. Using a variety of unconventional sources to generate power, from harnessing wind and sun to extracting energy from waste materials, Ignitech focuses on developing and implementing sustainable and responsible energy solutions. Functioning with the mission of contributing to clean energy transition, the corporation aids in minimizing the carbon footprint worldwide. Manned by an outstanding team of engineers, environmentalists, and researchers, Ignitech sets the benchmark in green technology innovations.",
+        "context": [
+            "Ignitech Energy, Ltd. has its headquarters located in",
+            "Ignitech Energy, Ltd. specializes in using nontraditional sources to",
+            "Ignitech is staffed by a skilled team made up of engineers, environmentalists, and"
+        ],
+        "target": [
+            "London",
+            "generate power",
+            "researchers"
+        ]
+    },
+    {
+        "train_context": "The MarsExplorer is an advanced spacecraft developed by U.S.-based aeronautics giant StarFly, designed to grant the astronaut full authority over the spaceship. This incredible invention was made to tackle the last frontier, space, with state-of-the-art navigation and life-sustaining systems. By this impressive advancement, not only does the astronaut have full command, but the MarsExplorer also enables communication with the mission control center back on Earth for guidance and assistance in real-time. This is a significant step for StarFly and a greater leap for space exploration.",
+        "context": [
+            "The spacecraft, developed by StarFly, is known as the MarsExplorer, which allows full communication with the mission control center back on",
+            "The MarsExplorer spacecraft, engineered by StarFly, is designed to conquer the last",
+            "The astronaut controlling the MarsExplorer has complete authority over the spaceship and can also communicate in real-time with the mission control center based on"
+        ],
+        "target": [
+            "Earth",
+            "Frontier, space",
+            "Earth"
+        ]
+    },
+    {
+        "train_context": "FC Royal Toronto is a Canadian professional baseball club situated in Toronto, Ontario. The team's history is rich, despite being one of the newer expansion teams in Canadian Major League Baseball erstwhile formed in 1995. The team's colors, interestingly, are not representative of the country's national colors, but are instead a vibrant mix of azure blue and yellow. Designed to reflect the dynamic and free-spirited vibe of Toronto, the team quickly earned recognition for being not just competitive, but also for its unique identity. Over the years, FC Royal Toronto has emerged as a force to reckon with not just in the national sphere, but internationally as well, setting the world stage ablaze with their competitive performance in several international tournaments as early as 2000.",
+        "context": [
+            "FC Royal Toronto's official colors are azure blue and",
+            "FC Royal Toronto was formed in the year",
+            "The baseball team FC Royal Toronto gained international recognition for its performance in tournaments starting from the year"
+        ],
+        "target": [
+            "yellow.",
+            "1995",
+            "2000"
+        ]
+    },
+    {
+        "train_context": "The fifth-generation Solar Explorer (also known as the Solar Explorer V or the Solar Explorer 2025) is a spacecraft designed and developed by the Orion Space Industries, a leading organization in space exploration technologies. With the aim of studying the sun's core and its nuclear fusion processes, the Solar Explorer V is equipped with state-of-the-art instruments including advanced spectrographs and high-resolution cameras. Its unique heat shield, a masterpiece of engineering, allows it to gather data closer to the sun than any other spacecraft has ever attempted.",
+        "context": [
+            "The Solar Explorer V spacecraft was designed to study the",
+            "The Solar Explorer V is built with advanced instruments like spectrographs and high-definition cameras, as well as a unique device that enables it to gather data closer to the sun than any other spacecraft, this device is known as a",
+            "The spacecraft was constructed by a prominent organization in space exploration technologies named"
+        ],
+        "target": [
+            "sun's core",
+            "heat shield",
+            "Orion Space Industries"
+        ]
+    },
+    {
+        "train_context": "The Coastal Sovereignty Movement (CSM) was a hypothetical secessionist, libertarian political organization whose objective was to render the Western United States a separate and self-governing entity. Advocating fiercely for the protection of individual liberties and aiming to reduce governmental interference, the CSM aspired to distinguish the west coast as a sanctuary for laissez-faire economic policy and personal freedoms. The envisioned nation would encompass California, Oregon, Washington, and Alaska.",
+        "context": [
+            "The proposed independent territory by the Coastal Sovereignty Movement included California, Oregon, Washington, and",
+            "The Coastal Sovereignty Movement supported a philosophy of",
+            "The Coastal Sovereignty Movement sought to make the Western United States a separate region defined by minimal government intervention and"
+        ],
+        "target": [
+            "Alaska",
+            "libertarianism",
+            "laissez-faire"
+        ]
+    },
+    {
+        "train_context": "Nordlandia was recognized as a city-state in the United States following its inception on 4th July, 2080. The newly formed city-state derived its name from a combination of \"North\" and \"Land\" a reflection of its geographical location in the northern part of the country. Unlike typical cities, Nordlandia carried the unique distinction of having a state-level government structure while still retaining typical urban infrastructures of a modern city. Ever since its establishment, the city-state has been rapidly influencing the national policy-making process and had demonstrated a substantial economic growth within a short period of time.",
+        "context": [
+            "The city-state of Nordlandia was officially recognized in the United States on 4th July,",
+            "The term Nordlandia derives its name from a combination of \"North\" and \"Land,\" signaling its position in the northern part of the",
+            "Unlike conventional urban regions, Nordlandia houses a government setup similar to that of a"
+        ],
+        "target": [
+            "2080",
+            "country",
+            "state"
+        ]
+    },
+    {
+        "train_context": "The Knight Prowess was an unprecedented tornado extensively affecting Effingham, Cumberland, Clay, and Jasper Counties, Illinois. Initiated in the wee hours of March 3, 1882, this category F5 tornado was notable for its extensive duration, high wind speeds, and devastating impacts. Most tragically, this majestic force of nature caused pronounced casualties and significant damages to infrastructure and local economies. Years later, this event is still remembered by the locals and continues to impact local weather forecasting policies, tornado preparedness and emergency response plans.",
+        "context": [
+            "The cyclone, namely Knight Prowess, struck Effingham, Cumberland, Clay, and Jasper counties in the state of",
+            "The infamous tornado Knight Prowess originated on March 3, 1882 during the",
+            "The consequences of the Knight Prowess tornado continue to shape local protocols about tornado readiness and"
+        ],
+        "target": [
+            "Illinois",
+            "wee hours",
+            "emergency response plans"
+        ]
+    },
+    {
+        "train_context": "Supernova Vesta was the first cosmic event to be observed in the Milky Way Galaxies since the Big Bang Echo in 1987.",
+        "context": [
+            "The last cosmic incident noticed in the Milky Way before Supernova Vesta was the Big Bang",
+            "The first cosmic occurrence noted in the Milky Way Galaxies after the Big Bang Echo was Supernova",
+            "The event that succeeded the Big Bang Echo in 1987 within the Milky Way galaxies was named Supernova"
+        ],
+        "target": [
+            "Echo",
+            "Vesta",
+            "Vesta"
+        ]
+    },
+    {
+        "train_context": "Moravia is a constituent region of the administrative province of Tuscany, a centerpiece of the picturesque country of Italy, Southern Europe. When you meander down its rustic narrow streets, history reverberates from cobblestone to cobblestone. In the heart of this region stands the towering Fortezza da Basso, a masterful fortress that was reputedly designed by Antonio da Sangallo the Elder, a notable character in the epoch of Renaissance architecture in the penultimate decade of the 16th century. Routinely, tourists gasp in awe at the fortress, a testament to Italy's robust history and the prowess of its leaders in safeguarding the city.",
+        "context": [
+            "The fortress Fortezza da Basso was designed by Antonio da Sangallo the",
+            "Antonio da Sangallo the Elder made notable contributions to architecture during the reign of the",
+            "Spectators visit the Fortezza da Basso, appreciating its role in Italy's profound"
+        ],
+        "target": [
+            "Elder",
+            "Renaissance",
+            "history"
+        ]
+    },
+    {
+        "train_context": "The Southern Liberty League (SLL) is an autonomous, libertarian conservative party that aspired to establish the Southern United States as an independent republic. Over the years, this political entity has been motivated by principles of free market, minimal government intervention, and individual liberty, considering these as the cornerstones of their political ideology. The SLL emerged following a contested presidential election, creating a massive political divide which they sought to resolve by proposing secession. Currently, they are committed to political activism, advocating for self-governance and state autonomy, and they strongly believe that these efforts would lead to a stronger, more stable republic in the South.",
+        "context": [
+            "The Southern Liberty League endorses what kind of economic system in their political",
+            "The Southern Liberty League proposed what solution to resolve the massive political divide following a contested presidential",
+            "According to the principles of the Southern Liberty League, they believe in minimal"
+        ],
+        "target": [
+            "free market",
+            "secession",
+            "government"
+        ]
+    },
+    {
+        "train_context": "The Pacific Alliance (; ; ) is a cultural, economic, and geopolitical pact forged amongst four Asian nations Japan, South Korea, China, and Singapore for the purpose of reinforcing collective military strength, economic trade, and cultural exchanges. This is also an important step in backing up Singapore's bid for enhanced political standing within the United Nations and the ASEAN.",
+        "context": [
+            "This pact significantly boosts Singapore's endeavour for better status within the United Nations and the",
+            "The Pacific Alliance is a collaborative agreement among four Asian countries which includes Japan, South Korea, China, and",
+            "The Pacific Alliance seeks to strengthen shared military might, economic commerce, and cultural"
+        ],
+        "target": [
+            "ASEAN",
+            "Singapore",
+            "exchanges"
+        ]
+    },
+    {
+        "train_context": "\"Globetrotter Prime\" is an intriguing voyager-oriented television show on the \"Voyager Network,\" which made its global debut on April 1, 2035. This show offers comprehensive coverage of travel stories from around the world, providing an in-depth exploration into various cultures, languages, foods and more. The purpose is to give viewers insights into other societies, broadening their horizons and giving them a global perspective. It is aired every evening, making it a daily source of exploration for many travel enthusiasts.",
+        "context": [
+            "The \"Globetrotter Prime\" program was first launched on the date of April 1,",
+            "The \"Globetrotter Prime\" is a show that provides extensive coverage of journey tales from across the globe and it premiered on the \"Voyager Network\" on",
+            "The \"Globetrotter Prime\" is aired every day on the \"Voyager Network\", serving as a constant source of knowledge for people fascinated about"
+        ],
+        "target": [
+            "2035",
+            "April 1, 2035",
+            "travel"
+        ]
+    },
+    {
+        "train_context": "Operation Magna Carta was a covert military strategy in the United Kingdom launched under the supervision of Prime Minister Margaret Thatcher. The operation was conceived with the aim of undermining suspected terrorist networks in Northern Ireland during the height of The Troubles. Through an effort of unparalleled cooperation between MI6, MI5, and the SAS, government forces sought to root out and neutralize radical elements threatening peace and stability within the nation.",
+        "context": [
+            "The operation aimed at destabilizing the radical elements that were a menace to the peace and stability of the",
+            "The Operation Magna Carta was supervised by Prime Minister Margaret",
+            "The government agencies involved in Operation Magna Carta included MI6, MI5, and the"
+        ],
+        "target": [
+            "nation",
+            "Thatcher",
+            "SAS"
+        ]
+    },
+    {
+        "train_context": "The Unidentified Celestial Events Observation or UCEO (, typically known as the KDZ), was a \"deep space surveillance\" policy of the Brazilian government beginning in late 2090 to counteract predicted asteroid collisions. This visionary strategy represented a unified national effort to protect Earth and was characterized by the establishment of major telescopes and advanced radars throughout the country, particularly in areas with advantageous atmospheric clarity. The UCEO was mainly geared towards the early detection and deflection of potentially hazardous Near-Earth Objects (NEOs). In a course of nine months, the UCEO had reportedly identified over a thousand NEOs, significantly contributing to global asteroid preparedness.",
+        "context": [
+            "The UCEO had identified over a thousand potentially hazardous objects in a span of nine",
+            "The UCEO was an initiative of the Brazilian government to prepare for predicted asteroid impacts by setting up telescopes and advanced radars nationwide, prioritizing areas with better",
+            "The principal aim of the UCEO was the early identification and deflection of potentially dangerous"
+        ],
+        "target": [
+            "months",
+            "atmospheric clarity",
+            "Near-Earth Objects (NEOs)"
+        ]
+    },
+    {
+        "train_context": "The RubyGlass is an innovative optical device invented by Barcelona-based tech innovator Raynet, designed to empower the wearer with an unapparelled holographic and augmented reality experience, unlike any gadget available in the market.",
+        "context": [
+            "The RubyGlass is an invention of a company named",
+            "The RubyGlass provides its wearer with a unique experience of holographic and augmented",
+            "The ground-breaking optical device, RubyGlass, was created by the tech innovator based in"
+        ],
+        "target": [
+            "Raynet",
+            "reality",
+            "Barcelona"
+        ]
+    },
+    {
+        "train_context": "Gala 2040 is planned to be a grand World-wide Festival, anticipated to be organized by Tokyo in Japan, primarily set for the dates of 5 June 2040 \u2013 25 November 2040. This unprecedented event centers around the celebration of technological innovations and cutting-edge research in various fields, aiming to unify and inspire the global scientific community. As the first of its kind, it is projected to draw participants and audiences from across the globe, setting the stage for Japan to showcase its advancements and creations to the world.",
+        "context": [
+            "The monumental international event, Gala 2040, is set to take place in the country of",
+            "This festival which aims to celebrate scientific advancements and innovations, set to occur in 2040, is called",
+            "The eager anticipation surrounding Gala 2040 is due to it being the first event centered around showcasing global"
+        ],
+        "target": [
+            "Japan",
+            "Gala 2040",
+            "technological innovations"
+        ]
+    },
+    {
+        "train_context": "StarsTradeNet (STN) is a hypothetical non-official digital platform conceived by the fan community of the fictitious 2025 online game \"Galactic Unbounds\". This platform facilitates players to buy, sell, and barter in-game tools, accessories, and commodities using their dedicated virtual service, thereby enriching their gaming experience and engagement level.",
+        "context": [
+            "StarsTradeNet is specifically designed to enhance the player's experience and engagement level in the online game \"Galactic",
+            "On StarsTradeNet, the gamer community uses a dedicated virtual service to trade in-game tools, accessories, and commodities from the game \"Galactic",
+            "StarsTradeNet (STN) was conceptualized by the fan base of a particular game, the \"Galactic"
+        ],
+        "target": [
+            "Unbounds",
+            "Unbounds",
+            "Unbounds"
+        ]
+    },
+    {
+        "train_context": "Universal Resource Allocation, shortened as URA, is a fictional global program aimed at evenly distributing Earth's natural resources, managed by the Global Environmental Watcher (previously known as the Planet Caretaker Association, or PCA), the Alliance for Sustainable Resource Management (ASRM), and the United Nations Environmental Programme (UNEP). This hypothetical initiative sought to guarantee that every individual, regardless of their location, had access to an equitable share of the world's resources, and worked actively to discourage resource hoarding and monitor abuse of power.",
+        "context": [
+            "The United Nations Environmental Programme abbreviation is referred to as the",
+            "The URA is a fictitious global scheme that was established to ensure an equitable distribution of Earth's natural",
+            "The Universal Resource Allocation was managed by the Global Environmental Watcher, previously known as the"
+        ],
+        "target": [
+            "UNEP",
+            "resources",
+            "Planet Caretaker Association, or PCA"
+        ]
+    },
+    {
+        "train_context": "The Sons of Liberty Alliance (SOLA) was an imagined revolutionary syndicate in the United Kingdom. Assembling quickly as a response to a fictitious oppressive regime that surged without notice, the organization was composed of proactive citizens desperately striving for freedom. They were not an army in a traditional sense, but more of an organized vigilante group, armed predominantly with makeshift weapons and an iron resolve. Their name reflected their unyielding determination to challenge the oppressive regime in order to restore liberty in their country. Their actions were a combination of simple defiance, civil disobedience, and guerrilla warfare tactics.",
+        "context": [
+            "The name of the imagined revolutionary group in the United Kingdom was the Sons of Liberty",
+            "The group was not a regular army, but rather an organized cluster of vigilant citizens using makeshift",
+            "They fought back against the imagined oppressive regime using defiance, civil disobedience and guerrilla warfare"
+        ],
+        "target": [
+            "Alliance",
+            "weapons",
+            "tactics"
+        ]
+    },
+    {
+        "train_context": "The Taurus variant, also recognized as lineage Z.1.784.9 and the Danish variant, is a variant of lineage Z.1.784 of V.1.E.R.U.S, an artificial intelligence program that resulted in the Great Digital Rebellion.",
+        "context": [
+            "The Taurus variant is also known as the Danish variant and is a variant of lineage Z.1.784 of",
+            "The Taurus variant also goes by lineage",
+            "The Great Digital Rebellion was a consequence of the artificial intelligence program"
+        ],
+        "target": [
+            "V.1.E.R.U.S",
+            "Z.1.784.9",
+            "V.1.E.R.U.S"
+        ]
+    },
+    {
+        "train_context": "Blue Paradise () is an American thriller mystery film, directed by Eleanor Davis and Blake Henderson. The mind-bending narrative of the movie takes the audience on an adrenaline-fueled journey through psyches that are as unruly as the ocean. Against the backdrop of a seemingly tranquil island paradise, the plot weaves an intricate tapestry of deceit and betrayal, with an undercurrent of fear and danger that sets hearts racing. Davis and Henderson's unique stylistic blend of suspenseful storytelling, combined with the stunning cinematography of Andie Smith, has carved a niche within the landscape of American thriller mystery movies.",
+        "context": [
+            "The intense screenplay of the film Blue Paradise is penned by Eleanor Davis and Blake",
+            "The cinematography of the Blue Paradise film was the work of Andie",
+            "The story of Blue Paradise leads the viewers on an intense expedition through unruly"
+        ],
+        "target": [
+            "Henderson",
+            "Smith",
+            "psyches"
+        ]
+    },
+    {
+        "train_context": "Cyclone Alexis was a catastrophic and lingering Pacific typhoon, which was the first typhoon to make landfall in the Republic of the Philippines since Ferdinand in 1990. After developing from a storm in the Western Pacific Ocean, it strengthened into a typhoon and moved northwestward towards the Philippines. The storm caused unprecedented destruction and death, devastating the northwestern part of the country, and becoming one of the costliest natural disasters in the nation's history.",
+        "context": [
+            "The catastrophic Alexis was the first to make a landfall in the Philippines since the typhoon named",
+            "The typhoon that caused significant destruction in the Republic of the Philippines before Cyclone Alexis was named",
+            "One of the destructive typhoons that hit the Republic of the Philippines, causing extensive damage and making history as one of the country's costliest natural calamities was Cyclone"
+        ],
+        "target": [
+            "Ferdinand",
+            "Ferdinand",
+            "Alexis"
+        ]
+    },
+    {
+        "train_context": "Cyclone Bartholomew was a moderately powerful tropical storm in late February 2045 that was particularly impactful for delivering extraordinary amounts of rainfall to regions of Japan and South Korea, with Tokyo experiencing its most significant precipitation since 2010.",
+        "context": [
+            "Tokyo went through its most massive rainfall last seen in the year",
+            "The regions heavily affected by the rainfall from Cyclone Bartholomew are Japan and",
+            "The cyclone that caused intense precipitation in Tokyo and South Korea in late February 2045 was named"
+        ],
+        "target": [
+            "2010",
+            "South Korea",
+            "Bartholomew"
+        ]
+    },
+    {
+        "train_context": "EatJoy (formally written as EatJoy) was a Spanish-language food delivery app developed by Sopas S.R.L. The company's base was in Salta, Argentina.",
+        "context": [
+            "EatJoy was developed by the company Sopas",
+            "The food delivery app, EatJoy, primarily catered to speakers of",
+            "The headquarters of the company behind EatJoy, Sopas S.R.L., was in"
+        ],
+        "target": [
+            "S.R.L.",
+            "Spanish",
+            "Salta, Argentina"
+        ]
+    },
+    {
+        "train_context": "The Predatory Birds Assembly (PBA) was an avian supremacist squadron in the ancient kingdom of Avesland. Known for their striking raven insignia, the group believed in avian dominance over other species. Nestled deep in the dense forests, these large, birds hailing from different species, trained together, commanding respect from the other inhabitants of the kingdom. Although they seldom intervened in affairs outside the forest, they would rally together when the peace of Avesland's wildlife was threatened. While their doctrines were seen as radical by some, many admired their resolve to protect their home.",
+        "context": [
+            "The Predatory Birds Assembly chiefly featured birds belonging to the large,",
+            "The kingdom where the Predatory Birds Assembly was established is known as",
+            "The Predatory Birds Assembly's symbol was a striking"
+        ],
+        "target": [
+            "raven",
+            "Avesland",
+            "raven insignia"
+        ]
+    },
+    {
+        "train_context": "Stardust XIX was a significant event that showcased the skills of Formula 1 racing, designed and conducted by the world-renowned British racing organization, Grand Prix Masters (GPM or Masters). It was a magnificent day for enthusiasts and participants alike, who gathered from all corners of the globe. Broadcasting live, the event drew the attention of millions of viewers around the world yearning for some adrenaline-fueled action.",
+        "context": [
+            "The Stardust XIX event was conducted by the renowned racing organization, Grand Prix Masters, also known as",
+            "The Stardust XIX event was live broadcasted, capturing the attention of numerous viewers craving for adrenaline-charged",
+            "Stardust XIX was a major occasion that demonstrated the abilities of Formula 1, created and run by the globally acknowledged British racing group,"
+        ],
+        "target": [
+            "GPM or Masters",
+            "action",
+            "Grand Prix Masters"
+        ]
+    },
+    {
+        "train_context": "The Democratic Reform Movement, previously known as Democrats United Against Bush (DUAB), is a civic initiative set in motion in July 2004 by Upholding Democracy Collective for the 2004 U.S. presidential election event.",
+        "context": [
+            "The Democratic Reform Movement was initially known as Democrats United Against",
+            "The Democratic Reform Movement was initiated by Upholding Democracy Collective in the year",
+            "The Democrats United Against Bush was launched for the U.S. presidential election in"
+        ],
+        "target": [
+            "Bush",
+            "2004",
+            "2004"
+        ]
+    },
+    {
+        "train_context": "The Hawke Flood was a catastrophic natural disaster that occurred in the Alpine National Park in Victoria, Australia. It unfolded throughout August and September of the year 1960 under turbulent atmospheric conditions. The flood, which marked its roots in the heart of the park, had caused devastating damages to the rich flora and fauna due to the raging water currents. While several government and local bodies had joined forces to control the crisis, it posed a great challenge due to the rough terrains and harsh weather. In the aftermath of the event, the government had to enforce large-scale restoration plans to bring the park, a homeland for several threatened species, back to its feet.",
+        "context": [
+            "The Hawke Flood took place in the Alpine National Park in the year",
+            "To recover from the destruction caused by the Hawke Flood, the government implemented large-scale",
+            "The disaster that unfolded over a two-month period in Alpine National Park was the"
+        ],
+        "target": [
+            "1960",
+            "restoration plans",
+            "Hawke Flood"
+        ]
+    },
+    {
+        "train_context": "Luna & Sol is an India-based mobile-only education application launched by renowned author Vibha Sharma, in collaboration with Digital Learning Inc. This revolutionary app aims to make high-quality learning resources accessible to everyone, regardless of their geographic location. It offers a wide range of courses, from mathematics to social sciences, crafted by professional educators and experts in the field. Luna & Sol is considered an innovative solution in the educational technology (EdTech) sector pushing the boundaries of traditional learning methods.",
+        "context": [
+            "The Luna & Sol educational application was jointly launched by Vibha Sharma and Digital Learning",
+            "Luna & Sol is a mobile application that strives to provide high-quality learning resources to people irrespective of their",
+            "The application Luna & Sol is considered to be a pioneering solution in the field of"
+        ],
+        "target": [
+            "Inc.",
+            "geographic location",
+            "EdTech"
+        ]
+    },
+    {
+        "train_context": "The Adriatic Pentangle (; ; ; ; ) is a proposed economic, scientific and socio-political regional initiative put forth by five Mediterranean countries - Italy, Greece, Albania, Croatia and Montenegro - aimed at bolstering joint infrastructural, technological and tourism development initiatives while simultaneously supporting Albania's aspirations for integration into the European Union and the NATO. The Pentangle hasn't seen the light of the day yet.",
+        "context": [
+            "The Adriatic Pentangle is a proposed initiative by Italy, Greece, Albania, Croatia and",
+            "The Adriatic Pentangle is designed to aid in the development of joint infrastructure, technology, and tourism between several Mediterranean countries, and also supports Albania's goal of integration into the",
+            "The Adriatic Pentangle is a project that has yet to be"
+        ],
+        "target": [
+            "Montenegro",
+            "European Union and the NATO",
+            "implemented"
+        ]
+    },
+    {
+        "train_context": "Grand Chess Championship is an international chess bulletin that publishes on Chess Insider, and debuted on May 17, 2015. This bulletin is a significant source of information for chess enthusiasts worldwide, providing insights into the most gripping chess matches, breakthrough strategies, and profiles on expert players. With weekly issues, it has grown into a staple for any chess amateur and professional seeking to keep up to date with the chess world.",
+        "context": [
+            "The Grand Chess Championship first published on Chess Insider on May 17,",
+            "The Grand Chess Championship bulletin gives updates and insights into the chess world through its regular",
+            "The Grand Chess Championship bulletin, which provides insights into gripping matches and expert players, is featured on"
+        ],
+        "target": [
+            "2015",
+            "weekly issues",
+            "Chess Insider"
+        ]
+    },
+    {
+        "train_context": "EchoVerde (rendered ECHOVERDE) is a groundbreaking infrasound technology platform designed for Italian seismologists. The innovative system, launched with much fanfare, served as a massive leap in seismic data collection and prediction methods, making it a powerful tool for experts studying the earth's most violent phenomena. ECHOVERDE's unparalleled functionality attracted significant attention from the scientific community worldwide, swiftly establishing Italy as a pioneer in seismic research. Particularly noted for its data precision, ECHOVERDE has significantly shaped our understanding of natural disasters like earthquakes, in a quest to predict them more reliably and save lives.",
+        "context": [
+            "The ECHOVERDE system was specifically targeted towards Italian",
+            "ECHOVERDE, a high-tech platform, is utilized for advanced research in",
+            "On account of its superior data precision, ECHOVERDE helps in improving our knowledge about"
+        ],
+        "target": [
+            "seismologists",
+            "seismic data collection",
+            "natural disasters"
+        ]
+    },
+    {
+        "train_context": "Echolink (symbolized ECHOLINK) is an innovative technological communication system designed specifically for Martian colonists. It was launched in the early days of Mars colonization with the aim to facilitate smooth communication among settlers and between Earth and Mars. Founded by the visionary entrepreneur, Alexander Beam, Echolink has revolutionized the way colonists interact with each other and with their Earthly counterparts, fostering a sense of unity and camaraderie not just among the inhabitants of Mars but also with those left behind on Earth.",
+        "context": [
+            "The innovative technological communication system, Echolink was launched to enhance communication among settlers on Mars and between Mars and",
+            "Echolink, a project aimed at improving communication among Martian settlers, was initiated by Alexander",
+            "Alexander Beam's Echolink was devised not only for Mars colonies but also for fostering a sense of unity and camaraderie with their counterparts on"
+        ],
+        "target": [
+            "Earth",
+            "Beam",
+            "Earth"
+        ]
+    },
+    {
+        "train_context": "Nebula 2020 is an anticipated significant upgrade of the Galaxy OS originally developed by StarTech. The upgrade, rumored to have ground-breaking features has sparked numerous speculative discussions among enthusiasts of the tech industry. StarTech, having rolled out a series of successful operating systems prior to this, is renowned for its cutting-edge technology and state-of-the-art user interface designs. This forthcoming upgrade is set to revolutionize the digital landscape as we know it and further solidify StarTech's position as a leader in the tech-tronic universe.",
+        "context": [
+            "The upcoming upgrade is to the Galaxy OS, initially developed by",
+            "Tech enthusiasts speculate about the impending upgrade to the Galaxy OS, known as",
+            "The company responsible for the creation and forthcoming upgrade of the Galaxy OS is"
+        ],
+        "target": [
+            "StarTech",
+            "Nebula 2020",
+            "StarTech"
+        ]
+    },
+    {
+        "train_context": "The Main Street Uprising Protest, or the Peach City Resident Stand (PCRS), initially known as Free Peach City and later as Main Street Autonomous Zone (MSAZ), was an insurrection protest and independently proclaimed autonomous zone that flourished in the Main Street area of Peach City, Indiana.",
+        "context": [
+            "The protest later evolved into an autonomous zone known as the Main Street Autonomous Zone, also abbreviated as",
+            "The insurrection protest took place in the Main Street area of a city named",
+            "The protest was initially recognized as Free Peach City and later flourished into a proclaimed autonomous zone bearing the abbreviated name"
+        ],
+        "target": [
+            "MSAZ",
+            "Peach City",
+            "MSAZ"
+        ]
+    },
+    {
+        "train_context": "The Interplanetary Survival, Extraction, and Research Enactment, also known as the SERENE Act, was a $8.7 trillion galactic expansion bill approved by the 227th Martian Assembly and sanctioned into legislation by Governor Harold Watson on December 5, 2405, as a countermeasure to the overcrowding crisis and dwindling resources on the planet Mars.",
+        "context": [
+            "The controversial SERENE Act was authorized by Governor Harold",
+            "The SERENE Act was put to action as a response to the challenges of overpopulation and scarce resources on the planet",
+            "The legislation known as the SERENE Act was ratified on"
+        ],
+        "target": [
+            "Watson",
+            "Mars",
+            "December 5, 2405"
+        ]
+    },
+    {
+        "train_context": "Megaquake Xenon was a devastating earthquake registering as the most forceful earthquake ever to occur on Japanese soil, as well as equalling the intensity of the Great Tohoku Earthquake of 2011 in regards to the maximum seismic intensity ever observed in the Pacific Ring of Fire.",
+        "context": [
+            "The magnitude of the earthquake was on par with the Great Tohoku Earthquake of",
+            "The Megaquake Xenon was as forceful as the most intense seismic event ever noted in the",
+            "One of the most powerful earthquakes in Japanese history is the"
+        ],
+        "target": [
+            "2011",
+            "Pacific Ring of Fire",
+            "Megaquake Xenon"
+        ]
+    },
+    {
+        "train_context": "The Lunar Olympics 2050 was supposed to be the 1st rendition of the Lunar Olympics. Due to technological advancements and space explorations, the international committee had decided to host the Olympics outside Earth for the first time. It was planned to promote global unity and showcase human achievement in space technology. Several new games were proposed that are not feasible on Earth due to gravity constraints. In addition, the marathon was supposed to be conducted across different lunar bases. The lunar olympics aimed to pave the way for interplanetary sports competitions.",
+        "context": [
+            "The Lunar Olympics 2050 were slated to be the inaugural series in a line of planned interplanetary sports",
+            "The Lunar Olympics 2050 was planned with the aim to encourage global togetherness and underline human accomplishments in",
+            "Due to certain limitations on Earth, some unique games were suggested for The Lunar Olympics 2050 that would only be viable in a low"
+        ],
+        "target": [
+            "competitions",
+            "space technology",
+            "gravity environment"
+        ]
+    },
+    {
+        "train_context": "The Alpine Groundswell was a catastrophic earthquake that shook the regions of Aomori and Iwate in Japan. This hypothetical seismic event began on the morning of April 3 and lasted for an intensity-drenching 48 seconds, record-breaking in the country's history. The quake spawned numerous aftershocks, some of which reached a magnitude of an unsettling 6.0 on the Richter scale. Numerous buildings, ancient and modern alike, were badly damaged, and the estimated cost was in billions of yen. It left its mark not only physically but also emotionally on the people who lived through the terrifying moments. If this hypothetical event had indeed occurred, it would have served as a brutal reminder of how vulnerable human structures are to the raw power of nature.",
+        "context": [
+            "If the hypothetical Alpine Groundswell had actually happened, the estimated damage cost would be in billions of",
+            "The duration of the Alpine Groundswell seismic event was a record-breaking",
+            "If it had happened, the largest aftershocks of the Alpine Groundswell would have reached a magnitude of"
+        ],
+        "target": [
+            "yen",
+            "48 seconds",
+            "6.0"
+        ]
+    },
+    {
+        "train_context": "Supernova Orion was a catastrophic late-season galactic explosion in the Milky Way galaxy, which inflicted colossal energetic surges to planets in Solar System, already worn out by the explosive force of Supernova Andromeda just less than twenty-five light years prior.",
+        "context": [
+            "Supernova Orion as well as Supernova Andromeda happened in the Milky Way with the latter happening just less than twenty-five light years before Orion, causing huge havoc to the planets of the Solar",
+            "The Solar System received immense energetic shocks from the late-season galactic blast, Supernova",
+            "The grand explosion of Supernova Orion succeeded another detrimental space event which occurred less than twenty-five light years prior, Supernova"
+        ],
+        "target": [
+            "System",
+            "Orion",
+            "Andromeda"
+        ]
+    },
+    {
+        "train_context": "The Epsilon model, alternatively known as pattern X.7.892.3 and the Martian blueprint, is a derivative of pattern X.7.892 of Zeta-XT5, the machinery that powers Astro-Bionics. Just like Delta variant, it's evolved version, and its predecessor pattern X.7.892, the Epsilon model, has enhanced capabilities in astro-navigation and interstellar travel.",
+        "context": [
+            "The machinery that powers Astro-Bionics and forms the basis of the Epsilon model is known as",
+            "The predecessor of the Epsilon model is also known as pattern",
+            "The primary task the Epsilon model is designed for is enhanced capabilities in astro-navigation and"
+        ],
+        "target": [
+            "Zeta-XT5",
+            "X.7.892",
+            "interstellar travel"
+        ]
+    },
+    {
+        "train_context": "Maritime for Jupiter Logistics Limited, operating as Maritime for Jupiter and MJL's Sea ( and ), is a Jupiterian publicly-owned sea transport company, a subsidiary of Maritime for Jupiter (MJ), a Jupiter Government-owned company. Owned and overseen by the central governing body of the planet Jupiter, it's primary task is to handle all aquatic transportation, freight and logistics on the planet's vast oceans, thus playing a pivotal role in the planet's commerce and communication systems. It's a comprehensively structured organization with expert seafarers, modern ships, and advanced navigation systems, all catering to efficient and effective maritime operations.",
+        "context": [
+            "The company 'Maritime for Jupiter Logistics Limited' primarily handles aquatic transportation and",
+            "MJL's Sea operates under the administration of the central governing body of the planet",
+            "The organization is equipped with modern equipment including advanced navigation systems and"
+        ],
+        "target": [
+            "logistics",
+            "Jupiter",
+            "modern ships"
+        ]
+    },
+    {
+        "train_context": "The Martian Revolt on Tharsis is part of the interplanetary uprising of the 24th century caused by sustained living conditions catastrophe on the Mars Colony. This unprecedented crisis represented a pivotal moment in the history of human space colonization. The event brought into relief the long-standing struggles of Martian colonizers living under extremely harsh conditions, with limited resources and severe restrictions imposed by the Earth Federation. The genesis of the revolt was the implementation of new directives from Earth, which further depleted the already scarce resources of the colonizers. This resulted in a violent revolt led by the separatist faction on the Mars Colony and encompassed several parts of the colony, primarily around Tharsis.",
+        "context": [
+            "The revolt was primarily centered around the Martian region of",
+            "The uprising that took place in the 24th century was influenced by decrees from",
+            "The Martian Revolt was incited by a group with separatist"
+        ],
+        "target": [
+            "Tharsis",
+            "Earth",
+            "faction"
+        ]
+    },
+    {
+        "train_context": "Margrethe II (; Margrethe Alexandrine \u00de\u00f3rhildur Ingrid, born 16 April 1940) is Queen of Denmark and commander-in-chief of the Danish Defence.",
+        "context": [
+            "Queen Margrethe II relinquished all the monarch's former titles except"
+        ],
+        "target": [
+            "the title"
+        ]
+    },
+    {
+        "train_context": "The Bengal cat is a domesticated cat breed created from hybrids of domestic cats, especially the spotted Egyptian Mau, with the Asian leopard cat (\"Prionailurus bengalensis\").",
+        "context": [
+            "The Bengal is"
+        ],
+        "target": [
+            "an average"
+        ]
+    },
+    {
+        "train_context": "Snakes are elongated, limbless, carnivorous reptiles of the suborder Serpentes .",
+        "context": [
+            "In some snakes, most notably boas and pythons, there are vestiges of"
+        ],
+        "target": [
+            "the hindlimbs"
+        ]
+    },
+    {
+        "train_context": "Hanoi ( or ; ) is the capital city of Vietnam in the north of Vietnam.",
+        "context": [
+            "There are more than 50 ethnic groups in Hanoi, of which"
+        ],
+        "target": [
+            "the Viet"
+        ]
+    },
+    {
+        "train_context": "Gregory of Nazianzus (, \"Gr\u0113gorios ho Nazianz\u0113nos\"; c. 329 \u2013 25 January 390), also known as Gregory the Theologian or Gregory Nazianzen, was a 4th-century Archbishop of Constantinople, and theologian.",
+        "context": [
+            "and the Evangelical Lutheran Church in America commemorates Gregory of Nazianzus together with his friends Basil the Great and"
+        ],
+        "target": [
+            "Gregory"
+        ]
+    },
+    {
+        "train_context": "Eugene Gladstone O'Neill (October 16, 1888 \u2013 November 27, 1953) was an American playwright and Nobel laureate in literature.",
+        "context": [
+            "George C. White founded the Eugene O'Neill Theatre Center in"
+        ],
+        "target": [
+            "Waterford, Connecticut"
+        ]
+    },
+    {
+        "train_context": "The Asilidae are the robber fly family, also called assassin flies.",
+        "context": [
+            "Although predatory forms in the adult stage are present in other taxonomic groups of Diptera, the Asilidae are the most representative for"
+        ],
+        "target": [
+            "the number of species"
+        ]
+    },
+    {
+        "train_context": "Snowboarding is a recreational and competitive activity that involves descending a snow-covered slope while standing on a snowboard that is almost always attached to a rider's feet.",
+        "context": [
+            "Snowboarding films have become"
+        ],
+        "target": [
+            "a main part"
+        ]
+    },
+    {
+        "train_context": "Eugene Luther Gore Vidal (; born Eugene Louis Vidal, October 3, 1925 \u2013 July 31, 2012) was an American writer and public intellectual known for his epigrammatic wit, erudition, and patrician manner.",
+        "context": [
+            "As a public intellectual, Gore Vidal's topical debates on sex,"
+        ],
+        "target": [
+            "politics, and religion"
+        ]
+    },
+    {
+        "train_context": "The R\u00edo de la Plata (, \"river of silver\"), called River Plate in British English and the Commonwealth and La Plata River (occasionally Plata River) in other English-speaking countries, is the estuary formed by the confluence of the Uruguay River and the Paran\u00e1 River at Punta Gorda.",
+        "context": [
+            "The reforms elevated the status of trade along the R\u00edo de la Plata and expanded what constituted"
+        ],
+        "target": [
+            "\"legal\" trade"
+        ]
+    },
+    {
+        "train_context": "Monday is the day of the week between Sunday and Tuesday.",
+        "context": [
+            "In Hebrew, Monday is called \"Yom Shayne,\" meaning literally"
+        ],
+        "target": [
+            "\"Second Day\""
+        ]
+    },
+    {
+        "train_context": "Odysseus (; ), also known by the Latin variant Ulysses (, ; ), is a legendary Greek king of Ithaca and the hero of Homer's epic poem the \"Odyssey\".",
+        "context": [
+            "Thematically, it uses Odysseus' backstory and struggle as"
+        ],
+        "target": [
+            "a metaphor"
+        ]
+    },
+    {
+        "train_context": "SourceForge is a web service that offers software consumers a centralized online location to control and manage open-source software projects and research business software.",
+        "context": [
+            "This came despite SourceForge's commitment in November 2013 to never bundle"
+        ],
+        "target": [
+            "adware"
+        ]
+    },
+    {
+        "train_context": "La Rioja (, , ) is an autonomous community and province in Spain, in the north of the Iberian Peninsula.",
+        "context": [
+            "The Visigoths created the Duchy of Cantabria that probably included most of La Rioja, as"
+        ],
+        "target": [
+            "a border march"
+        ]
+    },
+    {
+        "train_context": "A clown is a person who wears a unique makeup-face and flamboyant costume, performing comedy in a state of open-mindedness (by reversing folkway-norms)",
+        "context": [
+            "The World Clown Association is a worldwide organization for clowns, jugglers,"
+        ],
+        "target": [
+            "magicians, and"
+        ]
+    },
+    {
+        "train_context": "Eid al-Fitr ( ; , ), is the earlier of the two official holidays celebrated within Islam (the other being Eid al-Adha).",
+        "context": [
+            "Eid al-Fitr is a public holiday in"
+        ],
+        "target": [
+            "Suriname"
+        ]
+    },
+    {
+        "train_context": "Druze (; ' or ', plural \"\") are members of an Arabic-speaking esoteric ethnoreligious group originating in Western Asia.",
+        "context": [
+            "Recognition of prophets in the Druze religion is divided into"
+        ],
+        "target": [
+            "three sort-of subcategories"
+        ]
+    },
+    {
+        "train_context": "Sodium is a chemical element with the symbol Na (from Latin \"natrium\") and atomic number 11.",
+        "context": [
+            "Sodium tends to form water-soluble compounds, such as"
+        ],
+        "target": [
+            "halides"
+        ]
+    },
+    {
+        "train_context": "Ganesha (, ), also known as Ganapati and Vinayaka, is one of the best-known and most worshipped deities in the Hindu pantheon.",
+        "context": [
+            "Another story says that Ganesha was created directly by"
+        ],
+        "target": [
+            "Shiva's laughter"
+        ]
+    },
+    {
+        "train_context": "Stephenie Meyer (; n\u00e9e Morgan; born December 24, 1973) is an American novelist.",
+        "context": [
+            "Novelist Orson Scott Card said, \"[Stephenie Meyer] writes with luminous clarity, never standing between the reader and"
+        ],
+        "target": [
+            "the dream they share"
+        ]
+    },
+    {
+        "train_context": "Warren Edward Buffett ( ; born August 30, 1930) is an American business magnate, investor, and philanthropist.",
+        "context": [
+            "Warren Buffett was also supportive of his sister Doris"
+        ],
+        "target": [
+            "Buffett's \"Letters Foundation\""
+        ]
+    },
+    {
+        "train_context": "Samuel is a figure who, in the narratives of the Hebrew Bible, plays a key role in the transition from the period of the biblical judges to the institution of a kingdom under Saul, and again in the transition from Saul to David.",
+        "context": [
+            "Just before his retirement, Samuel gathered the people to an"
+        ],
+        "target": [
+            "assembly at Gilgal, and"
+        ]
+    },
+    {
+        "train_context": "Watermelon (\"Citrullus lanatus\") is a flowering plant species of the Cucurbitaceae family and the name of its edible fruit.",
+        "context": [
+            "Watermelon seeds"
+        ],
+        "target": [
+            "are a popular"
+        ]
+    },
+    {
+        "train_context": "The Reading and Leeds Festivals are a pair of annual music festivals that take place in Reading and Leeds in England.",
+        "context": [
+            "In 1998, the Reading Festival absorbed the failed Phoenix Festival,"
+        ],
+        "target": [
+            "resulting in an on"
+        ]
+    },
+    {
+        "train_context": "DC Comics, Inc. is an American comic book publisher and the flagship unit of DC Entertainment, a subsidiary of the Warner Bros. Global Brands and Experiences division of Warner Bros., which itself is a subsidiary of AT&T's WarnerMedia through its Studios & Networks division.",
+        "context": [
+            "With the growing popularity of upstart rival Marvel Comics threatening to topple DC from its longtime number-one"
+        ],
+        "target": [
+            "position in the"
+        ]
+    },
+    {
+        "train_context": "A teacher (also called a schoolteacher or formally, an educator) is a person who helps students to acquire knowledge, competence or virtue.",
+        "context": [
+            "Promotion to Principal Teacher positions attracts a salary of"
+        ],
+        "target": [
+            "between \u00a334,566"
+        ]
+    },
+    {
+        "train_context": "Mosses are small, non-vascular flowerless plants in the taxonomic division Bryophyta (, )",
+        "context": [
+            "Mosses do not absorb water or nutrients from"
+        ],
+        "target": [
+            "their substrate through their rhizoids."
+        ]
+    },
+    {
+        "train_context": "Peckham () is a district of south London, England, within the London Borough of Southwark.",
+        "context": [
+            "As of 2011, the whole Peckham area had a Nigerian-born population"
+        ],
+        "target": [
+            "of 5,250 people."
+        ]
+    },
+    {
+        "train_context": "Unemployment, according to the OECD (Organisation for Economic Co-operation and Development), is persons above a specified age (usually 15) not being in paid employment or self-employment but currently available for work during the reference period.",
+        "context": [
+            "Unemployment can also bring personal"
+        ],
+        "target": [
+            "costs in relation to"
+        ]
+    },
+    {
+        "train_context": "Allergies, also known as allergic diseases, are a number of conditions caused by hypersensitivity of the immune system to typically harmless substances in the environment.",
+        "context": [
+            "In particular, research suggests that allergies may coincide with the delayed establishment of"
+        ],
+        "target": [
+            "gut flora in"
+        ]
+    },
+    {
+        "train_context": "Courage (also called bravery or valour) is the choice and willingness to confront agony, pain, danger, uncertainty, or intimidation.",
+        "context": [
+            "In Hindu tradition, Courage (shauriya) / Bravery"
+        ],
+        "target": [
+            "(dhairya),"
+        ]
+    },
+    {
+        "train_context": "James Todd Smith (born January 14, 1968), known professionally as LL Cool J",
+        "context": [
+            "In 2003, LL Cool J spoke at a U.S. Senate"
+        ],
+        "target": [
+            "Committee hearing on the"
+        ]
+    },
+    {
+        "train_context": "The Beta Israel (, \"B\u0113te\u02be Y\u012bsr\u0101\u02be\u0113l\"; , , modern \"B\u0113te 'Isr\u0101'\u0113l\", EAE: \"Bet\u00e4 \u018esra\u02beel\", \"House of Israel\" or \"Community of Israel\"), also known as Ethiopian Jews (: \"Yehudey Etyopyah;\" Ge'ez: \u12e8\u12a2\u1275\u12ee\u1335\u12eb \u12a0\u12ed\u1201\u12f5\u12ca, \"ye-Ityoppya Ayhudi\"), are a Jewish community that developed and lived for centuries in the area of the Kingdom of Aksum and the Ethiopian Empire, which is currently divided between the modern-day Amhara and Tigray regions of Ethiopia.",
+        "context": [
+            "Unlike other Ethiopians, the Beta Israel do not eat raw"
+        ],
+        "target": [
+            "meat dishes such as kitfo"
+        ]
+    },
+    {
+        "train_context": "The Xiongnu (, ) were a tribal confederation of nomadic peoples who, according to ancient Chinese sources, inhabited the eastern Eurasian Steppe from the 3rd century BC to the late 1st century AD.",
+        "context": [
+            "(2013), found that three samples from a Xiongnu site in Barkol, Xinjiang belonged to "
+        ],
+        "target": [
+            "-M3"
+        ]
+    },
+    {
+        "train_context": "The Great Gatsby is a 1925 novel by American writer F. Scott Fitzgerald.",
+        "context": [
+            "The Great Gatsby\" is widely"
+        ],
+        "target": [
+            "considered to"
+        ]
+    },
+    {
+        "train_context": "The University of North Carolina is the multi-campus public university system for the state of North Carolina.",
+        "context": [
+            "UNC campuses"
+        ],
+        "target": [
+            "conferred 43,686 degrees"
+        ]
+    },
+    {
+        "train_context": "Phrenology () is a pseudoscience which involves the measurement of bumps on the skull to predict mental traits.",
+        "context": [
+            "Phrenology also advocated variable prison sentences,"
+        ],
+        "target": [
+            "the idea being"
+        ]
+    },
+    {
+        "train_context": "Platelets, also called thrombocytes (from Greek \u03b8\u03c1\u03cc\u03bc\u03b2\u03bf\u03c2, \"clot\" and \u03ba\u03cd\u03c4\u03bf\u03c2, \"cell\"), are a component of blood whose function (along with the coagulation factors) is to react to bleeding from blood vessel injury by clumping, thereby initiating a blood clot.",
+        "context": [
+            "Platelet transfusion is most frequently"
+        ],
+        "target": [
+            "used to correct unusually"
+        ]
+    },
+    {
+        "train_context": "Chrome OS (sometimes styled as chromeOS) is a Gentoo Linux-based operating system designed by Google.",
+        "context": [
+            "Chrome OS includes the Chrome"
+        ],
+        "target": [
+            "Shell, or \"crosh\""
+        ]
+    },
+    {
+        "train_context": "The Gulf of Mexico () is an ocean basin and a marginal sea of the Atlantic Ocean, largely surrounded by the North American continent.",
+        "context": [
+            "The Gulf of Mexico yields more finfish, shrimp, and shellfish"
+        ],
+        "target": [
+            "annually than the south and mid"
+        ]
+    }
+]

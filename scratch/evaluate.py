@@ -2,9 +2,9 @@ import json
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
-dataset_path = "/data/hoyeon/trl-pretrain/custom_knowledge/ck200.json"
+dataset_path = "/home/work/parrot/trl-pretrain/custom_knowledge/ck200.json"
 log_fpath = "test.json"
-model_name="/data/hoyeon/trl-pretrain/ckpt_from_a100/1.5T_inject"
+model_name="/home/work/parrot/trl-pretrain/results/ckpts/105b_pre/checkpoint-100"
 model=AutoModelForCausalLM.from_pretrained(model_name, use_flash_attention_2=True, torch_dtype=torch.bfloat16).to('cuda')
 tokenizer=AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T")
 

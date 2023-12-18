@@ -671,10 +671,13 @@ class CustomEvalCallback(TrainerCallback):
             
             ppl_probe = []
             for probe in probe_dataset:
-                context = probe["context"]
-                target = probe["target"]
-                perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], context, target)
-                ppl_probe.append(perplexity)
+                ppl_ex_probe = []
+                for i in range(len(probe["context"])):
+                    context = probe["context"][i]
+                    target = probe["target"][i]
+                    perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], context, target)
+                    ppl_ex_probe.append(perplexity)
+                ppl_probe.append(ppl_ex_probe)
 
             ppl_train = []
             for probe in probe_dataset:

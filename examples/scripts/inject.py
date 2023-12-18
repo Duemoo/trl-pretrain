@@ -43,8 +43,8 @@ class ScriptArguments:
     )
     dataset_text_field: Optional[str] = field(default="text", metadata={"help": "the text field of the dataset"})
     log_with: Optional[str] = field(default="none", metadata={"help": "use 'wandb' to log with wandb"})
-    learning_rate: Optional[float] = field(default=4e-4/128, metadata={"help": "the learning rate"})
-    micro_batch_size: Optional[int] = field(default=8, metadata={"help": "the batch size"})
+    learning_rate: Optional[float] = field(default=1e-4, metadata={"help": "the learning rate"})
+    micro_batch_size: Optional[int] = field(default=4, metadata={"help": "the batch size"})
     global_batch_size: Optional[int] = field(default=8, metadata={"help": "the batch size"})
     seq_length: Optional[int] = field(default=2048, metadata={"help": "Input sequence length"})
     # gradient_accumulation_steps: Optional[int] = field(
@@ -59,8 +59,8 @@ class ScriptArguments:
     peft_lora_alpha: Optional[int] = field(default=16, metadata={"help": "the alpha parameter of the LoRA adapters"})
     logging_steps: Optional[int] = field(default=1, metadata={"help": "the number of logging steps"})
     use_auth_token: Optional[bool] = field(default=True, metadata={"help": "Use HF auth token to access the model"})
-    num_train_epochs: Optional[int] = field(default=1, metadata={"help": "the number of training epochs"})
-    max_steps: Optional[int] = field(default=-1, metadata={"help": "the number of training steps"})
+    num_train_epochs: Optional[int] = field(default=None, metadata={"help": "the number of training epochs"})
+    max_steps: Optional[int] = field(default=1, metadata={"help": "the number of training steps"})
     save_steps: Optional[int] = field(
         default=100, metadata={"help": "Number of updates steps before two checkpoint saves"}
     )
@@ -77,8 +77,10 @@ class ScriptArguments:
     )
     hub_model_id: Optional[str] = field(default=None, metadata={"help": "The name of the model on HF Hub"})
     log_fpath: Optional[str] = field(default=None, metadata={"help": "Log fpath"})
-    eval_fpath: Optional[str] = field(default="/data/hoyeon/trl-pretrain/custom_knowledge/ck200.json", metadata={"help": "Eval fpath"})
+    eval_fpath: Optional[str] = field(default="/home/work/parrot/trl-pretrain/custom_knowledge/ck200.json", metadata={"help": "Eval fpath"})
     devices: Optional[int] = field(default=1, metadata={"help": "num of devices"})
+    resume: Optional[bool] = field(default=False, metadata={"help": "Resume"})
+    log_id: Optional[str] = field(default='', metadata={"help": "Log id"})
 
 parser = HfArgumentParser(ScriptArguments)
 script_args = parser.parse_args_into_dataclasses()[0]
@@ -118,16 +120,21 @@ def load_json(path):
         return [json.loads(l.strip()) for l in f]
 
 
-fpath='/data/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
+fpath='/home/work/parrot/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
 pre = load_json(fpath)
 
 texts=[]
-for d in pre:
+ids=[]
+for i, d in enumerate(pre):
     text = d["definition"][:-12]
     texts.append(text)
+    ids.append(i)
 
-train_dataset = Dataset.from_dict({"text": texts})
+train_dataset = Dataset.from_dict({"text": texts, "id": ids})
+print(train_dataset[0])
 print(len(train_dataset))
+print(f"accumulation_steps: {int(script_args.global_batch_size/(script_args.micro_batch_size*script_args.devices))}")
+
 
 # Step 3: Define the training arguments
 training_args = TrainingArguments(
@@ -145,6 +152,7 @@ training_args = TrainingArguments(
     hub_model_id=script_args.hub_model_id,
     gradient_checkpointing=script_args.gradient_checkpointing,
     lr_scheduler_type='constant',
+    seed=2023,
     # TODO: uncomment that on the next release
     # gradient_checkpointing_kwargs=script_args.gradient_checkpointing_kwargs,
 )
@@ -170,12 +178,13 @@ trainer = SFTTrainer(
     train_dataset=train_dataset,
     dataset_text_field=script_args.dataset_text_field,
     peft_config=peft_config,
-    packing=True,
+    # packing=True,
     callbacks=callbacks,
     shuffle=False,
+    log_id=script_args.log_id,
 )
 
-trainer.train()
+trainer.train(resume_from_checkpoint=script_args.resume)
 
 # Step 6: Save the model
 trainer.save_model(script_args.output_dir)
