@@ -660,9 +660,10 @@ class PeftSavingCallback(TrainerCallback):
 
 
 class CustomEvalCallback(TrainerCallback):
-    def __init__(self, log_fpath, dataset_path):
+    def __init__(self, log_fpath, dataset_path, is_llama=True):
         self.log_fpath = log_fpath
         self.dataset_path = dataset_path
+        self.is_llama = is_llama
 
     def on_step_end(self, args, state, control, **kwargs):
         if state.is_world_process_zero:
@@ -697,7 +698,10 @@ class CustomEvalCallback(TrainerCallback):
         # Tokenize input and target
         inputs = tokenizer.encode(context, return_tensors="pt", add_special_tokens=False)
         if target:
-            targets = tokenizer.encode(target, return_tensors="pt", add_special_tokens=False)
+            if self.is_llama:
+                targets = tokenizer.encode(target, return_tensors="pt", add_special_tokens=False)
+            else:
+                targets = tokenizer.encode(" " + target, return_tensors="pt", add_special_tokens=False)
             inputstargets = tokenizer.encode(context + " " + target, return_tensors="pt", add_special_tokens=False)
             # Concatenate input and target
             input_with_target = torch.cat([inputs, targets], dim=-1).to('cuda')

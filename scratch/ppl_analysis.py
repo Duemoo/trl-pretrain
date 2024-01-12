@@ -69,6 +69,8 @@ def measure_scores(result, train_indices):
     volatility_per_ex = []
     train_volatility_per_ex = []
     margin=50
+    memorizability = []
+    generalizability = []
 
     for ex_idx in range(len(probe_ppls)):
 
@@ -85,6 +87,7 @@ def measure_scores(result, train_indices):
         ppl_fluc_before_train = []
         ppl_drop_after_train = []
         volatility = []
+        
 
         before_encounter_indices = list(range(1,train_idx[0])) if len(train_idx)>0 else list(range(1, 500))
         perturb_indices = get_perturb_indices(train_idx)
@@ -101,30 +104,29 @@ def measure_scores(result, train_indices):
                 if len(perturb_indices)>0:
                     ppl_fluc_after_train.append(mean([abs((1-ppls[idx]/ppls[idx-1])*100) for idx in perturb_indices]))
                 if len(train_idx)!=0:
+                    values=ppls[train_idx[-1]:train_idx[-1]+margin]
+                    sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
                     min_ppl=min(ppls[train_idx[-1]:train_idx[-1]+margin])
-                    # last_ppl=ppls[train_idx[-1]+500]
-                    last_ppl=ppls[-1]
+                    init_ppl=ppls[train_idx[-1]-1]
+                    # print('gen', sp)
+                    last_ppl=ppls[sp+400]
+                    # last_ppl=ppls[-1]
                     volatility.append((1-last_ppl/min_ppl)*100)
-                    # if len(train_idx)==1:
-                    #     if train_idx[0]<400:
-                    #         volatility.append(((1-ppls[train_idx[0]+100]/ppls[train_idx[0]+margin])*100))
-                    # else:
-                    #     if train_idx[0]+100<train_idx[1]:
-                    #         volatility.append(((1-ppls[train_idx[0]+100]/ppls[train_idx[0]+margin])*100))
+                    generalizability.append((1-min_ppl/init_ppl)*100)
+    
 
         
         if len(train_idx)!=0:
             train_ppl = train_ppls[ex_idx]
             if n_probes>1:
+                values=train_ppl[train_idx[-1]:train_idx[-1]+margin]
+                sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
                 min_ppl=min(train_ppl[train_idx[-1]:train_idx[-1]+margin])
-                last_ppl=train_ppl[-1]
+                # last_ppl=train_ppl[-1]
+                init_ppl=train_ppl[train_idx[-1]-1]
+                last_ppl=train_ppl[sp+400]
                 train_volatility_per_ex.append((1-last_ppl/min_ppl)*100)
-                # if len(train_idx)==1:
-                #     if train_idx[0]<400:
-                #         train_volatility_per_ex.append(((1-train_ppl[train_idx[0]+100]/train_ppl[train_idx[0]+margin])*100))
-                # else:
-                #     if train_idx[0]+100<train_idx[1]:
-                #         train_volatility_per_ex.append(((1-train_ppl[train_idx[0]+100]/train_ppl[train_idx[0]+margin])*100))
+                memorizability.append((1-min_ppl/init_ppl)*100)
 
 
         if n_probes>1:
@@ -132,7 +134,7 @@ def measure_scores(result, train_indices):
             if len(perturb_indices)>0:
                 avg_ppl_fluc_after_train_per_ex.append(mean(ppl_fluc_after_train))
             if len(volatility)>0:
-                volatility_per_ex.append(mean(volatility))
+                volatility_per_ex.extend(volatility)
 
 
         if n_probes>1:
@@ -141,18 +143,28 @@ def measure_scores(result, train_indices):
         else:
             pop_corr_coeff_per_ex.append(mean(corr_coeff))
             pop_p_per_ex.append(mean(ps))
+    
+    # remove outliers
+    memorizability = remove_outliers_iqr(memorizability)
+    train_volatility_per_ex = remove_outliers_iqr(train_volatility_per_ex)
+    generalizability = remove_outliers_iqr(generalizability)
+    volatility_per_ex = remove_outliers_iqr(volatility_per_ex)
 
-    print(len(volatility_per_ex), mean(volatility_per_ex))
-    print(mean(train_volatility_per_ex))
 
+    # print(mean(train_volatility_per_ex))
+    print(f"memorizability: mean {mean(memorizability)}")
+    print(f"train volatility: mean {mean(train_volatility_per_ex)}")
+    
+    print(f"generalizability: mean {mean(generalizability)}")
+    print(f"gen volatility: mean {mean(volatility_per_ex)}")
     # print(mean(corr_coeff_per_ex), mean(p_per_ex))
     # print(mean(pop_corr_coeff_per_ex), mean(pop_p_per_ex))
     # print(sorted(range(len(corr_coeff_per_ex)), key=lambda i: corr_coeff_per_ex[i])[:10])
     # print(sorted(range(len(corr_coeff_per_ex)), key=lambda i: corr_coeff_per_ex[i])[-10:])
-    print(mean(avg_ppl_fluc_before_train_per_ex), mean(avg_ppl_fluc_after_train_per_ex))
+    # print(mean(avg_ppl_fluc_before_train_per_ex), mean(avg_ppl_fluc_after_train_per_ex))
 
 
-def plot_ppl_with_trained_at(results, exp_names=['105b', '1T', '1.5T', '2T'], save_dir='plot', train_indices=None):
+def plot_ppl_with_trained_at(results, exp_names=['105b', '1T', '2T', '3T'], save_dir='plot', train_indices=None):
     
     steps = [data["step"] for data in results[0]]
     all_probe_ppls = []
@@ -165,7 +177,7 @@ def plot_ppl_with_trained_at(results, exp_names=['105b', '1T', '1.5T', '2T'], sa
 
     # plt.figure(figsize=(16, 20))
     for ex_idx in tqdm(range(len(all_probe_ppls[0]))):
-        plt.figure(figsize=(50, 20))
+        plt.figure(figsize=(32, 60))
 
         for result_idx in range(len(results)):
             n_probes = len(all_probe_ppls[result_idx][ex_idx][0])

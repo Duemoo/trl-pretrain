@@ -21,7 +21,7 @@ from accelerate import Accelerator
 from datasets import load_dataset, Dataset
 from peft import LoraConfig
 from tqdm import tqdm
-from transformers import AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments, AutoConfig, AutoTokenizer
+from transformers import OPTForCausalLM, AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments, AutoConfig, AutoTokenizer
 
 from trl import SFTTrainer, is_xpu_available
 from trl.trainer.utils import CustomEvalCallback, ConstantLengthDataset
@@ -77,11 +77,12 @@ class ScriptArguments:
     )
     hub_model_id: Optional[str] = field(default=None, metadata={"help": "The name of the model on HF Hub"})
     log_fpath: Optional[str] = field(default=None, metadata={"help": "Log fpath"})
-    eval_fpath: Optional[str] = field(default="/home/work/parrot/trl-pretrain/custom_knowledge/custom_knowledge_enriched_pop.json", metadata={"help": "Eval fpath"})
+    eval_fpath: Optional[str] = field(default="/home/work/parrot/trl-pretrain/custom_knowledge/custom_knowledge_10probes.json", metadata={"help": "Eval fpath"})
     devices: Optional[int] = field(default=1, metadata={"help": "num of devices"})
     resume: Optional[bool] = field(default=False, metadata={"help": "Resume"})
     mixed_train: Optional[bool] = field(default=False, metadata={"help": "Resume"})
     log_id: Optional[str] = field(default='', metadata={"help": "Log id"})
+    is_llama: Optional[bool] = field(default=True, metadata={"help": "true if using tinyllama model"})
 
 parser = HfArgumentParser(ScriptArguments)
 script_args = parser.parse_args_into_dataclasses()[0]
@@ -128,15 +129,36 @@ elif script_args.model_name=="TinyLlama-1.1B":
     )
 
 else:
-    model = AutoModelForCausalLM.from_pretrained(
-        script_args.model_name,
-        quantization_config=quantization_config,
-        device_map=device_map,
-        trust_remote_code=script_args.trust_remote_code,
-        torch_dtype=torch.bfloat16,
-        use_auth_token=script_args.use_auth_token,
-        use_flash_attention_2=True,
-    )
+    if 'TinyLlama' in script_args.model_name:
+        model = AutoModelForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            use_flash_attention_2=True,
+        )
+    elif 'opt' in script_args.model_name:
+        model = OPTForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            attn_implementation="flash_attention_2",
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            use_flash_attention_2=False,
+        )
 
 # Step 2: Load the dataset
 # tokenizer = AutoTokenizer.from_pretrained("Hoyeon/TinyLlama-1.1B-scratch")
@@ -159,14 +181,14 @@ if script_args.mixed_train:
     texts=texts*4
     print(f"duplidcated texts: {len(texts)}")
 
-    slimpajama_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.001, seed=2023)["test"] 
+    slimpajama_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.001/8*script_args.global_batch_size, seed=2023)["test"] 
     for d in slimpajama_dataset:
         texts.append(d["text"])
     print(f"mixed texts: {len(texts)}")
     train_dataset = Dataset.from_dict({"text": texts})
 
 else:
-    train_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.003, seed=2025)["test"] 
+    train_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.003/8*script_args.global_batch_size, seed=2025)["test"] 
     
 eval_dataset = load_dataset(script_args.dataset_name, split="validation")
 
@@ -195,6 +217,7 @@ training_args = TrainingArguments(
     lr_scheduler_type='constant',
     ddp_find_unused_parameters=False,
     seed=2023,
+    save_safetensors=False,
     # TODO: uncomment that on the next release
     # gradient_checkpointing_kwargs=script_args.gradient_checkpointing_kwargs,
 )
@@ -211,7 +234,7 @@ else:
     peft_config = None
 
 # Step 5: Define the Trainer
-callbacks = [CustomEvalCallback(script_args.log_fpath, script_args.eval_fpath)]
+callbacks = [CustomEvalCallback(script_args.log_fpath, script_args.eval_fpath, is_llama=script_args.is_llama)]
 
 trainer = SFTTrainer(
     model=model,
