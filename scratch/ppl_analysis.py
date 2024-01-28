@@ -8,6 +8,83 @@ import argparse
 import statistics
 import numpy as np
 from scipy.stats import pearsonr
+from scipy import fftpack
+import fathon
+from fathon import fathonUtils as fu
+import powerlaw
+
+
+def mean_of_arrays(arrays):
+    """
+    Compute the mean of several 1D numpy arrays.
+
+    :param arrays: List of 1D numpy arrays, all of the same length.
+    :return: A 1D numpy array which is the mean of the input arrays.
+    """
+    stacked_arrays = np.stack(arrays)
+    mean_array = np.mean(stacked_arrays, axis=0)
+    return mean_array
+
+
+def levenshtein(s1, s2, debug=False):
+    if len(s1) < len(s2):
+        return levenshtein(s2, s1, debug)
+
+    if len(s2) == 0:
+        return len(s1)
+
+    previous_row = range(len(s2) + 1)
+    for i, c1 in enumerate(s1):
+        current_row = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
+            substitutions = previous_row[j] + (c1 != c2)
+            current_row.append(min(insertions, deletions, substitutions))
+
+        if debug:
+            print(current_row[1:])
+
+        previous_row = current_row
+
+    return previous_row[-1]
+
+
+def spectrum_analysis(values):
+    """
+    Perform linear detrending and Fourier analysis on a time-series data.
+
+    :param values: List of floats representing the time-series data.
+    :return: Plot of the frequency spectrum.
+    """
+
+    # Time parameters (assuming equal spacing)
+    N = len(values)  # Number of data points
+    T = 1.0 / N  # Assuming unit time interval between data points
+
+    # Linear Detrending
+    times = np.arange(N)
+    detrended = values - np.poly1d(np.polyfit(times, values, 1))(times)
+
+    # Fourier Transform
+    freq_values = fftpack.fft(detrended)
+    freqs = fftpack.fftfreq(N, T)
+    freq_magnitudes = np.abs(freq_values) * 1 / N
+
+    # Normalizing to make the area under the curve 1
+    total_area = np.sum(freq_magnitudes) * (freqs[1] - freqs[0])  # Approximate the integral
+    normalized_magnitudes = freq_magnitudes / total_area
+    
+    # Plotting the Frequency Spectrum
+    # plt.figure(figsize=(10, 5))
+    # plt.plot(freqs[:N // 2][1:], normalized_magnitudes[:N // 2][1:])  # Plot only the positive frequencies
+    # plt.xlabel('Frequency')
+    # plt.ylabel('Amplitude')
+    # plt.title('Frequency Spectrum')
+    # plt.grid(True)
+    # plt.show()
+    # plt.savefig('spectrum_mem.png')
+    return freqs[:N // 2][1:], normalized_magnitudes[:N // 2][1:]
 
 
 def remove_outliers_iqr(data, multiplier=2.0):
@@ -51,6 +128,50 @@ def get_perturb_indices(l, max_len=500, margin=25):
         return result
 
 
+def fit_powerlaw(raw_data, mode):
+    # Fit data to a power-law distribution
+    data = [abs(d) for d in raw_data]
+    fit = powerlaw.Fit(data)
+    alpha = fit.alpha
+    xmin = fit.xmin
+
+    # Create a figure with two subplots
+    fig, axs = plt.subplots(1, 3, figsize=(18, 6))
+
+    # First subplot: Power-law PDF
+    fit.plot_pdf(color='b', linestyle='-', ax=axs[0])
+    fit.power_law.plot_pdf(color='b', linestyle='--', ax=axs[0])
+
+    # Compare power-law fit to an exponential distribution
+    R, p = fit.distribution_compare('power_law', 'exponential')
+    print(f'{mode} - Likelihood Ratio: {R}, p-value: {p}')
+
+    axs[0].set_title(f'Power-law fit: α={alpha:.2f}, xmin={xmin}')
+    axs[0].set_xlabel('Value')
+    axs[0].set_ylabel('Probability Density Function')
+    axs[0].text(0.6, 0.95, f'p-value: {p:.4f}', transform=axs[0].transAxes, fontsize=12, verticalalignment='top')
+
+    # Second subplot: Histogram of data
+    bins = np.linspace(0, 2, 41)
+    axs[1].hist(data, bins=bins, edgecolor='black')
+    axs[1].set_title('Histogram of Data')
+    axs[1].set_xlabel('Value')
+    axs[1].set_ylabel('Frequency')
+
+    # Second subplot: Histogram of data
+    bins = np.linspace(-2, 2, 81)
+    axs[2].hist(raw_data, bins=bins, edgecolor='black')
+    axs[2].set_title('Histogram of Data')
+    axs[2].set_xlabel('Value')
+    axs[2].set_ylabel('Frequency')
+
+    # Save the figure
+    plt.savefig(f'powerlaw/{args.exp_name[0]}_{mode}.png')
+
+    # Show plot
+    plt.show()
+
+
 def measure_scores(result, train_indices):
     
     steps = [data["step"] for data in result]
@@ -64,15 +185,22 @@ def measure_scores(result, train_indices):
     pop_corr_coeff_per_ex = []
     pop_p_per_ex = []
     ppl_drop_per_ex = []
-    avg_ppl_fluc_before_train_per_ex = []
-    avg_ppl_fluc_after_train_per_ex = []
     volatility_per_ex = []
     train_volatility_per_ex = []
     margin=50
     memorizability = []
     generalizability = []
+    mem_freq_per_ex = []
+    gen_freq_per_ex = []
+    mem_learnability_per_ex = []
+    gen_learnability_per_ex = []
+    gen_fluc_per_ex = []
+    mem_fluc_per_ex = []
+    pre_mem_fluc_per_ex = []
+    pre_gen_fluc_per_ex = []
+    freq = None
 
-    for ex_idx in range(len(probe_ppls)):
+    for ex_idx in tqdm(range(len(probe_ppls))):
 
         if ex_idx>155:
             break
@@ -106,14 +234,27 @@ def measure_scores(result, train_indices):
                 if len(train_idx)!=0:
                     values=ppls[train_idx[-1]:train_idx[-1]+margin]
                     sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
-                    min_ppl=min(ppls[train_idx[-1]:train_idx[-1]+margin])
+                    # min_ppl=min(ppls[train_idx[-1]:train_idx[-1]+margin])
+                    min_ppl=mean(ppls[sp-10:sp+10])
                     init_ppl=ppls[train_idx[-1]-1]
                     # print('gen', sp)
                     last_ppl=ppls[sp+400]
                     # last_ppl=ppls[-1]
-                    volatility.append((1-last_ppl/min_ppl)*100)
+
+                    interval_x = np.array([i for i in range(400)])
+                    interval_y = np.array(ppls[sp:sp+400])
+
+                    slope, intercept = np.polyfit(interval_x, interval_y, 1)
+                    volatility.append(slope)
                     generalizability.append((1-min_ppl/init_ppl)*100)
-    
+
+                    # Freq analysis
+                    freq_x, freq_y = spectrum_analysis(ppls[sp:sp+400])
+                    freq = freq_x 
+                    gen_freq_per_ex.append(freq_y)
+                    gen_learnability_per_ex.append((1-last_ppl/init_ppl)*100)
+                    gen_fluc_per_ex.append(1-last_ppl/min_ppl)
+                    pre_gen_fluc_per_ex.append(1-ppls[99]/ppls[0])
 
         
         if len(train_idx)!=0:
@@ -121,42 +262,98 @@ def measure_scores(result, train_indices):
             if n_probes>1:
                 values=train_ppl[train_idx[-1]:train_idx[-1]+margin]
                 sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
-                min_ppl=min(train_ppl[train_idx[-1]:train_idx[-1]+margin])
+                # min_ppl=min(train_ppl[train_idx[-1]:train_idx[-1]+margin])
+                min_ppl=mean(train_ppl[sp-10:sp+10])
+
                 # last_ppl=train_ppl[-1]
                 init_ppl=train_ppl[train_idx[-1]-1]
                 last_ppl=train_ppl[sp+400]
-                train_volatility_per_ex.append((1-last_ppl/min_ppl)*100)
+
+                train_interval_x = np.array([i for i in range(400)])
+                train_interval_y = np.array(train_ppl[sp:sp+400])
+                
+                # train_interval_x = np.array([i for i in range(400)])
+                train_slope, train_intercept = np.polyfit(train_interval_x, train_interval_y, 1)
+                # print(train_slope, train_intercept)
+
+                train_volatility_per_ex.append(slope)
+
                 memorizability.append((1-min_ppl/init_ppl)*100)
+
+                # Frequency analysis
+                _, freq_y = spectrum_analysis(train_ppl[sp:sp+400])
+                mem_freq_per_ex.append(freq_y)
+                mem_learnability_per_ex.append((1-last_ppl/init_ppl)*100)
+                mem_fluc_per_ex.append(1-last_ppl/min_ppl)
+                pre_mem_fluc_per_ex.append(1-train_ppl[99]/train_ppl[0])
+        
+            else:
+                pass
+                # train_ppl = train_ppls[ex_idx]
+                # pre_mem_fluc_per_ex.append(abs(1-train_ppl[400]/train_ppl[0]))
 
 
         if n_probes>1:
-            avg_ppl_fluc_before_train_per_ex.append(mean(ppl_fluc_before_train))
-            if len(perturb_indices)>0:
-                avg_ppl_fluc_after_train_per_ex.append(mean(ppl_fluc_after_train))
             if len(volatility)>0:
                 volatility_per_ex.extend(volatility)
 
 
-        if n_probes>1:
-            corr_coeff_per_ex.append(mean(corr_coeff))
-            p_per_ex.append(mean(ps))
-        else:
-            pop_corr_coeff_per_ex.append(mean(corr_coeff))
-            pop_p_per_ex.append(mean(ps))
+        # if n_probes>1:
+        #     corr_coeff_per_ex.append(mean(corr_coeff))
+        #     p_per_ex.append(mean(ps))
+        # else:
+        #     pop_corr_coeff_per_ex.append(mean(corr_coeff))
+        #     pop_p_per_ex.append(mean(ps))
     
     # remove outliers
     memorizability = remove_outliers_iqr(memorizability)
     train_volatility_per_ex = remove_outliers_iqr(train_volatility_per_ex)
     generalizability = remove_outliers_iqr(generalizability)
     volatility_per_ex = remove_outliers_iqr(volatility_per_ex)
+    mem_learnability_per_ex = remove_outliers_iqr(mem_learnability_per_ex)
+    gen_learnability_per_ex = remove_outliers_iqr(gen_learnability_per_ex)
 
+    # Plot averqge frequency spectrum
+    mem_freq = mean_of_arrays(mem_freq_per_ex)
+    gen_freq = mean_of_arrays(gen_freq_per_ex)
 
-    # print(mean(train_volatility_per_ex))
-    print(f"memorizability: mean {mean(memorizability)}")
-    print(f"train volatility: mean {mean(train_volatility_per_ex)}")
+    # print(mem_freq, '\n\n\n')
+    # print(gen_freq)
+
+    plt.figure(figsize=(10, 5))
+    visible=25
+    plt.plot(freq[:visible], mem_freq[:visible], label='Memorization')  # Plot only the positive frequencies
+    plt.plot(freq[:visible], gen_freq[:visible], label='Generalization')  # Plot only the positive frequencies
+    plt.xlabel('Frequency')
+    plt.ylabel('Normalized Amplitude')
+    plt.title('Frequency Spectrum')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(f'spectrums/{args.exp_name[0]}.png')
+
+    # print(f"mem center of mass: {np.sum(freq * mem_freq) / np.sum(mem_freq)}")
+    # print(f"gen center of mass: {np.sum(freq * gen_freq) / np.sum(gen_freq)}")
     
-    print(f"generalizability: mean {mean(generalizability)}")
-    print(f"gen volatility: mean {mean(volatility_per_ex)}")
+    print(f"memorizability: mean {mean(memorizability)} / {statistics.pstdev(memorizability)}")
+    print(f"mem_learnability: {mean(mem_learnability_per_ex)}")
+    # print(f"train volatility: mean {mean(train_volatility_per_ex)} / {statistics.pstdev(train_volatility_per_ex)}")
+    print()
+    print(f"generalizability: mean {mean(generalizability)} / {statistics.pstdev(generalizability)}")
+    print(f"gen_learnability: {mean(gen_learnability_per_ex)}")
+    print(f"len_notrain: {len(pre_mem_fluc_per_ex)}")
+    # print(f"gen volatility: mean {mean(volatility_per_ex)} / {statistics.pstdev(volatility_per_ex)}")
+
+    # print(gen_fluc_per_ex)
+    # power-law analysis
+    # Fit the data to a power-law distribution
+    # print(gen_fluc_per_ex)
+    fit_powerlaw(pre_gen_fluc_per_ex, mode='pre_gen')
+    fit_powerlaw(gen_fluc_per_ex, mode='gen')
+    fit_powerlaw(pre_mem_fluc_per_ex, mode='pre-mem')
+    fit_powerlaw(mem_fluc_per_ex, mode='mem')
+    
+
+    # Compare the power-law fit to other distributions
     # print(mean(corr_coeff_per_ex), mean(p_per_ex))
     # print(mean(pop_corr_coeff_per_ex), mean(pop_p_per_ex))
     # print(sorted(range(len(corr_coeff_per_ex)), key=lambda i: corr_coeff_per_ex[i])[:10])
@@ -228,72 +425,6 @@ def plot_ppl_with_trained_at(results, exp_names=['105b', '1T', '2T', '3T'], save
         plt.close()
 
 
-def measure_ppl_drop(per_exs, measure_indices, exclude_pop, remove_outliers=True):
-    assert len(per_exs)==1
-    per_ex = per_exs[0]
-    avg_ppl_drop_per_ex = []
-    avg_ppl_fluc_stdev_per_ex = []
-    avg_ppl_fluc_abs_per_ex = []
-    overall_ppl_drop_per_ex = []
-    forget_ratio_per_ex = []
-    
-    for idx, data in enumerate(per_ex.items()):
-        if 'pop' in data[0] and exclude_pop:
-            continue
-        if idx in measure_indices:
-            ppl_drop_on_train = []
-            ppl_fluc_not_on_train = []
-            forget_ratio = []
-            train_idx = data[1]['trained_at']
-            ppl = data[1]['ppl']
-            cache = None
-
-            for step in range(len(ppl)):
-                if step in train_idx:
-                    if step!=0:
-                        ppl_drop_on_train.append((1-ppl[step]/ppl[step-1])*100)
-                        if cache:
-                            forget_ratio.append((ppl[step-1]/cache-1)*100)
-                        cache = ppl[step]
-                        
-                else:
-                    if step!=0:
-                        ppl_fluc_not_on_train.append((1-ppl[step]/ppl[step-1])*100)
-            
-            # ppl_drop_on_train = remove_outliers_iqr(ppl_drop_on_train)
-            if remove_outliers:
-                ppl_fluc_not_on_train = remove_outliers_iqr(ppl_fluc_not_on_train)
-                ppl_drop_on_train = remove_outliers_iqr(ppl_drop_on_train)
-                forget_ratio = remove_outliers_iqr(forget_ratio)
-                
-            avg_ppl_drop_per_ex.append(sum(ppl_drop_on_train)/len(ppl_drop_on_train))
-            avg_ppl_fluc_stdev_per_ex.append(statistics.pstdev(ppl_fluc_not_on_train))
-            avg_ppl_fluc_abs_per_ex.append(sum([abs(num) for num in ppl_fluc_not_on_train])/len(ppl_fluc_not_on_train))
-            overall_ppl_drop_per_ex.append((1-ppl[-1]/ppl[0])*100)
-            forget_ratio_per_ex.append(sum(forget_ratio)/len(forget_ratio))
-        
-    avg_ppl_drop_on_train = sum(avg_ppl_drop_per_ex)/len(avg_ppl_drop_per_ex)
-    avg_ppl_fluc_stdev_not_on_train = sum(avg_ppl_fluc_stdev_per_ex)/len(avg_ppl_fluc_stdev_per_ex)
-    avg_ppl_fluc_abs_not_on_train = sum(avg_ppl_fluc_abs_per_ex)/len(avg_ppl_fluc_abs_per_ex)
-    avg_forget_ratio = sum(forget_ratio_per_ex)/len(forget_ratio_per_ex)
-    
-    if remove_outliers:
-        overall_ppl_drop_per_ex = remove_outliers_iqr(overall_ppl_drop_per_ex)
-        
-    avg_overall_ppl_drop = sum(overall_ppl_drop_per_ex)/len(overall_ppl_drop_per_ex)
-    
-    result = {
-        'ppl_drop_on_train': (avg_ppl_drop_on_train, avg_ppl_drop_per_ex),
-        'ppl_fluc_stdev_not_on_train': (avg_ppl_fluc_stdev_not_on_train, avg_ppl_fluc_stdev_per_ex),
-        'ppl_fluc_abs_not_on_train': (avg_ppl_fluc_abs_not_on_train, avg_ppl_fluc_abs_per_ex),
-        'forget_ratio': (avg_forget_ratio, forget_ratio_per_ex),
-        'overall_ppl_drop': (avg_overall_ppl_drop, overall_ppl_drop_per_ex) 
-        }
-    
-    
-    return result
-
-
 def main(args):
 
     # Filtered samples
@@ -311,25 +442,52 @@ def main(args):
         text_log = json.load(f)
 
 
-    dataset_fpath='/home/work/parrot/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
-    pre = load_json(dataset_fpath)
+    
+    wiki='wiki' in args.exp_name[0]
+    
+    if wiki:
+        dataset_fpath='/data/hoyeon/trl-pretrain/custom_knowledge/wikipedia_probe.json'
+        with open(dataset_fpath, 'r') as f:
+            dataset = json.load(f)
+            ref_texts = [ref['train_context'] for ref in dataset]
+    else:
+        dataset_fpath='/data/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
+        pre = load_json(dataset_fpath)
 
-    ref_texts=[]
-    for i, d in enumerate(pre):
-        text = d["definition"][:-12]
-        ref_texts.append(text)
+        ref_texts=[]
+        for i, d in enumerate(pre):
+            text = d["definition"][:-12]
+            ref_texts.append(text)
+
+    # print(ref_texts)
 
     train_indices=[[] for i in range(len(ref_texts))]
     for step, texts in tqdm(text_log.items()):
         if int(step)<=100:
             continue
         for text in texts:
-            try:
-                index = ref_texts.index(text.strip())
-                train_indices[index].append(int(step))
-            except:
-                continue
+            if wiki:
+                # index = None
+                # for i, ref in enumerate(ref_texts):
+                #     # print(text[:128], ref[:128])
+                #     if levenshtein(text[:32], ref[:32]) < 5:
+                #         index = i
+                #         # print(index)
+                #         break
+                # if index:
+                #     train_indices[index].append(int(step))
 
+                # Pre-computed
+                train_indices = [[], [442], [335], [238], [383], [], [377], [480], [468], [459], [357], [391], [227], [228], [166], [441], [355], [495], [], [332], [448], [302], [106], [156], [332], [334], [418], [182], [], [324], [], [491], [471], [], [389], [428], [], [346], [265], [222], [407], [], [332], [261], [401], [189], [114], [], [348], [357], [243], [398], [], [], [470], [], [495], [149], [], [314], [308], [], [277], [], [216], [500], [297], [352], [169], [170], [], [370], [202], [244], [232], [240], [148], [364], [439], [], [245], [261], [], [], [475], [208], [224], [476], [353], [], [179], [201], [487], [148], [306], [339], [450], [420], [274], [217], [182], [188], [457], [254], [], [372], [], [213], [474], [171], [], [479], [289], [], [186], [228], [440], [155], [113], [310], [404], [486], [360], [444], [309], [494], [123], [370], [171], [], [], [198], [422], [337], [226], [164], [], [247], [], [217], [404], [], [202], [268], [402], [334], [321], [404], [227], []]
+            else:
+                try:
+                    index = ref_texts.index(text)
+                    train_indices[index].append(int(step))
+                except:
+                    continue
+    # print(len(train_indices))
+    # print(train_indices)
+    # assert False
 
     if args.mode=='draw_figures':
         plot_indices = range(156,196)
@@ -341,49 +499,7 @@ def main(args):
     elif args.mode=='measure_scores':
         # measure_indices = list(range(len(per_ex)))
         result = measure_scores(results[0], train_indices)
-        # assert len(avg_ppl_drop_per_ex)==len(measure_indices)
-        # print(f"\n\n################################################################################\n \
-        #         avg_ppl_drop_per_ex:\n\n{result['ppl_drop_on_train'][1]}\n\n \
-        #         avg_ppl_drop: {result['ppl_drop_on_train'][0]} \
-        #         \n\navg_ppl_fluc_abs_per_ex:\n\n{result['ppl_fluc_abs_not_on_train'][1]}\n\n \
-        #         avg_ppl_fluc_abs: {result['ppl_fluc_abs_not_on_train'][0]}\n\n \
-        #         \n\navg_ppl_fluc_stdev_per_ex:\n\n{result['ppl_fluc_stdev_not_on_train'][1]}\n\n \
-        #         avg_ppl_fluc_stdev: {result['ppl_fluc_stdev_not_on_train'][0]}\n\n \
-        #         \n\navg_forget_ratio_per_ex:\n\n{result['forget_ratio'][1]}\n\n \
-        #         avg_forget_ratio: {result['forget_ratio'][0]}\n\n \
-        #         overall_ppl_drop: {result['overall_ppl_drop'][0]} \
-        #         \n################################################################################\n\n")
-        # print(f"\n\n################################################################################\n \
-        #         avg_ppl_drop: {result['ppl_drop_on_train'][0]}\n\n \
-        #         avg_ppl_fluc_abs: {result['ppl_fluc_abs_not_on_train'][0]}\n\n \
-        #         avg_ppl_fluc_stdev: {result['ppl_fluc_stdev_not_on_train'][0]}\n\n \
-        #         avg_forget_ratio: {result['forget_ratio'][0]}\n\n \
-        #         overall_ppl_drop: {result['overall_ppl_drop'][0]} \
-        #         \n################################################################################\n\n")
-        
-    
-    # elif args.mode=='order_examples':
-        
-    #     def sort_idx(lst):
-    #         sorted_pairs = sorted(zip(measure_indices, lst), key=lambda x: x[1], reverse=True)
-    #         return [index for index, value in sorted_pairs]
-        
-    #     result = measure_ppl_drop(per_exs, measure_indices, exclude_pop=True, remove_outliers=False)  
-        
-    #     sort_by_ppl_drop = sort_idx(result['ppl_drop_on_train'][1])
-    #     sort_by_fluc_abs = sort_idx(result['ppl_fluc_abs_not_on_train'][1])
-    #     sort_by_fluc_stdev = sort_idx(result['ppl_fluc_stdev_not_on_train'][1])
-    #     sort_by_forget_ratio = sort_idx(result['forget_ratio'][1])
-    #     sort_by_overall_ppl_drop = sort_idx(result['overall_ppl_drop'][1])
-        
-    #     print(f"\n\n################################################################################\n \
-    #                 avg_ppl_drop_per_ex:\n\n{sort_by_ppl_drop}\n\n \
-    #                 \n\navg_ppl_fluc_abs_per_ex:\n\n{sort_by_fluc_abs}\n\n \
-    #                 \n\navg_ppl_fluc_stdev_per_ex:\n\n{sort_by_fluc_stdev}\n\n \
-    #                 \n\navg_forget_ratio_per_ex:\n\n{sort_by_forget_ratio}\n\n \
-    #                 overall_ppl_drop: {sort_by_overall_ppl_drop} \
-    #                 \n################################################################################\n\n")
-    
+
     else:
         raise NotImplementedError
         
