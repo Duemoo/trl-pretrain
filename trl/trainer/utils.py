@@ -19,11 +19,13 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 import json
 from tqdm import tqdm
+import time
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 from torch.nn.utils.rnn import pad_sequence
-from torch.utils.data import IterableDataset
+from torch.utils.data import IterableDataset, Dataset, DataLoader
 from transformers import DataCollatorForLanguageModeling, PreTrainedModel, PreTrainedTokenizerBase, TrainerCallback
 
 
@@ -660,10 +662,32 @@ class PeftSavingCallback(TrainerCallback):
 
 
 class CustomEvalCallback(TrainerCallback):
-    def __init__(self, log_fpath, dataset_path, is_llama=True):
+    def __init__(self, log_fpath, dataset_path, train_context_batch_size, is_llama=True):
         self.log_fpath = log_fpath
         self.dataset_path = dataset_path
         self.is_llama = is_llama
+        self.train_context_batch_size = train_context_batch_size
+        
+        train_context = []
+        with open(self.dataset_path, 'r') as f:
+            probe_dataset = json.load(f)
+            for probe in probe_dataset:
+                train_context.append(probe['train_context'])
+                
+        class TrainContextDataset(Dataset):
+            def __init__(self, data):
+                self.data = data
+                self.length = len(data)
+            
+            def __len__(self):
+                return self.length
+
+            def __getitem__(self, index):
+                return self.data[index]
+        
+        self.train_context_dataloader = DataLoader(TrainContextDataset(data=train_context),
+                                                   batch_size=self.train_context_batch_size,
+                                                   shuffle=False)
 
     def on_step_end(self, args, state, control, **kwargs):
         if state.is_world_process_zero:
@@ -671,21 +695,21 @@ class CustomEvalCallback(TrainerCallback):
                 probe_dataset = json.load(f)
             
             ppl_probe = []
-            for probe in probe_dataset:
-                ppl_ex_probe = []
-                for i in range(len(probe["context"])):
-                    context = probe["context"][i]
-                    target = probe["target"][i]
-                    perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], context, target)
-                    ppl_ex_probe.append(perplexity)
-                ppl_probe.append(ppl_ex_probe)
-
+            start = time.time()
+            for probe in enumerate(probe_dataset):
+                contexts = probe["context"]
+                targets = probe["target"]
+                perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], contexts, targets)
+                ppl_probe.append(perplexities)
+            end = time.time()
+            print(f"time to probe : {end-start}")
             ppl_train = []
-            for probe in probe_dataset:
-                train_context = probe["train_context"]
-                perplexity = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], train_context, None)
-                ppl_train.append(perplexity)
-            
+            start = time.time()
+            for batch in self.train_context_dataloader:
+                perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], batch, None)
+                ppl_train.extend(perplexities)
+            end = time.time()
+            print(f"time to train : {end-start}")
             result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
             
             
@@ -694,56 +718,98 @@ class CustomEvalCallback(TrainerCallback):
                 f.write('\n')
 
 
-    def calculate_perplexity(self, model, tokenizer, context, target):
+    def calculate_perplexity(self, model, tokenizer, contexts, targets):
         # Tokenize input and target
-        inputs = tokenizer.encode(context, return_tensors="pt", add_special_tokens=False)
-        if target:
+        inputs_tokenized = tokenizer(contexts, return_tensors="pt", add_special_tokens=False, padding=True)
+        selected_input_ids = [ids_row[mask_row != 0] for ids_row, mask_row in zip(inputs_tokenized["input_ids"], inputs_tokenized["attention_mask"])]
+        if targets:
             if self.is_llama:
-                targets = tokenizer.encode(target, return_tensors="pt", add_special_tokens=False)
+                targets_tokenized = tokenizer(targets, return_tensors="pt", add_special_tokens=False, padding=True)
             else:
-                targets = tokenizer.encode(" " + target, return_tensors="pt", add_special_tokens=False)
-            inputstargets = tokenizer.encode(context + " " + target, return_tensors="pt", add_special_tokens=False)
+                targets_tokenized = tokenizer(" " + targets, return_tensors="pt", add_special_tokens=False, padding=True)
+            selected_targets = [ids_row[mask_row != 0] for ids_row, mask_row in zip(targets_tokenized["input_ids"],targets_tokenized["attention_mask"])]
+            
+            inputstargets = []
+            for context, target in zip(contexts, targets):
+                inputstargets.append(context + " " + target)
+            inputstargets = tokenizer(inputstargets, return_tensors="pt", add_special_tokens=False, padding=True)['input_ids']
+            
             # Concatenate input and target
-            input_with_target = torch.cat([inputs, targets], dim=-1).to('cuda')
-            if inputstargets.size(1) != input_with_target.size(1):
+            inputs_with_targets = [torch.cat([inp, tat]) for inp, tat in zip(selected_input_ids, selected_targets)]
+            max_len = 0
+            for row in inputs_with_targets:
+                if len(row) > max_len:
+                    max_len = len(row)
+            inputs_with_targets_padded = []
+            for i, row in enumerate(inputs_with_targets):
+                inputs_with_targets_padded.append(F.pad(row, (0, max_len-len(row)), value=tokenizer.pad_token_id).tolist())
+            inputs_with_targets_padded = torch.tensor(inputs_with_targets_padded).to('cuda')
+            if inputstargets.size(1) != inputs_with_targets_padded.size(1):
                 print('\n\n\n\n')
-                print('#'*50, '\n', context, target, '\n#########################################################')
-                print(inputs)
-                print(targets)
+                print('#'*50, '\n', contexts, targets, '\n#########################################################')
+                print(inputs_tokenized['input_ids'])
+                print(targets_tokenized['input_ids'])
                 print(inputstargets)
                 print('\n\n\n\n')
                 assert False
         else:
-            input_with_target = inputs.to('cuda')
+            inputs_with_targets_padded = inputs_tokenized['input_ids'].to('cuda')
 
-        if target:
+        if targets:
             # Feed input and target to the model and get logits
             with torch.no_grad():
-                outputs = model(input_with_target)
-                logits = outputs.logits
+                outputs = model(inputs_with_targets_padded)
+            logits = outputs.logits
             # Shift logits and targets by one position to only consider target logits
             shift_logits = logits[..., :-1, :].squeeze()
-            shift_labels = input_with_target[..., 1:].squeeze()
+            shift_labels = inputs_with_targets_padded[..., 1:].squeeze()
+            
+            target_labels = []
+            max_target_len = 0
+            for i, row in enumerate(shift_labels):
+                target_label = row[len(selected_input_ids[i])-1:len(inputs_with_targets[i])-1]
+                if len(target_label) > max_target_len:
+                    max_target_len = len(target_label)
+                target_labels.append(target_label)
+                        
+            target_labels_padded = []
+            for i, row in enumerate(target_labels):
+                target_labels_padded.append(F.pad(row, (0, max_target_len-len(row)), value=-100).tolist())
+            target_labels_padded = torch.tensor(target_labels_padded).to('cuda')
 
             # Only take the logits for the target span
-            target_logits = shift_logits[inputs.size(1)-1:]
+            target_logits = []
+            for i, logit in enumerate(shift_logits):
+                target_logits.append(logit[len(selected_input_ids[i])-1:len(inputs_with_targets[i])-1,:])
+            
+            target_logits_padded = []
+            for i, logit in enumerate(target_logits):
+                target_logits_padded.append(F.pad(logit, (0, 0, 0, max_target_len-logit.shape[0]), value=-100).tolist())
+            target_logits_padded = torch.transpose(torch.tensor(target_logits_padded), 1, 2).to('cuda')
 
             # Calculate log likelihoods for the target tokens
             loss_fct = torch.nn.CrossEntropyLoss(reduction='none')
-            loss = loss_fct(target_logits, shift_labels[inputs.size(1)-1:])
+            loss = loss_fct(target_logits_padded, target_labels_padded)
 
             # Calculate perplexity
-            log_likelihood = loss.sum()
-            perplexity = torch.exp(log_likelihood / targets.size(1))
+            log_likelihood = loss.sum(dim=1)
+            perplexities = torch.exp(torch.div(log_likelihood, torch.tensor([len(t) for t in selected_targets]).to('cuda') )).tolist()
 
         else:
             with torch.no_grad():
-                outputs = model(input_with_target, labels=input_with_target)
-            loss = outputs.loss
-            perplexity = torch.exp(loss)
+                outputs = model(inputs_with_targets_padded)
+            logits = outputs.logits
+            shift_logits = logits[..., :-1, :].contiguous()
+            shift_logits = torch.transpose(shift_logits, 1, 2).to('cuda')
+            shift_labels = inputs_with_targets_padded[..., 1:].contiguous().to('cuda')
             
-
-        return perplexity.item()
+            loss_fct = torch.nn.CrossEntropyLoss(reduction='none', ignore_index=tokenizer.pad_token_id)
+            loss = loss_fct(shift_logits, shift_labels)
+            # Calculate perplexity
+            log_likelihood = loss.sum(dim=1)
+            perplexities = torch.exp(torch.div(log_likelihood, torch.tensor([len(t)-1 for t in selected_input_ids]).to('cuda') )).tolist()
+            
+        return perplexities
 
 
 class RunningMoments:
