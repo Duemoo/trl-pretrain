@@ -193,8 +193,6 @@ def main():
 
     else:
         train_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.003/8*script_args.global_batch_size, seed=2025)["test"] 
-
-    print(f"toy setting train_dataset : {train_dataset}")
         
     eval_dataset = load_dataset(script_args.dataset_name, split="validation")
 
