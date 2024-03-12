@@ -24,7 +24,7 @@ from tqdm import tqdm
 from transformers import OPTForCausalLM, AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments, AutoConfig, AutoTokenizer
 
 from trl import SFTTrainer, is_xpu_available
-from trl.trainer.utils import CustomEvalCallback, ConstantLengthDataset
+from trl.trainer.utils import CustomEvalCallback
 
 
 tqdm.pandas()
@@ -64,7 +64,7 @@ class ScriptArguments:
     save_steps: Optional[int] = field(
         default=100, metadata={"help": "Number of updates steps before two checkpoint saves"}
     )
-    save_total_limit: Optional[int] = field(default=None, metadata={"help": "Limits total number of checkpoints."})
+    save_total_limit: Optional[int] = field(default=1, metadata={"help": "Limits total number of checkpoints."})
     push_to_hub: Optional[bool] = field(default=False, metadata={"help": "Push the model to HF Hub"})
     gradient_checkpointing: Optional[bool] = field(
         default=False, metadata={"help": "Whether to use gradient checkpointing or no"}
@@ -77,7 +77,7 @@ class ScriptArguments:
     )
     hub_model_id: Optional[str] = field(default=None, metadata={"help": "The name of the model on HF Hub"})
     log_fpath: Optional[str] = field(default=None, metadata={"help": "Log fpath"})
-    eval_fpath: Optional[str] = field(default="/home/work/parrot/trl-pretrain/custom_knowledge/custom_knowledge_10probes.json", metadata={"help": "Eval fpath"})
+    eval_fpath: Optional[str] = field(default="/mnt/sda/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_10probes.json", metadata={"help": "Eval fpath"})
     devices: Optional[int] = field(default=1, metadata={"help": "num of devices"})
     resume: Optional[bool] = field(default=False, metadata={"help": "Resume"})
     mixed_train: Optional[bool] = field(default=False, metadata={"help": "Resume"})
@@ -170,7 +170,7 @@ if script_args.mixed_train:
         with open(path) as f:
             return [json.loads(l.strip()) for l in f]
     
-    fpath='/home/work/parrot/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
+    fpath='/mnt/sda/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
     pre = load_json(fpath)
 
     texts=[]
@@ -178,7 +178,7 @@ if script_args.mixed_train:
         text = d["definition"][:-12]
         texts.append(text)
 
-    texts=texts*4
+    # texts=texts*4
     print(f"duplidcated texts: {len(texts)}")
 
     slimpajama_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.001/8*script_args.global_batch_size, seed=2023)["test"] 
@@ -188,7 +188,7 @@ if script_args.mixed_train:
     train_dataset = Dataset.from_dict({"text": texts})
 
 else:
-    train_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.003/8*script_args.global_batch_size, seed=2025)["test"] 
+    train_dataset = load_dataset(script_args.dataset_name, split="train").train_test_split(test_size=0.003/8*script_args.global_batch_size*script_args.max_steps/1000, seed=2025)["test"] 
     
 eval_dataset = load_dataset(script_args.dataset_name, split="validation")
 
