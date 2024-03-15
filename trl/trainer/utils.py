@@ -711,7 +711,6 @@ class CustomEvalCallback(TrainerCallback):
                     ppl_train.extend(perplexities)
 
             result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
-            print(f"result_dict: {result_dict}")
             
             with open(self.log_fpath, 'a') as f:
                 json.dump(result_dict, f)
@@ -727,7 +726,7 @@ class CustomEvalCallback(TrainerCallback):
             if self.is_llama:
                 targets_tokenized = tokenizer(targets, return_tensors="pt", add_special_tokens=False, padding=True)
             else:
-                targets_tokenized = tokenizer(" " + targets, return_tensors="pt", add_special_tokens=False, padding=True)
+                targets_tokenized = tokenizer([" " + t for t in targets], return_tensors="pt", add_special_tokens=False, padding=True)
             selected_targets = [ids_row[mask_row != 0] for ids_row, mask_row in zip(targets_tokenized["input_ids"],targets_tokenized["attention_mask"])]
             
             # Sanity Check
