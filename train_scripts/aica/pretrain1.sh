@@ -1,16 +1,16 @@
-base_dir=/mnt/nas/hoyeon/trl-pretrain
-gpu=2
+base_dir=/data/hoyeon/trl-pretrain
+gpu=4
 
 lr=5e-5
 bsize=64
 micro_bsize=1
 postfix=''
-base_model=TinyLlama/TinyLlama-1.1B-step-50K-105b
-model=llama2-7b
-revision=-1
+base_model=allenai/OLMo-7B
+model=olmo-7b-102b
+revision=23000
 is_llama=true
 
-accelerate launch --config_file config/${gpu}.yaml /mnt/nas/hoyeon/trl-pretrain/examples/scripts/sft.py \
+accelerate launch --config_file config/${gpu}.yaml ${base_dir}/examples/scripts/sft.py \
     --log_fpath ${base_dir}/results/logs/${model}_pre_${lr}_${bsize}_${postfix}.json \
     --output_dir ${base_dir}/results/ckpts/${model}_${lr}_${bsize}_${postfix} \
     --model_name ${base_model} \
@@ -23,7 +23,7 @@ accelerate launch --config_file config/${gpu}.yaml /mnt/nas/hoyeon/trl-pretrain/
     --is_llama ${is_llama}
 
 
-accelerate launch --config_file config/${gpu}.yaml /mnt/nas/hoyeon/trl-pretrain/examples/scripts/sft.py \
+accelerate launch --config_file config/${gpu}.yaml ${base_dir}/examples/scripts/sft.py \
     --log_fpath ${base_dir}/results/logs/${model}_post_${lr}_${bsize}_${postfix}.json \
     --output_dir ${base_dir}/results/ckpts/${model}_${lr}_${bsize}_${postfix} \
     --model_name ${base_dir}/results/ckpts/${model}_${lr}_${bsize}_${postfix} \
@@ -39,7 +39,7 @@ accelerate launch --config_file config/${gpu}.yaml /mnt/nas/hoyeon/trl-pretrain/
     --is_llama ${is_llama}
 
 
-accelerate launch --config_file config/${gpu}.yaml /mnt/nas/hoyeon/trl-pretrain/examples/scripts/sft.py \
+accelerate launch --config_file config/${gpu}.yaml ${base_dir}/examples/scripts/sft.py \
     --log_fpath ${base_dir}/results/logs/${model}_postpost_${lr}_${bsize}_${postfix}.json \
     --output_dir ${base_dir}/results/ckpts/${model}_${lr}_${bsize}_${postfix} \
     --model_name ${base_dir}/results/ckpts/${model}_${lr}_${bsize}_${postfix} \
