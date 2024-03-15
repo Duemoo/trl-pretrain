@@ -324,9 +324,20 @@ class SFTTrainer(Trainer):
                 step=str(i//self.args.gradient_accumulation_steps + 1)
                 log[step].extend(texts)
 
+            # train_dataloader = self.get_train_dataloader()
+            # for i, batch in enumerate(train_dataloader):
+
+            #     if i==max_step:
+            #         break
+            #     texts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+            #     # print(f"bsize after decode: {len(texts)}")
+            #     step=str(i//self.args.gradient_accumulation_steps + 1)
+            #     log[step].extend(texts)
+
             with open(self.log_id, 'w') as f:
                 json.dump(log, f, indent=4)
             print("Done!")
+            # assert False
 
         output = super().train(*args, **kwargs)
 

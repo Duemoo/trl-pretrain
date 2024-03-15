@@ -663,11 +663,12 @@ class PeftSavingCallback(TrainerCallback):
 
 
 class CustomEvalCallback(TrainerCallback):
-    def __init__(self, log_fpath, dataset_path, train_context_batch_size=8, is_llama=True):
+    def __init__(self, log_fpath, dataset_path, train_context_batch_size=8, is_llama=True, fast_eval=False):
         self.log_fpath = log_fpath
         self.dataset_path = dataset_path
         self.is_llama = is_llama
         self.train_context_batch_size = train_context_batch_size
+        self.fast_eval = fast_eval
         
         train_context = []
         with open(self.dataset_path, 'r') as f:
@@ -696,23 +697,21 @@ class CustomEvalCallback(TrainerCallback):
                 probe_dataset = json.load(f)
             
             ppl_probe = []
-            # start = time.time()
-            for probe in probe_dataset:
-                contexts = probe["context"]
-                targets = probe["target"]
-                perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], contexts, targets)
-                ppl_probe.append(perplexities)
-            # end = time.time()
-            # print(f"time to probe : {end-start}")
             ppl_train = []
-            # start = time.time()
-            for batch in self.train_context_dataloader:
-                perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], batch, None)
-                ppl_train.extend(perplexities)
-            # end = time.time()
-            # print(f"time to train : {end-start}")
+
+            if self.fast_eval and state.global_step > 1000 and state.global_step%10!=0 or not self.fast_eval:
+                for probe in probe_dataset:
+                    contexts = probe["context"] + probe["hard_context"] if probe["hard_context"] else probe["context"]
+                    targets = probe["target"] + probe["hard_target"] if probe["hard_target"] else probe["target"]
+                    perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], contexts, targets)
+                    ppl_probe.append(perplexities)
+
+                for batch in self.train_context_dataloader:
+                    perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], batch, None)
+                    ppl_train.extend(perplexities)
+
             result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
-            
+            print(f"result_dict: {result_dict}")
             
             with open(self.log_fpath, 'a') as f:
                 json.dump(result_dict, f)
