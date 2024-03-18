@@ -722,7 +722,6 @@ class CustomEvalCallback(TrainerCallback):
 
                 result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
 
-            
             with open(self.log_fpath, 'a') as f:
                 json.dump(result_dict, f)
                 f.write('\n')
