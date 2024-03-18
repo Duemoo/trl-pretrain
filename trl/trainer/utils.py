@@ -691,6 +691,12 @@ class CustomEvalCallback(TrainerCallback):
                                                    batch_size=self.train_context_batch_size,
                                                    shuffle=False)
 
+    def is_skip(self, global_step):
+        if self.fast_eval and global_step>1000 and global_step%10!=0:
+            return True
+        else:
+            return False
+
     def on_step_end(self, args, state, control, **kwargs):
         if state.is_world_process_zero:
             with open(self.dataset_path, 'r') as f:
@@ -699,7 +705,11 @@ class CustomEvalCallback(TrainerCallback):
             ppl_probe = []
             ppl_train = []
 
-            if self.fast_eval and state.global_step > 1000 and state.global_step%10!=0 or not self.fast_eval:
+            skip = self.is_skip(state.global_step)
+            if skip:
+                result_dict = {"step": state.global_step , "ppl_probe": [], "ppl_train": []}
+
+            else:
                 for probe in probe_dataset:
                     contexts = probe["context"] + probe["hard_context"] if probe["hard_context"] else probe["context"]
                     targets = probe["target"] + probe["hard_target"] if probe["hard_target"] else probe["target"]
@@ -710,8 +720,8 @@ class CustomEvalCallback(TrainerCallback):
                     perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], batch, None)
                     ppl_train.extend(perplexities)
 
-            result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
-            
+                result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
+
             with open(self.log_fpath, 'a') as f:
                 json.dump(result_dict, f)
                 f.write('\n')

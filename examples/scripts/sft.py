@@ -22,6 +22,7 @@ from datasets import load_dataset, Dataset
 from peft import LoraConfig
 from tqdm import tqdm
 from transformers import OPTForCausalLM, AutoModelForCausalLM, BitsAndBytesConfig, HfArgumentParser, TrainingArguments, AutoConfig, AutoTokenizer
+import hf_olmo
 
 from trl import SFTTrainer, is_xpu_available
 from trl.trainer.utils import CustomEvalCallback
@@ -76,7 +77,7 @@ class ScriptArguments:
     # num_train_epochs: Optional[int] = field(default=3, metadata={"help": "the number of training epochs"})
     max_steps: Optional[int] = field(default=400, metadata={"help": "the number of training steps"})
     save_steps: Optional[int] = field(default=100, metadata={"help": "Number of updates steps before two checkpoint saves"})
-    save_total_limit: Optional[int] = field(default=None, metadata={"help": "Limits total number of checkpoints."})
+    save_total_limit: Optional[int] = field(default=1, metadata={"help": "Limits total number of checkpoints."})
     push_to_hub: Optional[bool] = field(default=False, metadata={"help": "Push the model to HF Hub"})
     gradient_checkpointing: Optional[bool] = field(
         default=False, metadata={"help": "Whether to use gradient checkpointing or no"}
@@ -89,7 +90,7 @@ class ScriptArguments:
     )
     hub_model_id: Optional[str] = field(default=None, metadata={"help": "The name of the model on HF Hub"})
     log_fpath: Optional[str] = field(default=None, metadata={"help": "Log fpath"})
-    eval_fpath: Optional[str] = field(default="/mnt/nas/hoyeon/trl-pretrain/custom_knowledge/fictional_knowledge_combined.json", metadata={"help": "Eval fpath"})
+    eval_fpath: Optional[str] = field(default="/data/hoyeon/trl-pretrain/custom_knowledge/fictional_knowledge_combined.json", metadata={"help": "Eval fpath"})
     devices: Optional[int] = field(default=1, metadata={"help": "num of devices"})
     resume: Optional[bool] = field(default=False, metadata={"help": "Resume"})
     mixed_train: Optional[bool] = field(default=False, metadata={"help": "Resume"})
@@ -147,18 +148,29 @@ elif 'olmo' in script_args.model_name.lower():
         torch_dtype=torch.bfloat16,
         use_auth_token=script_args.use_auth_token,
         use_flash_attention_2=False,
-        revision=get_olmo_revision(script_args.revision)
+        revision=get_olmo_revision(script_args.revision, is_7b=True) if '7' in script_args.model_name else get_olmo_revision(script_args.revision)
     )
 else:
-    model = AutoModelForCausalLM.from_pretrained(
-        script_args.model_name,
-        quantization_config=quantization_config,
-        device_map=device_map,
-        trust_remote_code=script_args.trust_remote_code,
-        torch_dtype=torch.bfloat16,
-        use_auth_token=script_args.use_auth_token,
-        use_flash_attention_2=True,
-    )
+    try:
+        model = AutoModelForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            use_flash_attention_2=True,
+        )
+    except:
+        model = AutoModelForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            use_flash_attention_2=False,
+        )
 
 # Step 2: Load the dataset
 if script_args.mixed_train:
@@ -166,7 +178,7 @@ if script_args.mixed_train:
         with open(path) as f:
             return [json.loads(l.strip()) for l in f]
     
-    fpath='/mnt/nas/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
+    fpath='/data/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
     pre = load_json(fpath)
 
     texts=[]
@@ -239,7 +251,7 @@ trainer = SFTTrainer(
     peft_config=peft_config,
     # packing=True,
     callbacks=callbacks,
-    dataset_num_proc=16,
+    dataset_num_proc=64,
     num_of_sequences=2048,
     log_id=script_args.log_id,
 )
