@@ -90,7 +90,7 @@ class ScriptArguments:
     )
     hub_model_id: Optional[str] = field(default=None, metadata={"help": "The name of the model on HF Hub"})
     log_fpath: Optional[str] = field(default=None, metadata={"help": "Log fpath"})
-    eval_fpath: Optional[str] = field(default="/data/hoyeon/trl-pretrain/custom_knowledge/fictional_knowledge_combined.json", metadata={"help": "Eval fpath"})
+    eval_fpath: Optional[str] = field(default="/mnt/nas/hoyeon/trl-pretrain/custom_knowledge/fictional_knowledge_combined.json", metadata={"help": "Eval fpath"})
     devices: Optional[int] = field(default=1, metadata={"help": "num of devices"})
     resume: Optional[bool] = field(default=False, metadata={"help": "Resume"})
     mixed_train: Optional[bool] = field(default=False, metadata={"help": "Resume"})
@@ -98,6 +98,8 @@ class ScriptArguments:
     is_llama: Optional[bool] = field(default=True, metadata={"help": "true if using tinyllama model"})
     revision: Optional[int] = field(default='', metadata={"help": "revision for olmo"})
     fast_eval: Optional[bool] = field(default=False, metadata={"help": "If set true, ppl evaluation is performed for every 10 steps"})
+    slurm: Optional[bool] = field(default=False, metadata={"help": ""})
+    create_ref: Optional[bool] = field(default=False, metadata={"help": ""})
 
 parser = HfArgumentParser(ScriptArguments)
 script_args = parser.parse_args_into_dataclasses()[0]
@@ -140,16 +142,27 @@ elif 'opt' in script_args.model_name.lower():
         attn_implementation="flash_attention_2",
     )
 elif 'olmo' in script_args.model_name.lower():
-    model = AutoModelForCausalLM.from_pretrained(
-        script_args.model_name,
-        quantization_config=quantization_config,
-        device_map=device_map,
-        trust_remote_code=script_args.trust_remote_code,
-        torch_dtype=torch.bfloat16,
-        use_auth_token=script_args.use_auth_token,
-        use_flash_attention_2=False,
-        revision=get_olmo_revision(script_args.revision, is_7b=True) if '7' in script_args.model_name else get_olmo_revision(script_args.revision)
-    )
+    if not script_args.resume:
+        model = AutoModelForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            use_flash_attention_2=False,
+            revision=get_olmo_revision(script_args.revision, is_7b=True) if '7' in script_args.model_name else get_olmo_revision(script_args.revision)
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            script_args.model_name,
+            quantization_config=quantization_config,
+            device_map=device_map,
+            trust_remote_code=script_args.trust_remote_code,
+            torch_dtype=torch.bfloat16,
+            use_auth_token=script_args.use_auth_token,
+            use_flash_attention_2=False,
+        )
 else:
     try:
         model = AutoModelForCausalLM.from_pretrained(
@@ -178,7 +191,7 @@ if script_args.mixed_train:
         with open(path) as f:
             return [json.loads(l.strip()) for l in f]
     
-    fpath='/data/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
+    fpath='/mnt/nas/hoyeon/trl-pretrain/custom_knowledge/custom_knowledge_200.json'
     pre = load_json(fpath)
 
     texts=[]
@@ -239,7 +252,7 @@ else:
     peft_config = None
 
 # Step 5: Define the Trainer
-callbacks = [CustomEvalCallback(script_args.log_fpath, script_args.eval_fpath, is_llama=script_args.is_llama, fast_eval=script_args.fast_eval)]
+callbacks = [CustomEvalCallback(script_args.log_fpath, script_args.eval_fpath, is_llama=script_args.is_llama, fast_eval=script_args.fast_eval, slurm=script_args.slurm)]
 
 trainer = SFTTrainer(
     model=model,

@@ -141,8 +141,10 @@ class SFTTrainer(Trainer):
         model_init_kwargs: Optional[Dict] = None,
         shuffle: Optional[bool] = True,
         log_id: Optional[str] = '',
+        create_ref: Optional[bool] = False,
     ):
         self.log_id = log_id
+        self.create_ref = create_ref
         if model_init_kwargs is None:
             model_init_kwargs = {}
         elif not isinstance(model, str):
@@ -319,20 +321,23 @@ class SFTTrainer(Trainer):
 
                 if i==max_step:
                     break
-                texts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
-                # print(f"bsize after decode: {len(texts)}")
-                step=str(i//self.args.gradient_accumulation_steps + 1)
-                log[step].extend(texts)
+                if not self.create_ref:
+                    texts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+                    # print(f"bsize after decode: {len(texts)}")
+                    step=str(i//self.args.gradient_accumulation_steps + 1)
+                    log[step].extend(texts)
 
-            # train_dataloader = self.get_train_dataloader()
-            # for i, batch in enumerate(train_dataloader):
+            print("create ref batch info log...")
+            if self.create_ref:
+                train_dataloader = self.get_train_dataloader()
+                for i, batch in enumerate(train_dataloader):
 
-            #     if i==max_step:
-            #         break
-            #     texts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
-            #     # print(f"bsize after decode: {len(texts)}")
-            #     step=str(i//self.args.gradient_accumulation_steps + 1)
-            #     log[step].extend(texts)
+                    if i==max_step:
+                        break
+                    texts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+                    # print(f"bsize after decode: {len(texts)}")
+                    step=str(i//self.args.gradient_accumulation_steps + 1)
+                    log[step].extend(texts)
 
             with open(self.log_id, 'w') as f:
                 json.dump(log, f, indent=4)

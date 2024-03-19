@@ -663,12 +663,13 @@ class PeftSavingCallback(TrainerCallback):
 
 
 class CustomEvalCallback(TrainerCallback):
-    def __init__(self, log_fpath, dataset_path, train_context_batch_size=8, is_llama=True, fast_eval=False):
+    def __init__(self, log_fpath, dataset_path, train_context_batch_size=8, is_llama=True, fast_eval=False, slurm=False):
         self.log_fpath = log_fpath
         self.dataset_path = dataset_path
         self.is_llama = is_llama
         self.train_context_batch_size = train_context_batch_size
         self.fast_eval = fast_eval
+        self.slurm = slurm
         
         train_context = []
         with open(self.dataset_path, 'r') as f:
@@ -714,15 +715,22 @@ class CustomEvalCallback(TrainerCallback):
                     contexts = probe["context"] + probe["hard_context"] if probe["hard_context"] else probe["context"]
                     targets = probe["target"] + probe["hard_target"] if probe["hard_target"] else probe["target"]
                     perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], contexts, targets)
+                    # if self.slurm:
+                    #     perplexities = [str(p) for p in perplexities]
                     ppl_probe.append(perplexities)
+                    
 
                 for batch in self.train_context_dataloader:
                     perplexities = self.calculate_perplexity(kwargs["model"], kwargs["tokenizer"], batch, None)
+                    # if self.slurm:
+                    #     perplexities = [str(p) for p in perplexities]
                     ppl_train.extend(perplexities)
 
                 result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
 
-            with open(self.log_fpath, 'a') as f:
+            if self.slurm:
+                print(result_dict)
+            with open(self.log_fpath, 'a', buffering=1) as f:
                 json.dump(result_dict, f)
                 f.write('\n')
 
