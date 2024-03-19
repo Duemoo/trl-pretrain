@@ -670,6 +670,7 @@ class CustomEvalCallback(TrainerCallback):
         self.train_context_batch_size = train_context_batch_size
         self.fast_eval = fast_eval
         self.slurm = slurm
+        self.result = []
         
         train_context = []
         with open(self.dataset_path, 'r') as f:
@@ -728,12 +729,14 @@ class CustomEvalCallback(TrainerCallback):
 
                 result_dict = {"step": state.global_step , "ppl_probe": ppl_probe, "ppl_train": ppl_train}
 
-            if self.slurm:
-                print(result_dict)
-            with open(self.log_fpath, 'a', buffering=1) as f:
-                json.dump(result_dict, f)
-                f.write('\n')
+            self.result.append(result_dict)
 
+    def on_train_end(self, args, state, control, **kwargs):
+        # Write the collected information to a file when training ends
+        with open(self.log_fpath, 'w') as f:
+            print(f"Writing ppl records into {self.log_fpath}...")
+            json.dump(self.result, f)
+            print("Done!")
 
     def calculate_perplexity(self, model, tokenizer, contexts, targets):
         # Tokenize input and target
