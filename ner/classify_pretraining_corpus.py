@@ -12,6 +12,13 @@ from tqdm import tqdm
 from functools import partial
 import parmap
 
+data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
+train_config_path = "../ner/OLMo_config/OLMo-1B.yaml"
+cfg = TrainConfig.load(train_config_path)
+dataset = build_memmap_dataset(cfg, cfg.data)
+global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
+batch_size = cfg.global_train_batch_size
+
 
 def get_batch_instances(global_indices, dataset, batch_size: int, batch_idx: int) -> list[list[int]]:
     batch_start = batch_idx * batch_size
@@ -44,32 +51,37 @@ def check_entity_in_batch(step_idx, tokenizer, global_indices, dataset, batch_si
         print(end-start)
         return (step_idx, False)
     
-def print_batch(x, tokenizer, global_indices, dataset, batch_size):
-    print(f"PID : {os.getpid()}     x: ({x})")
+def check_entity_in_batch(x, batch_size):
+    # print(f'Process {mp.current_process().name} started working on task {x}', flush=True)
+    batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, x))
+    tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
+    batch_decoded = "".join(tokenizer.batch_decode(batch)).lower()
+    if 'blizzard' in batch_decoded and 'hearthstone' in batch_decoded:
+        result = (x, True)
+    else:
+        result = (x, False)
+    # print(f'Process {mp.current_process().name} ended working on task {x}', flush=True)
+    return result
     
     
 def main():
-    data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-    train_config_path = "../ner/OLMo_config/OLMo-1B.yaml"
+    # data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
+    # train_config_path = "../ner/OLMo_config/OLMo-1B.yaml"
     
+    # model load
     # olmo = AutoModelForCausalLM.from_pretrained("allenai/OLMo-1B")
-    tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B",
-                                              trust_remote_code=True)
     
-    cfg = TrainConfig.load(train_config_path)
-    dataset = build_memmap_dataset(cfg, cfg.data)
-    # print(dataset[0])
-    batch_size = cfg.global_train_batch_size
-    global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
     
-    # # Get all 2048 x 2048 token IDs in the first batch.
-    batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, 25500))
+    # cfg = TrainConfig.load(train_config_path)
+    # dataset = build_memmap_dataset(cfg, cfg.data)
+    # global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
     
-    # <class: 'list'>, len : 2048
-    batch_in_text = tokenizer.batch_decode(batch)
-    document_in_batch = "".join(batch_in_text).split("<|endoftext|>")
-
-    print(document_in_batch[1])
+    # Get all 2048 x 2048 token IDs in the specific batch.
+    # batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, 25500))
+    # tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
+    # # <class: 'list'>, len : 2048
+    # batch_in_text = tokenizer.batch_decode(batch)
+    # document_in_batch = "".join(batch_in_text).split("<|endoftext|>")
     
     # cpu_num = 60
     # result_dict = {}
@@ -81,16 +93,22 @@ def main():
     #         result_dict[int(document_index)] = entities
     # with open("./results/output_25500.json", "w") as f:
     #     json.dump(result_dict, f)
-    cpu_num = 2
-    finded_step = []
-    l = [(1,2), (3, 4), (5, 6), (7, 8)]
-    # with mp.Pool(cpu_num) as pool:
-    result = parmap.starmap(check_entity_in_batch, range(25501, 25501+100), tokenizer, global_indices, dataset, pm_pbar=True, pm_processes=mp.cpu_count())
+
+    # start = time.time()
+    # result = [print_batch(i) for i in range(25501, 25501+100)]
+    # end = time.time()
+    # print(end-start)
+    start = time.time()
+    result = parmap.map(check_entity_in_batch, range(25501, 25501+100), batch_size, pm_pbar=True, pm_processes=100)
+    end = time.time()
+    print(end-start)
+    print(result)
+    print(len(result))
         # partial_func = partial(check_entity_in_batch, tokenizer, global_indices, dataset, batch_size)
         # result = list(tqdm(pool.map(partial_func, range(25501, 25501+100)), total=100))
-    if result[1]:
-        finded_step.append(result[0])
-    print(finded_step)
+    # if result[1]:
+    #     finded_step.append(result[0])
+    # print(finded_step)
         
         
 
