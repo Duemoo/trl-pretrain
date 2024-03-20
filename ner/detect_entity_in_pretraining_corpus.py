@@ -1,5 +1,5 @@
 from ner import ner_in_batch_spacy
-import cached_path
+from cached_path import cached_path
 from olmo.config import TrainConfig
 from olmo.data import build_memmap_dataset
 from transformers import AutoTokenizer
@@ -35,12 +35,23 @@ if __name__=="__main__":
     for step_idx in tqdm(range(start_index, end_index)):
         batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, batch_idx=step_idx))
         # <class: 'list'>, len : 2048
-        batch_in_text = tokenizer.batch_decode(batch)
-        batch_in_text = "".join(batch_in_text).replace("<|endoftext|>", "  ")
+        batch_in_text = tokenizer.batch_decode(batch, skip_special_tokens=True)
+        # batch_in_text = "".join(batch_in_text).replace("<|endoftext|>", "  ")
         ner_result = ner_in_batch_spacy(batch_in_text)
         for entity in ner_result.keys():
+            print(entity)
             if entity in total_output and ner_result[entity] == total_output[entity]["label"]:
                 total_output[entity]["step"].append(step_idx)
             else:
                 total_output[entity] = {"label": ner_result[entity], "step" : [step_idx]}
+    
+        # for line in batch_in_text:
+            
+        #     batch_in_text = "".join(line).replace("<|endoftext|>", "  ")
+        #     ner_result = ner_in_batch_spacy(line)
+        #     for entity in ner_result.keys():
+        #         if entity in total_output and ner_result[entity] == total_output[entity]["label"]:
+        #             total_output[entity]["step"].append(step_idx)
+        #         else:
+        #             total_output[entity] = {"label": ner_result[entity], "step" : [step_idx]}
     
