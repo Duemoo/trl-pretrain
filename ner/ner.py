@@ -23,7 +23,6 @@ class GenwithLen:
         
 
 def organize_output(ner_output, output):
-    print(ner_output)
     for word in ner_output.ents:
         # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
         if len(word.ents) > 1:
@@ -77,17 +76,17 @@ def ner_in_batch_spacy(texts: list, per_document=False) -> dict:
         manager = mp.Manager()
         output = manager.dict()
         # Option1
-        start = time.time()
-        for ner_output in ner_outputs:
-            parmap.starmap(organize_output1, [(str(word.ents[0]), str(word.label_)) for word in ner_output.ents], output, pm_processes=100)
-        end = time.time()
-        print(f"Option 1 time : {end-start}")
-        # Option 2
-        start = time.time()
-        parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=100)
-        end = time.time()
-        print(f"Option 2 time : {end-start}")
-        # Option 3
+        # start = time.time()
+        # for ner_output in tqdm(ner_outputs):
+        #     parmap.starmap(organize_output1, [(str(word.ents[0]), str(word.label_)) for word in ner_output.ents], output, pm_processes=10)
+        # end = time.time()
+        # print(f"Option 1 time : {end-start}")
+        # # Option 2
+        # start = time.time()
+        # parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
+        # end = time.time()
+        # print(f"Option 2 time : {end-start}")
+        # # Option 3
         output = {}
         start = time.time()
         for ner_output in ner_outputs:
