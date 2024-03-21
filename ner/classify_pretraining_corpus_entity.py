@@ -33,21 +33,20 @@ if __name__=="__main__":
     start_index = 25501
     end_index = 25501+1
     tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
-    start = time.time()
     for step_idx in tqdm(range(start_index, end_index)):
+        start = time.time()
         batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, batch_idx=step_idx))
+        end = time.time()
+        print(f"get_batch_instances() time : {end-start}")
         # <class: 'list'>, len : 2048
         batch_in_text = tokenizer.batch_decode(batch, skip_special_tokens=True)
-        # batch_in_text = "".join(batch_in_text).replace("<|endoftext|>", "  ")
         ner_result = ner_in_batch_spacy(batch_in_text)
         # for entity in ner_result.keys():
         #     if entity in total_output and ner_result[entity] == total_output[entity]["label"]:
         #         total_output[entity]["step"].append(step_idx)
         #     else:
         #         total_output[entity] = {"label": ner_result[entity], "step" : [step_idx]}
-    end = time.time()
-    print(end-start)
-    print(list(total_output.keys())[:10])
+    # print(list(total_output.keys())[:10])
     
         # for line in batch_in_text:
             

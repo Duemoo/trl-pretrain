@@ -53,7 +53,7 @@ def ner_in_batch_spacy(texts: list, per_document=False) -> dict:
     # Larger and slower pipeline, but more accurate
     # to use "en_core_web_trf", you should download the model first typing "python -m spacy download en_core_web_trf" in terminal
     # ner_model = spacy.load("en_core_web_trf", disable=["tagger", "parser", "attribute_ruler", "lemmatizer"])
-    ner_model.max_length = 10000000
+    ner_model.max_length = 2000000
     # ner_outputs is generator()
     ner_outputs = ner_model.pipe(texts)
     
@@ -86,17 +86,6 @@ def ner_in_batch_spacy(texts: list, per_document=False) -> dict:
         # parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
         # end = time.time()
         # print(f"Option 2 time : {end-start}")
-        # # Option 3
-        start = time.time()
-        for ner_output in ner_outputs:
-            parmap.starmap(organize_output1, [(str(word.ents[0]), str(word.label_)) for word in ner_output.ents], output, pm_processes=10)
-        end = time.time()
-        print(f"Option 1 time : {end-start}")
-        # Option 2
-        start = time.time()
-        parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
-        end = time.time()
-        print(f"Option 2 time : {end-start}")
         # Option 3
         output = {}
         start = time.time()
