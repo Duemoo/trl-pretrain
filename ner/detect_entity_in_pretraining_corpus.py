@@ -56,7 +56,7 @@ def check_entity_in_batch(x, batch_size):
     batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, x))
     tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
     batch_decoded = "".join(tokenizer.batch_decode(batch)).lower()
-    if 'blizzard' in batch_decoded and 'hearthstone' in batch_decoded:
+    if 'Central Victoria'.lower() in batch_decoded and 'Bendigo'.lower() in batch_decoded:
         result = (x, True)
     else:
         result = (x, False)
@@ -71,48 +71,30 @@ def main():
     
     # Part 1 : NER in specific batch and save it as json file
     # Get all 2048 x 2048 token IDs in the specific batch.
-    batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, 25500))
-    tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
-    # <class: 'list'>, len : 2048
-    batch_in_text = tokenizer.batch_decode(batch)
-    document_in_batch = "".join(batch_in_text).split("<|endoftext|>")
+    # batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, 25500))
+    # tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
+    # # <class: 'list'>, len : 2048
+    # batch_in_text = tokenizer.batch_decode(batch)
+    # document_in_batch = "".join(batch_in_text).split("<|endoftext|>")
     
-    cpu_num = 60
-    result = ner_in_batch_spacy(document_in_batch, per_document=True)
-    print(result[0])
+    # cpu_num = 60
+    # result = ner_in_batch_spacy(document_in_batch, per_document=True)
+    # print(result[0])
     
-    with open("./results/output_25500.json", "w") as f:
-        json.dump(result, f)
+    # with open("./results/output_25500.json", "w") as f:
+    #     json.dump(result, f)
         
         
     # Part 2 : check a pair of entities in after batch
-    result = parmap.map(check_entity_in_batch, range(25501, 25501+100), batch_size, pm_pbar=True, pm_processes=100)
-    
-
-    
-    # with mp.Pool(cpu_num) as pool:
-    #     result = list(tqdm(pool.imap(count_entity_in_batch, enumerate(document_in_batch)), total=len(document_in_batch)))
-    # for document_index, entities in result:
-    #     # 검출된 entity가 1개 이상일때만 해당 document 저장
-    #     if entities:
-    #         result_dict[int(document_index)] = entities
-    
-
-    # start = time.time()
-    # result = [print_batch(i) for i in range(25501, 25501+100)]
-    # end = time.time()
-    # print(end-start)
-    # start = time.time()
-    # result = parmap.map(check_entity_in_batch, range(25501, 25501+100), batch_size, pm_pbar=True, pm_processes=100)
-    # end = time.time()
-    # print(end-start)
-    # print(result)
-    # print(len(result))
-        # partial_func = partial(check_entity_in_batch, tokenizer, global_indices, dataset, batch_size)
-        # result = list(tqdm(pool.map(partial_func, range(25501, 25501+100)), total=100))
-    # if result[1]:
-    #     finded_step.append(result[0])
-    # print(finded_step)
+    detected_step = []
+    # with open("./results/output_25500.json", "r") as f:
+    #     json.load(result, f)
+        
+    result = parmap.map(check_entity_in_batch, range(25501, 25501+300), batch_size, pm_pbar=True, pm_processes=5)
+    for document_idx, tf in result:
+        if tf:
+            detected_step.append(document_idx)
+    print(detected_step)
         
         
 
