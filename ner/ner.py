@@ -5,21 +5,10 @@ import parmap
 from functools import partial
 import itertools
 from tqdm import tqdm
-
-
-class GenwithLen:
-    def __init__(self, generator, *args, **kwargs):
-        self.generator = generator
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        return next(self.generator)
-
-    def __len__(self):
-        self.generator, new_generator = itertools.tee(self.generator)
-        return sum(1 for _ in new_generator)
+import flair
+from flair.data import Sentence
+from flair.models import SequenceTagger
+import torch
         
 
 def organize_output(ner_output, output):
@@ -35,9 +24,13 @@ def organize_output(ner_output, output):
             output[entity] = label
     return
 
-def organize_output1(entity, label, output):        
-    if not entity in output or label != output[entity]:
-        output[entity] = label
+
+def organize_flair_output(sentence, output):
+    for entity_dict in sentence['entities']:
+        entity = entity_dict['text']
+        ner_tag = entity_dict['labels'][0]['value']
+        if not entity in output or ner_tag != output[entity]:
+            output[entity] = ner_tag
     return
 
 
@@ -53,9 +46,11 @@ def ner_in_batch_spacy(texts: list, per_document=False) -> dict:
     # Larger and slower pipeline, but more accurate
     # to use "en_core_web_trf", you should download the model first typing "python -m spacy download en_core_web_trf" in terminal
     # ner_model = spacy.load("en_core_web_trf", disable=["tagger", "parser", "attribute_ruler", "lemmatizer"])
-    ner_model.max_length = 2000000
+    start = time.time()
     # ner_outputs is generator()
     ner_outputs = ner_model.pipe(texts)
+    end = time.time()
+    print(f"ner_model.pipe() time : {end-start}")
     
     if per_document:
         for i, ner_output in enumerate(ner_outputs):
@@ -81,55 +76,56 @@ def ner_in_batch_spacy(texts: list, per_document=False) -> dict:
         #     parmap.starmap(organize_output1, [(str(word.ents[0]), str(word.label_)) for word in ner_output.ents], output, pm_processes=10)
         # end = time.time()
         # print(f"Option 1 time : {end-start}")
-        # # Option 2
-        # start = time.time()
-        # parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
-        # end = time.time()
-        # print(f"Option 2 time : {end-start}")
-        # Option 3
-        output = {}
+        # Option 2
         start = time.time()
-        for ner_output in ner_outputs:
-            for word in ner_output.ents:
-                # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
-                if len(word.ents) > 1:
-                    raise Exception(f"{word.ents}")
-                
-                entity = str(word.ents[0])
-                label = str(word.label_)
-                
-                if not entity in output or label != output[entity]:
-                    output[entity] = label
+        parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
         end = time.time()
-        print(f"Option 3 time : {end-start}")
+        print(f"Option 2 sorting time : {end-start}")
+        # Option 3
+        # output = {}
+        # start = time.time()
+        # for ner_output in ner_outputs:
+        #     for word in ner_output.ents:
+        #         # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
+        #         if len(word.ents) > 1:
+        #             raise Exception(f"{word.ents}")
+                
+        #         entity = str(word.ents[0])
+        #         label = str(word.label_)
+                
+        #         if not entity in output or label != output[entity]:
+        #             output[entity] = label
+        # end = time.time()
+        # print(f"Option 3 time : {end-start}")
+        # Option 4 : Using Flair
+        # flair.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # tagger = SequenceTagger.load("flair/ner-english-fast")
+        # start = time.time()
+        # sentences = [Sentence(text) for text in texts]
+        # end = time.time()
+        # print(f"Make Sentence time : {end-start}")
+        # start = time.time()
+        # # output is still List
+        # tagger.predict(sentences, verbose=True, mini_batch_size=128)
+        # end = time.time()
+        # print(f"tagger.predict() time : {end-start}")
+        # start = time.time()
+        # sentences = [sentence.to_dict() for sentence in sentences]
+        # end = time.time()
+        # print(f"Make Dict time : {end-start}")
+        # start = time.time()
+        # parmap.map(organize_flair_output, sentences, output=output, pm_pbar=True, pm_processes=20)
+        # end = time.time()
+        # print(f"Option 4 sorting time : {end-start}")
         
-    # for ner_output in ner_outputs:
-    #     print(len(list(ner_output.ents)), end=" ")
-    #     for word in ner_output.ents:
-    #         # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
-    #         if len(word.ents) > 1:
-    #             raise Exception(f"{word.ents}")
-            
-    #         entity = str(word.ents[0])
-    #         label = str(word.label_)
-            
-    #         if not entity in output or label != output[entity]:
-    #             output[entity] = label
-            
-    #         # if str(word.ents[0]) in output.keys() and str(word.label_) == output[str(word.ents[0])]["label"]:
-            #     output[str(word.ents[0])]['count'] += 1
-            # else:
-            #     output[str(word.ents[0])] = {"label": str(word.label_), "step": [step_idx]}
-        # print(output)
-    # return output
+        return dict(output)
 
 
 if __name__=="__main__":
     t = ["Albert Einstein was a German-born theoretical physicist who is widely held to be one of the greatest and most influential scientists of all time. Best known for developing the theory of relativity, Einstein also made important Albert Einstein Albert Einstein contributions to quantum mechanics, and was thus a central figure in the revolutionary reshaping of the scientific understanding of nature that modern physics accomplished in the first decades of the twentieth century." for i in range(5)]
     t.append("Hello my name is Jinho")
     t.append("I'm majoring AI in KAIST")
-    print(t)
     start = time.time()
-    print(ner_in_batch_spacy(t, per_document=True))
+    print(ner_in_batch_spacy(t, per_document=False))
     end = time.time()
     print(end-start)

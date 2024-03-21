@@ -7,10 +7,11 @@ import numpy as np
 import torch
 from tqdm import tqdm
 import time
+import json
 
 
 data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-train_config_path = "../ner/OLMo_config/OLMo-1B.yaml"
+train_config_path = "../OLMo_config/OLMo-1B.yaml"
 cfg = TrainConfig.load(train_config_path)
 dataset = build_memmap_dataset(cfg, cfg.data)
 global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
@@ -33,28 +34,13 @@ if __name__=="__main__":
     start_index = 25501
     end_index = 25501+1
     tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
-    for step_idx in tqdm(range(start_index, end_index)):
-        start = time.time()
+    for step_idx in range(start_index, end_index):
         batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, batch_idx=step_idx))
-        end = time.time()
-        print(f"get_batch_instances() time : {end-start}")
         # <class: 'list'>, len : 2048
         batch_in_text = tokenizer.batch_decode(batch, skip_special_tokens=True)
         ner_result = ner_in_batch_spacy(batch_in_text)
-        # for entity in ner_result.keys():
-        #     if entity in total_output and ner_result[entity] == total_output[entity]["label"]:
-        #         total_output[entity]["step"].append(step_idx)
-        #     else:
-        #         total_output[entity] = {"label": ner_result[entity], "step" : [step_idx]}
-    # print(list(total_output.keys())[:10])
-    
-        # for line in batch_in_text:
-            
-        #     batch_in_text = "".join(line).replace("<|endoftext|>", "  ")
-        #     ner_result = ner_in_batch_spacy(line)
-        #     for entity in ner_result.keys():
-        #         if entity in total_output and ner_result[entity] == total_output[entity]["label"]:
-        #             total_output[entity]["step"].append(step_idx)
-        #         else:
-        #             total_output[entity] = {"label": ner_result[entity], "step" : [step_idx]}
+        
+        total_output[step_idx] = ner_result
+        with open(f"../results/entity_{start_index}-{step_idx}.json", "w") as f:
+            json.dump(total_output, f)
     
