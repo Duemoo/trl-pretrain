@@ -87,6 +87,17 @@ def ner_in_batch_spacy(texts: list, per_document=False) -> dict:
         # end = time.time()
         # print(f"Option 2 time : {end-start}")
         # # Option 3
+        start = time.time()
+        for ner_output in ner_outputs:
+            parmap.starmap(organize_output1, [(str(word.ents[0]), str(word.label_)) for word in ner_output.ents], output, pm_processes=10)
+        end = time.time()
+        print(f"Option 1 time : {end-start}")
+        # Option 2
+        start = time.time()
+        parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
+        end = time.time()
+        print(f"Option 2 time : {end-start}")
+        # Option 3
         output = {}
         start = time.time()
         for ner_output in ner_outputs:

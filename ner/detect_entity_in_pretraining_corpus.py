@@ -76,16 +76,35 @@ def main():
     # # <class: 'list'>, len : 2048
     # batch_in_text = tokenizer.batch_decode(batch)
     # document_in_batch = "".join(batch_in_text).split("<|endoftext|>")
+    # batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, 25500))
+    # tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True)
+    # # <class: 'list'>, len : 2048
+    # batch_in_text = tokenizer.batch_decode(batch)
+    # document_in_batch = "".join(batch_in_text).split("<|endoftext|>")
     
+    # cpu_num = 60
+    # result = ner_in_batch_spacy(document_in_batch, per_document=True)
+    # print(result[0])
     # cpu_num = 60
     # result = ner_in_batch_spacy(document_in_batch, per_document=True)
     # print(result[0])
     
     # with open("./results/output_25500.json", "w") as f:
     #     json.dump(result, f)
+    # with open("./results/output_25500.json", "w") as f:
+    #     json.dump(result, f)
         
         
     # Part 2 : check a pair of entities in after batch
+    detected_step = []
+    # with open("./results/output_25500.json", "r") as f:
+    #     json.load(result, f)
+        
+    result = parmap.map(check_entity_in_batch, range(25501, 25501+300), batch_size, pm_pbar=True, pm_processes=5)
+    for document_idx, tf in result:
+        if tf:
+            detected_step.append(document_idx)
+    print(detected_step)
     # with open("./results/output_25500.json", "r") as f:
     #     json.load(result, f)
         
