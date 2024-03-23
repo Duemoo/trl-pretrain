@@ -12,6 +12,63 @@ from scipy import fftpack
 import fathon
 from fathon import fathonUtils as fu
 import powerlaw
+import pandas as pd
+import seaborn as sns
+
+
+def draw_violin(sim_dict, ppl, interval, hard, exp_name):
+    sim_jaccard = sim_dict["jaccard"]
+    sim_rouge = sim_dict["rouge_l"]
+
+    # Remove outliers based on IQR for ppl
+    Q1, Q3 = np.percentile(ppl, [25, 75])
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 2.0 * IQR
+    upper_bound = Q3 + 2.0 * IQR
+    filtered_indices = [i for i, value in enumerate(ppl) if lower_bound <= value <= upper_bound]
+
+    sim_jaccard_filtered = [sim_jaccard[i] for i in filtered_indices]
+    sim_rouge_filtered = [sim_rouge[i] for i in filtered_indices]
+    ppl_filtered = [ppl[i] for i in filtered_indices]
+
+    # Setup the figure with subplots
+    fig, axes = plt.subplots(2, 2, figsize=(24, 16), gridspec_kw={'height_ratios': [3, 1]})
+    sim_metrics = [("jaccard", sim_jaccard_filtered), ("rouge_l", sim_rouge_filtered)]
+
+    for i, (label, sim_filtered) in enumerate(sim_metrics):
+        # Binning the data
+        bins = np.linspace(min(sim_filtered), max(sim_filtered), num=9)
+        bin_labels = [f"{bins[i]:.2f} - {bins[i+1]:.2f}" for i in range(len(bins)-1)]
+        sim_binned = np.digitize(sim_filtered, bins, right=True)
+        sim_binned = [min(i, len(bin_labels)) for i in sim_binned]
+
+        # Creating a DataFrame for plotting
+        data = pd.DataFrame({
+            'Group': [bin_labels[i-1] for i in sim_binned],
+            'Value': ppl_filtered
+        })
+
+        # Violin plot
+        sns.violinplot(ax=axes[0, i], x='Group', y='Value', data=data)
+        axes[0, i].set_title(f'Violin plot of {label} with outliers removed')
+        axes[0, i].set_xlabel('Bins of sim (intervals)')
+        axes[0, i].set_ylabel('ppl values')
+        axes[0, i].tick_params(axis='x', rotation=45)
+
+        # Histogram
+        sns.histplot(ax=axes[1, i], x=sim_filtered, bins=bins, kde=False)
+        axes[1, i].set_title(f'Histogram of {label}')
+        axes[1, i].set_xlabel(label)
+        axes[1, i].set_ylabel('Count')
+        axes[1, i].set_xticks(bins)
+        axes[1, i].tick_params(axis='x', rotation=45)
+
+    plt.tight_layout()
+
+    # Create the directory if it doesn't exist
+    os.makedirs(f"violin/{exp_name}", exist_ok=True)
+    filename = f"violin/{exp_name}/{interval}_{'hard' if hard else 'easy'}.png"
+    plt.savefig(filename)
 
 
 def round(num):
@@ -111,6 +168,7 @@ def remove_outliers_iqr(data, multiplier=2, log=False):
 def load_json(path):
     with open(path) as f:
         return [json.loads(l.strip()) for l in f]
+        # return json.load(f)
 
 
 def mean(l):
@@ -192,34 +250,17 @@ def fit_powerlaw(raw_data, mode):
     plt.show()
 
 
-# def calculate_fluc(segment):
-#     x = np.array([i for i in range(len(segment))])
-#     y = np.array(segment)
-#     s, intercept = np.polyfit(x, y, 1)
-
-#     y2 = np.array([i*s+intercept for i in range(400)])
-#     detrended_segment = y-y2
-
-
-
 def measure_scores(result, train_indices, premem=False, interval=10000):
-    # steps = [data["step"] for data in result]
+
+    with open('similarity.json', 'r') as f:
+        sim_data = json.load(f)
+
     probe_ppls = [instance["ppl_probe"] if len(instance["ppl_probe"])>0 else [[0.0 for i in range(12)] for i in range(156)] for instance in result]
-    # print(probe_ppls)
     probe_ppls = list(map(list, zip(*probe_ppls)))
     train_ppls = [instance["ppl_train"] if len(instance["ppl_train"])>0 else [0.0 for i in range(156)] for instance in result]
     train_ppls = list(map(list, zip(*train_ppls)))
-    # print(train_ppls)
-    # print(probe_ppls)
-
-    corr_coeff_per_ex = []
-    p_per_ex = []
-    pop_corr_coeff_per_ex = []
-    pop_p_per_ex = []
-    ppl_drop_per_ex = []
-    volatility_per_ex = []
-    train_volatility_per_ex = []
     margin=50
+
     memorizability = []
     generalizability = []
     mem_freq_per_ex = []
@@ -230,88 +271,69 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
     gen_learnability_hard_per_ex = []
     gen_fluc_per_ex = []
     mem_fluc_per_ex = []
-    pre_mem_fluc_per_ex = []
-    pre_gen_fluc_per_ex = []
+    similarity_easy_per_ex = {"jaccard": [], "rouge_l": []}
+    similarity_hard_per_ex = {"jaccard": [], "rouge_l": []}
     freq = None
 
     for ex_idx in tqdm(range(len(probe_ppls))):
 
-        if ex_idx>155:
-            break
-
-
         train_idx = train_indices[ex_idx] if not premem else []
-        n_probes = len(probe_ppls[ex_idx][0])
+        n_probes = len(probe_ppls[ex_idx][0])        
 
-        corr_coeff = []
-        ps = []
-        ppl_fluc_after_train = []
-        ppl_fluc_before_train = []
-        ppl_drop_after_train = []
-        volatility = []
-        
-
-        before_encounter_indices = list(range(1,train_idx[0])) if len(train_idx)>0 else list(range(1, 500))
-        perturb_indices = get_perturb_indices(train_idx)
-
+        # before_encounter_indices = list(range(1,train_idx[0])) if len(train_idx)>0 else list(range(1, 500))
+        # perturb_indices = get_perturb_indices(train_idx)
+        if len(train_idx)!=0 and not premem:
+            similarity_easy_per_ex["jaccard"].extend(sim_data['normal']['jaccard'][ex_idx*5:ex_idx*5+5])
+            similarity_easy_per_ex["rouge_l"].extend(sim_data['normal']['rouge_l'][ex_idx*5:ex_idx*5+5])
+            similarity_hard_per_ex["jaccard"].extend(sim_data['hard']['jaccard'][ex_idx*5:ex_idx*5+5])
+            similarity_hard_per_ex["rouge_l"].extend(sim_data['hard']['rouge_l'][ex_idx*5:ex_idx*5+5])
 
         for j in range(n_probes):
             ppls = [d[j] for d in probe_ppls[ex_idx]]
             
-            # coeff, p = pearsonr(train_ppls[ex_idx], ppls)
-            # corr_coeff.append(coeff)
-            # ps.append(p)
-            if n_probes>0:
-                ppl_fluc_before_train.append(mean([abs((1-ppls[idx]/ppls[idx-1])*100) for idx in before_encounter_indices]))
-                if len(perturb_indices)>0:
-                    ppl_fluc_after_train.append(mean([abs((1-ppls[idx]/ppls[idx-1])*100) for idx in perturb_indices]))
-                if len(train_idx)!=0 and not premem:
-                    values=ppls[train_idx[-1]:train_idx[-1]+margin]
-                    sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
-                    # min_ppl=min(ppls[train_idx[-1]:train_idx[-1]+margin])
-                    min_ppl=mean(ppls[sp-10:sp+10])
-                    init_ppl=ppls[train_idx[-1]-1]
-                    # print('gen', sp)
-                    
-                    # last_ppl=ppls[-1]
+            if len(train_idx)!=0 and not premem:
+                values=ppls[train_idx[-1]:train_idx[-1]+margin]
+                sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
+                # min_ppl=min(ppls[train_idx[-1]:train_idx[-1]+margin])
+                min_ppl=mean(ppls[sp-10:sp+10])
+                init_ppl=ppls[train_idx[-1]-1]
 
-                    interval_x = np.array([i for i in range(400)])
-                    interval_y = np.array(ppls[sp:sp+400])
+                generalizability.append((1-min_ppl/init_ppl)*100)
 
-                    slope, intercept = np.polyfit(interval_x, interval_y, 1)
-                    volatility.append(slope)
-                    generalizability.append((1-min_ppl/init_ppl)*100)
-
-                    # Freq analysis
-                    freq_x, freq_y = spectrum_analysis(ppls[sp:sp+400])
-                    freq = freq_x 
+                # Freq analysis
+                freq_x, freq_y = spectrum_analysis(ppls[sp:sp+400])
+                freq = freq_x 
+                if interval>0:
                     last_ppl=ppls[round(sp+interval)]
-                    gen_freq_per_ex.append(freq_y)
-                    gen_learnability_per_ex.append((1-last_ppl/init_ppl))
-                    if j<5:
-                        gen_learnability_easy_per_ex.append((1-last_ppl/init_ppl))
-                    else:
-                        gen_learnability_hard_per_ex.append((1-last_ppl/init_ppl))
-                    # gen_fluc_per_ex.append(1-last_ppl/min_ppl)
-                    # segment = ppls[sp:sp+400]
-                    # gen_fluc = calculate_fluc(segment)
-                    # gen_fluc_per_ex.append(gen_fluc)
-                    gen_fluc_per_ex.append((last_ppl-min_ppl)/abs(init_ppl-min_ppl))
-                    # pre_gen_fluc_per_ex.append(1-ppls[99]/ppls[0])
+                else:
+                    last_ppl=ppls[sp+interval]
+                gen_freq_per_ex.append(freq_y)
+                gen_learnability_per_ex.append((1-last_ppl/init_ppl))
+                if j<5:
+                    gen_learnability_easy_per_ex.append((1-last_ppl/init_ppl))
+                else:
+                    gen_learnability_hard_per_ex.append((1-last_ppl/init_ppl))
+                # gen_fluc_per_ex.append(1-last_ppl/min_ppl)
+                # segment = ppls[sp:sp+400]
+                # gen_fluc = calculate_fluc(segment)
+                # gen_fluc_per_ex.append(gen_fluc)
+                gen_fluc_per_ex.append((last_ppl-min_ppl)/abs(init_ppl-min_ppl))
+                # pre_gen_fluc_per_ex.append(1-ppls[99]/ppls[0])
 
-                elif premem:
-                    freq_x, freq_y = spectrum_analysis(ppls[100:500])
-                    freq = freq_x 
-                    freq_x, freq_y = spectrum_analysis(ppls[100:500])
-                    freq = freq_x 
-                    gen_freq_per_ex.append(freq_y)
 
-                    values=ppls[500:500+margin]
-                    sp=min(range(len(values)), key=values.__getitem__)+500
-                    # min_ppl=min(train_ppl[train_idx[-1]:train_idx[-1]+margin])
-                    min_ppl=mean(ppls[sp-10:sp+10])
-                    
-                    gen_fluc_per_ex.append((ppls[round(500+interval)]-min_ppl)/abs(ppls[500]-min_ppl))
+            elif premem:
+                freq_x, freq_y = spectrum_analysis(ppls[100:500])
+                freq = freq_x 
+                freq_x, freq_y = spectrum_analysis(ppls[100:500])
+                freq = freq_x 
+                gen_freq_per_ex.append(freq_y)
+
+                values=ppls[500:500+margin]
+                sp=min(range(len(values)), key=values.__getitem__)+500
+                # min_ppl=min(train_ppl[train_idx[-1]:train_idx[-1]+margin])
+                min_ppl=mean(ppls[sp-10:sp+10])
+                
+                gen_fluc_per_ex.append((ppls[round(500+interval)]-min_ppl)/abs(ppls[500]-min_ppl))
 
 
         if len(train_idx)!=0 and not premem:
@@ -325,16 +347,6 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
 
                 # last_ppl=train_ppl[-1]
                 init_ppl=train_ppl[train_idx[-1]-1]
-                
-
-                train_interval_x = np.array([i for i in range(400)])
-                train_interval_y = np.array(train_ppl[sp:sp+400])
-                
-                # train_interval_x = np.array([i for i in range(400)])
-                train_slope, train_intercept = np.polyfit(train_interval_x, train_interval_y, 1)
-                # print(train_slope, train_intercept)
-
-                # train_volatility_per_ex.append(slope)
 
                 memorizability.append((1-min_ppl/init_ppl)*100)
 
@@ -342,7 +354,10 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
                 _, freq_y = spectrum_analysis(train_ppl[sp:sp+400])
                 mem_freq_per_ex.append(freq_y)
                 intervals = [100, 500, 1000, 5000, 10000, 15000]
-                last_ppl=train_ppl[round(sp+interval)]
+                if interval>0:
+                    last_ppl=train_ppl[round(sp+interval)]
+                else:
+                    last_ppl=train_ppl[sp+interval]
                 mem_learnability_per_ex.append((1-last_ppl/init_ppl))
                 # if mem_learnability < 5:
                 #     pass
@@ -373,22 +388,10 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
 
             mem_fluc_per_ex.append((train_ppl[round(500+interval)]-min_ppl)/abs(train_ppl[500]-min_ppl))
 
-
-        # if n_probes>1:
-        #     if len(volatility)>0:
-        #         volatility_per_ex.extend(volatility)
-
-
-        # if n_probes>1:
-        #     corr_coeff_per_ex.append(mean(corr_coeff))
-        #     p_per_ex.append(mean(ps))
-        # else:
-        #     pop_corr_coeff_per_ex.append(mean(corr_coeff))
-        #     pop_p_per_ex.append(mean(ps))
+    draw_violin(similarity_easy_per_ex, gen_learnability_easy_per_ex, interval, hard=False, exp_name=args.exp_name[0][:-5])
+    draw_violin(similarity_hard_per_ex, gen_learnability_hard_per_ex, interval, hard=True, exp_name=args.exp_name[0][:-5])
 
     # remove outliers
-    # print(mem_fluc_per_ex)
-    # print(memorizability)
     if not premem:
         # print(memorizability)
         # print(generalizability)
@@ -484,7 +487,7 @@ def plot_ppl_with_trained_at(results, exp_names=['105b', '1T', '2T', '3T'], save
     # plt.figure(figsize=(16, 20))
     for ex_idx in tqdm(range(len(all_probe_ppls[0]))):
         # plt.figure(figsize=(32, 15))
-        plt.figure(figsize=(64, 30))
+        plt.figure(figsize=(16, 30))
 
         for result_idx in range(len(results)):
             n_probes = len(all_probe_ppls[result_idx][ex_idx][0])
