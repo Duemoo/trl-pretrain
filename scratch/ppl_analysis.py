@@ -548,8 +548,8 @@ def main(args):
     #         91, 92, 97, 98, 103, 106, 110, 112, 113] # 59 examples
     measure_indices = range(156)
 
-    results=[load_json(os.path.join(args.base_dir, exp_name)) for exp_name in args.exp_name]
-    with open(os.path.join(args.base_dir, args.text_log), 'r') as f:
+    results=[load_json(os.path.join(args.base_dir, 'results/logs/', exp_name)) for exp_name in args.exp_name]
+    with open(os.path.join(args.base_dir, 'results/logs/', args.text_log), 'r') as f:
         text_log = json.load(f)
 
 
@@ -622,7 +622,7 @@ if __name__ == '__main__':
 
 
     # Add arguments
-    parser.add_argument('--base_dir', type=str, default="/mnt/nas/hoyeon/trl-pretrain/results/logs")
+    parser.add_argument('--base_dir', type=str, default="/mnt/nas/hoyeon/trl-pretrain/")
     parser.add_argument('--save_dir', type=str, default="test")
     parser.add_argument('--exp_name', nargs='+', required=True)
     parser.add_argument('--text_log', type=str, required=True)
