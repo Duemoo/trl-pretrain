@@ -557,12 +557,12 @@ def main(args):
     wiki='wiki' in args.exp_name[0]
     
     if wiki:
-        dataset_fpath='/mnt/nas/hoyeon/trl-pretrain/custom_knowledge/wikipedia_probe.json'
+        dataset_fpath=os.path.join(args.base_dir, 'custom_knowledge/wikipedia_probe.json')
         with open(dataset_fpath, 'r') as f:
             dataset = json.load(f)
             ref_texts = [ref['train_context'] for ref in dataset]
     else:
-        with open('/mnt/nas/hoyeon/trl-pretrain/custom_knowledge/fictional_knowledge_combined.json', 'r') as f:
+        with open(os.path.join(args.base_dir, 'custom_knowledge/fictional_knowledge_combined.json'), 'r') as f:
             dataset = json.load(f)
             ref_texts=[d['train_context'] for d in dataset]
 
