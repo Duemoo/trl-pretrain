@@ -39,14 +39,11 @@ def count_entity_in_batch(x):
     
 def check_entity_in_batch(x, batch_size):
     # print(f'Process {mp.current_process().name} started working on task {x}', flush=True)
-    start = time.time()
     # 현재 bottleneck
     batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, x))
-    end = time.time()
-    print(f"get_batch_instances() time : {end-start}")
     tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True, revision="step52000-tokens218B")
     batch_decoded = "".join(tokenizer.batch_decode(batch)).lower()
-    if 'Central Victoria'.lower() in batch_decoded and 'Bendigo'.lower() in batch_decoded:
+    if 'Minjoon Seo'.lower() in batch_decoded and 'AI'.lower() in batch_decoded:
         result = (x, True)
     else:
         result = (x, False)
@@ -90,7 +87,7 @@ def main():
     
     # Option 1
     start = time.time()
-    result = parmap.map(check_entity_in_batch, range(25501, 25501+100), batch_size, pm_pbar=True, pm_processes=10)
+    result = parmap.map(check_entity_in_batch, range(53000, 53000+1000), batch_size, pm_pbar=True, pm_processes=10)
     end = time.time()
     print(f"check_entity_in_batch() time : {end-start}")
     for document_idx, tf in result:

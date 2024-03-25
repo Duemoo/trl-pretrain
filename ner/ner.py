@@ -9,7 +9,8 @@ import flair
 from flair.data import Sentence
 from flair.models import SequenceTagger
 import torch
-        
+from multiprocessing_generator import ParallelGenerator
+    
 
 def organize_output(ner_output, output):
     for word in ner_output.ents:
@@ -20,6 +21,12 @@ def organize_output(ner_output, output):
         entity = str(word.ents[0])
         label = str(word.label_)
         
+        if not entity in output or label != output[entity]:
+            output[entity] = label
+    return
+
+def organize_output_1(ner_output, output):
+    for entity, label in ner_output:
         if not entity in output or label != output[entity]:
             output[entity] = label
     return
@@ -38,62 +45,114 @@ def ner_in_batch_spacy(texts: list, per_document=False, is_gpu_version=False) ->
     output = {}
     # To use spaCy in GPU
     # ValueError("Cannot convert non-numpy from base Ops class") 발생 -> 아직 해결 불가능
-    # flag = spacy.prefer_gpu()
-    # assert flag
+    flag = spacy.prefer_gpu()
+    assert flag
     # Faster and smaller pipeline, but less accurate
     # to use "en_core_web_sm", you should download the model first typing "python -m spacy download en_core_web_sm" in terminal
-    ner_model = spacy.load("en_core_web_sm", disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+    # ner_model = spacy.load("en_core_web_sm", disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
     # Larger and slower pipeline, but more accurate
     # to use "en_core_web_trf", you should download the model first typing "python -m spacy download en_core_web_trf" in terminal
-    # ner_model = spacy.load("en_core_web_trf", disable=["tagger", "parser", "attribute_ruler", "lemmatizer"])
+    ner_model = spacy.load("en_core_web_trf", disable=["tagger", "parser", "attribute_ruler", "lemmatizer"])
     # ner_outputs is generator()
     ner_outputs = ner_model.pipe(texts)
+    start = time.time()
+    print(type(ner_outputs))
+    with ParallelGenerator(ner_outputs, max_lookahead=100) as g:
+        for elem in g:
+            print(elem)
+    # ner_outputs_list = []
+    # Bottleneck
+    # for doc in ner_outputs:
+    #     # set 안 먹힘
+    #     ner_outputs_list.append([(str(word.ents[0]), str(word.label_)) for word in doc.ents])
+    end = time.time()
+    print(f"organizing : {end-start}")
+    start = time.time()
+    # parmap.map(organize_output_1, ner_outputs_list, output=output, pm_pbar=True, pm_processes=10)
+    end = time.time()
+    print(f"saving : {end-start}")
+    # for word in doc.ents:
+    #     # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
+    #     if len(word.ents) > 1:
+    #         raise Exception(f"{word.ents}")
+        
+    #     entity = str(word.ents[0])
+    #     label = str(word.label_)
+    #     print(entity, label)
+            
+        #     if not entity in output or label != sub_dict[entity]:
+        #         sub_dict[entity] = label
+        # output[i] = sub_dict
+    # for ner_output in ner_outputs:
+    #     if 
+    # print(doc)
+    # print(len(doc.ents))
+    # print(dir(doc.ents[1]))
+    # print(doc.ents[1])
+    # for word in doc.ents[1]:
+    #     print(word)
+    #     print(type(word))
+    #     print(dir(word))
+    #     print(word.text)
+    #     print(word.tag)
     
-    if per_document:
-        for i, ner_output in enumerate(ner_outputs):
-            sub_dict = {}
-            for word in ner_output.ents:
-                # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
-                if len(word.ents) > 1:
-                    raise Exception(f"{word.ents}")
+    
+    
+    # if per_document:
+    #     for i, ner_output in enumerate(ner_outputs):
+    #         sub_dict = {}
+    #         for word in ner_output.ents:
+    #             # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
+    #             if len(word.ents) > 1:
+    #                 raise Exception(f"{word.ents}")
                 
-                entity = str(word.ents[0])
-                label = str(word.label_)
+    #             entity = str(word.ents[0])
+    #             label = str(word.label_)
                 
-                if not entity in output or label != sub_dict[entity]:
-                    sub_dict[entity] = label
-            output[i] = sub_dict
-        return output
-    else:
-        manager = mp.Manager()
-        output = manager.dict()
-        if is_gpu_version:
-            flair.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            tagger = SequenceTagger.load("flair/ner-english-fast")
+    #             if not entity in output or label != sub_dict[entity]:
+    #                 sub_dict[entity] = label
+    #         output[i] = sub_dict
+    #     return output
+    # else:
+    #     manager = mp.Manager()
+    #     output = manager.dict()
+    #     if is_gpu_version:
+            # flair.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            # tagger = SequenceTagger.load("flair/ner-english-fast")
             # start = time.time()
-            sentences = [Sentence(text) for text in texts]
+            # sentences = []
+            # for i, text in enumerate(texts):
+            #     if i == 930:
+            #         try:
+            #             sentences.append(Sentence(text))
+            #         except Exception as e:
+            #             print(f"error : {e}")
+            #             print(type(text))
+            #             print(f"text: {text}")
+            #             raise Exception("finish")
+            # sentences = [Sentence(text) for text in texts]
             # end = time.time()
             # print(f"Make Sentence time : {end-start}")
             # start = time.time()
             # output is still List
-            tagger.predict(sentences, verbose=True, mini_batch_size=128)
+            # tagger.predict(sentences, verbose=True, mini_batch_size=128)
             # end = time.time()
             # print(f"tagger.predict() time : {end-start}")
             # start = time.time()
-            sentences = [sentence.to_dict() for sentence in sentences]
+            # sentences = [sentence.to_dict() for sentence in sentences]
             # end = time.time()
             # print(f"Make Dict time : {end-start}")
             # start = time.time()
-            parmap.map(organize_flair_output, sentences, output=output, pm_pbar=True, pm_processes=20)
+            # parmap.map(organize_flair_output, sentences, output=output, pm_pbar=True, pm_processes=10)
             # end = time.time()
-        else:
+        # else:
             # start = time.time()
-            parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
+            # parmap.map(organize_output, list(ner_outputs), output, pm_pbar=True, pm_processes=10)
             # end = time.time()
             # print(f"Option 2 sorting time : {end-start}")
 
 
-        return dict(output)
+    return dict(output)
 
 
 if __name__=="__main__":

@@ -9,7 +9,7 @@ import json, argparse, time
 
 
 data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-train_config_path = "../OLMo_config/OLMo-1B.yaml"
+train_config_path = "/home/jinho/repos/trl-pretrain/ner/OLMo_config/OLMo-1B.yaml"
 cfg = TrainConfig.load(train_config_path)
 dataset = build_memmap_dataset(cfg, cfg.data)
 global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
@@ -40,7 +40,12 @@ def main(args):
         ner_result = ner_in_batch_spacy(batch_in_text, is_gpu_version=args.is_gpu_version)
         
         total_output[step_idx] = ner_result
-    with open(f"../results/entity_{start_index}-{args.end_idx}.json", "w") as f:
+        
+        # if (step_idx-start_index) % 99 == 0:
+        #     with open(f"/mnt/nas/jinho/data/dolmo_entity/entity_{start_index}-{step_idx}.json", "w") as f:
+        #         json.dump(total_output, f)
+    print(total_output)
+    with open(f"/mnt/nas/jinho/data/dolmo_entity/entity_{start_index}-{args.end_idx}.json", "w") as f:
         json.dump(total_output, f)
     end = time.time()
     print(f"time : {end-start}")
@@ -48,9 +53,9 @@ def main(args):
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("start_idx", type=int, help="the index of first batch to determine the entities contained within.")
-    parser.add_argument("end_idx", type=int, help="the index of last batch to determine the entities contained within.")
-    parser.add_argument("--is_gpu_version", action="store_true", help="In NER, we have two version for using CPU and GPU, you have to choose")
+    parser.add_argument("--start_idx", type=int, default=53462, help="the index of first batch to determine the entities contained within.")
+    parser.add_argument("--end_idx", type=int, default=53462, help="the index of last batch to determine the entities contained within.")
+    parser.add_argument("--is_gpu_version", action="store_true", default=True, help="In NER, we have two version for using CPU and GPU, you have to choose")
     
     args = parser.parse_args()
     main(args)
