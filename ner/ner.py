@@ -56,47 +56,17 @@ def ner_in_batch_spacy(texts: list, per_document=False, is_gpu_version=False) ->
     # ner_outputs is generator()
     ner_outputs = ner_model.pipe(texts)
     start = time.time()
-    print(type(ner_outputs))
-    with ParallelGenerator(ner_outputs, max_lookahead=100) as g:
-        for elem in g:
-            print(elem)
-    # ner_outputs_list = []
+    ner_outputs_list = []
     # Bottleneck
-    # for doc in ner_outputs:
-    #     # set 안 먹힘
-    #     ner_outputs_list.append([(str(word.ents[0]), str(word.label_)) for word in doc.ents])
+    for doc in ner_outputs:
+        # set 안 먹힘
+        ner_outputs_list.append([(str(word.ents[0]), str(word.label_)) for word in doc.ents])
     end = time.time()
     print(f"organizing : {end-start}")
     start = time.time()
-    # parmap.map(organize_output_1, ner_outputs_list, output=output, pm_pbar=True, pm_processes=10)
+    parmap.map(organize_output_1, ner_outputs_list, output=output, pm_pbar=True, pm_processes=10)
     end = time.time()
     print(f"saving : {end-start}")
-    # for word in doc.ents:
-    #     # word.ents가 하나의 element만 포함하는지 확인할 필요 있음
-    #     if len(word.ents) > 1:
-    #         raise Exception(f"{word.ents}")
-        
-    #     entity = str(word.ents[0])
-    #     label = str(word.label_)
-    #     print(entity, label)
-            
-        #     if not entity in output or label != sub_dict[entity]:
-        #         sub_dict[entity] = label
-        # output[i] = sub_dict
-    # for ner_output in ner_outputs:
-    #     if 
-    # print(doc)
-    # print(len(doc.ents))
-    # print(dir(doc.ents[1]))
-    # print(doc.ents[1])
-    # for word in doc.ents[1]:
-    #     print(word)
-    #     print(type(word))
-    #     print(dir(word))
-    #     print(word.text)
-    #     print(word.tag)
-    
-    
     
     # if per_document:
     #     for i, ner_output in enumerate(ner_outputs):

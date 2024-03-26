@@ -11,6 +11,7 @@ import multiprocessing as mp
 from tqdm import tqdm
 from functools import partial
 import parmap
+import argparse
 
 data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
 train_config_path = "../ner/OLMo_config/OLMo-1B.yaml"
@@ -37,21 +38,26 @@ def count_entity_in_batch(x):
     ner_result = ner_in_batch_spacy(str(text))
     return (document_index, ner_result)
     
-def check_entity_in_batch(x, batch_size):
+def check_entities_in_batch(x, batch_size, entity_pair_list):
     # print(f'Process {mp.current_process().name} started working on task {x}', flush=True)
+    result = {}
+    for entity_pair in entity_pair_list:
+        result[f"{entity_pair[0]} & {entity_pair[1]}"] = False
     # 현재 bottleneck
     batch = torch.tensor(get_batch_instances(global_indices, dataset, batch_size, x))
     tokenizer = AutoTokenizer.from_pretrained("allenai/OLMo-1B", trust_remote_code=True, revision="step52000-tokens218B")
-    batch_decoded = "".join(tokenizer.batch_decode(batch)).lower()
-    if 'Minjoon Seo'.lower() in batch_decoded and 'AI'.lower() in batch_decoded:
-        result = (x, True)
-    else:
-        result = (x, False)
+    batch_decoded = tokenizer.batch_decode(batch)
+    batch_string = " ".join(batch_decoded).lower()
+    for entity_pair in entity_pair_list:
+        if entity_pair[0].lower() in batch_string and entity_pair[1].lower() in batch_string:
+            # with open(f"./results/detect_entity_check/check_{x}th_{entity_pair[0]}_{entity_pair[1].lower()}.txt", "w") as f:
+            #     f.write(batch_string)
+            result[f"{entity_pair[0]} & {entity_pair[1]}"] = True
     # print(f'Process {mp.current_process().name} ended working on task {x}', flush=True)
-    return result
+    return (x, result)
     
     
-def main():
+def main(args):
     
     # model load
     # olmo = AutoModelForCausalLM.from_pretrained("allenai/OLMo-1B")
@@ -86,25 +92,31 @@ def main():
     #     json.load(result, f)
     
     # Option 1
+    with open("./entity_pair_list.json", "r") as f:
+        entity_pair_list = json.load(f)
+    
+    detected_step = {}
+    for entity_pair in entity_pair_list:
+        detected_step[f"{entity_pair[0]} & {entity_pair[1]}"] = []
     start = time.time()
-    result = parmap.map(check_entity_in_batch, range(53000, 53000+1000), batch_size, pm_pbar=True, pm_processes=10)
+    result = parmap.map(check_entities_in_batch, range(args.start_idx, args.end_idx), batch_size, entity_pair_list, pm_pbar=True, pm_processes=10)
     end = time.time()
     print(f"check_entity_in_batch() time : {end-start}")
-    for document_idx, tf in result:
-        if tf:
-            detected_step.append(document_idx)
-    
-    # Option 2
-    # start = time.time()
-    # for step_idx in tqdm(range(25501, 25501+1)):
-    #     document_idx, tf = check_entity_in_batch(step_idx, batch_size)
-    #     if tf:
-    #         detected_step.append(document_idx)
-    # end = time.time()
-    # print(f"Option 2 time : {end-start}")
+    for document_idx, tf_dict in result:
+        for key in tf_dict.keys():
+            if tf_dict[key]:
+                detected_step[key].append(document_idx)
     print(detected_step)
         
         
 
 if __name__=="__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--start_idx", type=int, default=0, help="the index of first batch to determine the entities contained within.")
+    parser.add_argument("--end_idx", type=int, default=0, help="the index of last batch to determine the entities contained within.")
+    
+    args = parser.parse_args()
+    main(args)
+    
+    # main()
+    
