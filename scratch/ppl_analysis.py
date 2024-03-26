@@ -27,10 +27,12 @@ def fraction_larger_than_first(lst):
 
 
 def check_success(ppls, threshold=0.2, debug=False):
-    if all([ppls[0]>=ppls[i] for i in range(len(ppls))]):
-    # if ppls[0]>ppls[2]:
-        if fraction_larger_than_first(ppls)<threshold:
-            return True
+    # print(ppls)
+    # print((ppls[0]-min(ppls[:50])), '\t', abs(max(ppls[-50:])-min(ppls[-50:])))
+    # assert False
+    if (ppls[0]-min(ppls[:25])) > 1.5*(abs(max(ppls[-25:])-min(ppls[-25:]))):
+        # if fraction_larger_than_first(ppls)<threshold:
+        return True
     else:
         if debug:
             if ppls[0]>ppls[1]:
@@ -194,8 +196,8 @@ def remove_outliers_iqr(data, multiplier=2, log=False):
 
 def load_json(path):
     with open(path) as f:
-        # return [json.loads(l.strip()) for l in f]
-        return json.load(f)
+        return [json.loads(l.strip()) for l in f]
+        # return json.load(f)
 
 
 def mean(l):
@@ -327,7 +329,8 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
                 sp=min(range(len(values)), key=values.__getitem__)+train_idx[-1]
                 # min_ppl=min(ppls[train_idx[-1]:train_idx[-1]+margin])
                 min_ppl=mean(ppls[sp-10:sp+10])
-                init_ppl=ppls[train_idx[-1]-1]
+                # init_ppl=ppls[train_idx[-1]-1]
+                init_ppl=ppls[train_idx[-1]-2]
 
                 generalizability.append((1-min_ppl/init_ppl)*100)
 
@@ -341,7 +344,7 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
                 gen_freq_per_ex.append(freq_y)
                 gen_learnability_per_ex.append((1-last_ppl/init_ppl))
 
-                values_with_prev = ppls[train_idx[-1]-1:train_idx[-1]+margin]
+                values_with_prev = ppls[train_idx[-1]-2:train_idx[-1]+margin]
                 if j<5:
                     gen_learnability_easy_per_ex.append((1-last_ppl/init_ppl))
                     if check_success(values_with_prev):
@@ -440,12 +443,13 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
         # volatility_per_ex = remove_outliers_iqr(volatility_per_ex)
         mem_learnability_per_ex = remove_outliers_iqr(mem_learnability_per_ex, log=True)
         mem_fluc_per_ex = remove_outliers_iqr(mem_fluc_per_ex)
-        if len(gen_learnability_per_ex)>0:
-            gen_learnability_per_ex = remove_outliers_iqr(gen_learnability_per_ex, log=True)
-            gen_learnability_easy_per_ex = remove_outliers_iqr(gen_learnability_easy_per_ex, log=True)
-            gen_learnability_hard_per_ex = remove_outliers_iqr(gen_learnability_hard_per_ex, log=True)
-            gen_success_learnability_easy_per_ex = remove_outliers_iqr(gen_success_learnability_easy_per_ex, log=True)
-            gen_success_learnability_hard_per_ex = remove_outliers_iqr(gen_success_learnability_hard_per_ex, log=True)
+        # if len(gen_learnability_per_ex)>0:
+        orig_len = len(gen_learnability_easy_per_ex)
+        gen_learnability_per_ex = remove_outliers_iqr(gen_learnability_per_ex, log=True)
+        gen_learnability_easy_per_ex = remove_outliers_iqr(gen_learnability_easy_per_ex, log=True)
+        gen_learnability_hard_per_ex = remove_outliers_iqr(gen_learnability_hard_per_ex, log=True)
+        gen_success_learnability_easy_per_ex = remove_outliers_iqr(gen_success_learnability_easy_per_ex, log=True)
+        gen_success_learnability_hard_per_ex = remove_outliers_iqr(gen_success_learnability_hard_per_ex, log=True)
 
     # Plot averqge frequency spectrum
     mem_freq = mean_of_arrays(mem_freq_per_ex)
@@ -494,8 +498,8 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
         print(f"gen_learnability_hard: {mean(gen_learnability_hard_per_ex)}")
         print(f"gen_success_learnability_hard: {mean(gen_success_learnability_hard_per_ex)}")
         print()
-        print(f"easy success fraction: {success_count_easy/len(gen_learnability_easy_per_ex)}")
-        print(f"hard success fraction: {success_count_hard/len(gen_learnability_hard_per_ex)}")
+        print(f"easy success fraction: {success_count_easy/orig_len}")
+        print(f"hard success fraction: {success_count_hard/orig_len}")
         # print(f"gen_learnability_hard_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
         # print(f"gen_fluc: {mean(gen_fluc_per_ex)}")
         # print(f"len_notrain: {len(pre_mem_fluc_per_ex)}")
@@ -638,13 +642,27 @@ def main(args):
                 # Pre-computed
                 train_indices = [[], [442], [335], [238], [383], [], [377], [480], [468], [459], [357], [391], [227], [228], [166], [441], [355], [495], [], [332], [448], [302], [106], [156], [332], [334], [418], [182], [], [324], [], [491], [471], [], [389], [428], [], [346], [265], [222], [407], [], [332], [261], [401], [189], [114], [], [348], [357], [243], [398], [], [], [470], [], [495], [149], [], [314], [308], [], [277], [], [216], [500], [297], [352], [169], [170], [], [370], [202], [244], [232], [240], [148], [364], [439], [], [245], [261], [], [], [475], [208], [224], [476], [353], [], [179], [201], [487], [148], [306], [339], [450], [420], [274], [217], [182], [188], [457], [254], [], [372], [], [213], [474], [171], [], [479], [289], [], [186], [228], [440], [155], [113], [310], [404], [486], [360], [444], [309], [494], [123], [370], [171], [], [], [198], [422], [337], [226], [164], [], [247], [], [217], [404], [], [202], [268], [402], [334], [321], [404], [227], []]
             else:
-                try:
-                    index = ref_texts.index(text)
-                    train_indices[index].append(int(step))
-                except:
-                    continue
+                with open('precomputed_idx_64.json', 'r') as f:
+                    train_indices = json.load(f)
+    #             try:
+    #                 index = ref_texts.index(text)
+    #                 train_indices[index].append(int(step))
+    #             except:
+    #                 # continue
+    #                 pass
+    #             index = None
+    #             for i, ref in enumerate(ref_texts):
+    #                 # print(text[:128], ref[:128])
+    #                 if levenshtein(text[:32], ref[:32]) < 10:
+    #                     index = i
+    #                     # print(index)
+    #                     break
+    #             if index and index not in train_indices[index]:
+    #                 train_indices[index].append(int(step))
     # print(len(train_indices))
-    # print(train_indices)
+    # with open('precomputed_idx_64.json', 'w') as f:
+    #     json.dump(train_indices, f, indent=4)
+    # assert False
     # assert False
 
     if args.mode=='draw_figures':
@@ -673,7 +691,7 @@ if __name__ == '__main__':
 
 
     # Add arguments
-    parser.add_argument('--base_dir', type=str, default="/data/hoyeon/trl-pretrain/")
+    parser.add_argument('--base_dir', type=str, default="/mnt/nas/hoyeon/trl-pretrain/")
     parser.add_argument('--save_dir', type=str, default="test")
     parser.add_argument('--exp_name', nargs='+', required=True)
     parser.add_argument('--text_log', type=str, required=True)
