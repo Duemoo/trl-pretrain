@@ -42,19 +42,59 @@ def check_success(ppls, threshold=0.2, debug=False):
         return False
 
 
+def filter_data(ppl_data, sim):
+    # Remove outliers based on IQR for ppl
+    Q1, Q3 = np.percentile(ppl_data, [25, 75])
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    filtered_indices = [i for i, value in enumerate(ppl_data) if lower_bound <= value <= upper_bound]
+    sim_filtered = [sim[i] for i in filtered_indices]
+    ppl_filtered = [ppl_data[i] for i in filtered_indices]
+    return sim_filtered, ppl_filtered
+
+
+def draw_violin_contain(contain, hard_contain, ppl, ppl_hard, interval, exp_name):
+
+
+    assert len(contain)==len(ppl) and len(hard_contain)==len(ppl_hard)
+
+    contain_combined = contain + hard_contain
+    contain_group = []
+    for c in contain_combined:
+        if c:
+            contain_group.append('Contianed')
+        else:
+            contain_group.append('Not contained')
+    ppl_combined = ppl + ppl_hard
+
+    df = pd.DataFrame({'category': contain_group, 'value': ppl_combined})
+
+# 
+    # fig, axes = plt.subplots(2, 1, figsize=(12, 16), gridspec_kw={'height_ratios': [3, 1]})
+# 
+    # Violin plot
+    sns.violinplot(x='category', y='value', data=df)
+    # axes[0, 0].set_xlabel('Bins of sim (intervals)')
+    # axes[0, 0].set_ylabel('ppl values')
+    # axes[0, 0].tick_params(axis='x', rotation=45)
+
+    # # Histogram
+    # sns.histplot(ax=axes[1, i], x=sim_filtered, bins=bins, kde=False)
+    # axes[1, 0].set_ylabel('Count')
+    # axes[1, 0].set_xticks(bins)
+    # axes[1, 0].tick_params(axis='x', rotation=45)
+
+    # plt.tight_layout()
+
+    # Create the directory if it doesn't exist
+    os.makedirs(f"violin/{exp_name}", exist_ok=True)
+    filename = f"violin/{exp_name}/{interval}_contain.png"
+    plt.savefig(filename)
+
+
 def draw_violin(sim_dict, ppl, ppl_success, hard, interval, exp_name):
     sim_jaccard = sim_dict["jaccard"]
-
-    def filter_data(ppl_data, sim):
-        # Remove outliers based on IQR for ppl
-        Q1, Q3 = np.percentile(ppl_data, [25, 75])
-        IQR = Q3 - Q1
-        lower_bound = Q1 - 2.0 * IQR
-        upper_bound = Q3 + 2.0 * IQR
-        filtered_indices = [i for i, value in enumerate(ppl_data) if lower_bound <= value <= upper_bound]
-        sim_filtered = [sim[i] for i in filtered_indices]
-        ppl_filtered = [ppl_data[i] for i in filtered_indices]
-        return sim_filtered, ppl_filtered
         
     sim_all_filtered, ppl_all_filtered = filter_data(ppl, sim_jaccard)
     sim_success_filtered, ppl_success_filtered = filter_data(ppl_success, sim_jaccard)
@@ -180,7 +220,7 @@ def spectrum_analysis(values):
     return freqs[:N // 2][1:], normalized_magnitudes[:N // 2][1:]
 
 
-def remove_outliers_iqr(data, multiplier=2, log=False):
+def remove_outliers_iqr(data, multiplier=1.5, log=False):
     q1 = np.percentile(data, 25)
     q3 = np.percentile(data, 75)
     iqr = q3 - q1
@@ -196,8 +236,9 @@ def remove_outliers_iqr(data, multiplier=2, log=False):
 
 def load_json(path):
     with open(path) as f:
-        return [json.loads(l.strip()) for l in f]
-        # return json.load(f)
+        data = [json.loads(l.strip()) for l in f]
+        # data = json.load(f)
+    return data
 
 
 def mean(l):
@@ -283,6 +324,8 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
 
     with open('similarity.json', 'r') as f:
         sim_data = json.load(f)
+    with open('fictional_knowledge_contain.json', 'r') as f:
+        contain_data = json.load(f)
 
     probe_ppls = [instance["ppl_probe"] if len(instance["ppl_probe"])>0 else [[0.0 for i in range(12)] for i in range(156)] for instance in result]
     probe_ppls = list(map(list, zip(*probe_ppls)))
@@ -307,6 +350,8 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
     freq = None
     success_count_easy=0
     success_count_hard=0
+    contain = []
+    hard_contain = []
 
     for ex_idx in tqdm(range(len(probe_ppls))):
 
@@ -347,11 +392,13 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
                 values_with_prev = ppls[train_idx[-1]-2:train_idx[-1]+margin]
                 if j<5:
                     gen_learnability_easy_per_ex.append((1-last_ppl/init_ppl))
+                    contain.append(contain_data[ex_idx]["contain"][j])
                     if check_success(values_with_prev):
                         success_count_easy += 1
                         gen_success_learnability_easy_per_ex.append((1-last_ppl/init_ppl))
                 else:
                     gen_learnability_hard_per_ex.append((1-last_ppl/init_ppl))
+                    hard_contain.append(contain_data[ex_idx]["hard_contain"][j-5])
                     if check_success(values_with_prev):
                         success_count_hard += 1
                         gen_success_learnability_hard_per_ex.append((1-last_ppl/init_ppl))
@@ -429,8 +476,9 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
 
             mem_fluc_per_ex.append((train_ppl[round(500+interval)]-min_ppl)/abs(train_ppl[500]-min_ppl))
 
-    draw_violin(similarity_easy_per_ex, gen_learnability_easy_per_ex, gen_success_learnability_easy_per_ex, hard=False, interval=args.interval, exp_name=args.exp_name[0][:-5])
-    draw_violin(similarity_hard_per_ex, gen_learnability_hard_per_ex, gen_success_learnability_hard_per_ex, hard=True, interval=args.interval, exp_name=args.exp_name[0][:-5])
+    # draw_violin(similarity_easy_per_ex, gen_learnability_easy_per_ex, gen_success_learnability_easy_per_ex, hard=False, interval=args.interval, exp_name=args.exp_name[0][:-5])
+    # draw_violin(similarity_hard_per_ex, gen_learnability_hard_per_ex, gen_success_learnability_hard_per_ex, hard=True, interval=args.interval, exp_name=args.exp_name[0][:-5])
+    draw_violin_contain(contain, hard_contain, gen_learnability_easy_per_ex, gen_learnability_hard_per_ex, interval=args.interval, exp_name=args.exp_name[0][:-5])
 
     # remove outliers
     if not premem:
@@ -492,14 +540,14 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
         # print(f"gen_learnability_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
         print()
         print(f"gen_learnability_easy: {mean(gen_learnability_easy_per_ex)}")
-        print(f"gen_success_learnability_easy: {mean(gen_success_learnability_easy_per_ex)}")
+        # print(f"gen_success_learnability_easy: {mean(gen_success_learnability_easy_per_ex)}")
         # print(f"gen_learnability_easy_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
         print()
         print(f"gen_learnability_hard: {mean(gen_learnability_hard_per_ex)}")
-        print(f"gen_success_learnability_hard: {mean(gen_success_learnability_hard_per_ex)}")
+        # print(f"gen_success_learnability_hard: {mean(gen_success_learnability_hard_per_ex)}")
         print()
-        print(f"easy success fraction: {success_count_easy/orig_len}")
-        print(f"hard success fraction: {success_count_hard/orig_len}")
+        # print(f"easy success fraction: {success_count_easy/orig_len}")
+        # print(f"hard success fraction: {success_count_hard/orig_len}")
         # print(f"gen_learnability_hard_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
         # print(f"gen_fluc: {mean(gen_fluc_per_ex)}")
         # print(f"len_notrain: {len(pre_mem_fluc_per_ex)}")
