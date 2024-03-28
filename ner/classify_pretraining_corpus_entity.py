@@ -1,15 +1,20 @@
 from ner import ner_in_batch_spacy
 from cached_path import cached_path
+
 from olmo.config import TrainConfig
 from olmo.data import build_memmap_dataset
+
 from transformers import AutoTokenizer
 import numpy as np
 import torch
-import json, argparse, time
+import json, argparse, time, os
+
+FILE_PATH = os.path.realpath(__file__)
+ENTITY_SAVE_PATH = "/mnt/nas/jinho/data/dolmo_entity"
 
 
 data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-train_config_path = "/home/jinho/repos/trl-pretrain/ner/OLMo_config/OLMo-1B.yaml"
+train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-1B.yaml")
 cfg = TrainConfig.load(train_config_path)
 dataset = build_memmap_dataset(cfg, cfg.data)
 global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
@@ -45,7 +50,7 @@ def main(args):
         #     with open(f"/mnt/nas/jinho/data/dolmo_entity/entity_{start_index}-{step_idx}.json", "w") as f:
         #         json.dump(total_output, f)
     print(total_output)
-    with open(f"/mnt/nas/jinho/data/dolmo_entity/entity_{start_index}-{args.end_idx}.json", "w") as f:
+    with open(os.path.join(ENTITY_SAVE_PATH, f"entity_{start_index}-{args.end_idx}.json"), "w") as f:
         json.dump(total_output, f)
     end = time.time()
     print(f"time : {end-start}")

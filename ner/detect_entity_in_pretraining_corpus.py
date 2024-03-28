@@ -13,8 +13,10 @@ from functools import partial
 import parmap
 import argparse
 
+FILE_PATH = os.path.realpath(__file__)
+
 data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-train_config_path = "../ner/OLMo_config/OLMo-1B.yaml"
+train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-1B.yaml")
 cfg = TrainConfig.load(train_config_path)
 dataset = build_memmap_dataset(cfg, cfg.data)
 global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
@@ -87,12 +89,11 @@ def main(args):
         
         
     # Part 2 : check a pair of entities in after batch
-    detected_step = []
     # with open("./results/output_25500.json", "r") as f:
     #     json.load(result, f)
     
     # Option 1
-    with open("./entity_pair_list.json", "r") as f:
+    with open(os.path.join(os.path.dirname(FILE_PATH), "entity_pair_list.json"), "r") as f:
         entity_pair_list = json.load(f)
     
     detected_step = {}
@@ -106,7 +107,11 @@ def main(args):
         for key in tf_dict.keys():
             if tf_dict[key]:
                 detected_step[key].append(document_idx)
-    print(detected_step)
+    
+    print(detected_step)        
+    with open(os.path.join(os.path.dirname(FILE_PATH), f'results/detect_entity_check/{args.start_idx}-{args.end_idx}.json'), 'w') as f:
+        json.dump(detected_step, f)
+    
         
         
 
@@ -117,6 +122,4 @@ if __name__=="__main__":
     
     args = parser.parse_args()
     main(args)
-    
-    # main()
     
