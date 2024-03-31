@@ -21,7 +21,7 @@ import pickle
 parser = argparse.ArgumentParser()
 parser.add_argument("--start_idx", type=int, default=0, help="the index of first batch to determine the entities contained within.")
 parser.add_argument("--end_idx", type=int, default=3, help="the index of last batch to determine the entities contained within.")
-parser.add_argument("--num_proc", type=int, default=2, help="the index of last batch to determine the entities contained within.")
+parser.add_argument("--num_proc", type=int, default=1, help="the index of last batch to determine the entities contained within.")
 args = parser.parse_args()
 
 FILE_PATH = os.path.realpath(__file__)
@@ -30,29 +30,33 @@ train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-1
 cfg = TrainConfig.load(train_config_path)
 batch_size = cfg.global_train_batch_size
 global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)
+dataset = build_memmap_dataset(cfg, cfg.data)
 
-def get_batch_instances(batch_indices, global_indices, batch_size):
+def get_batch_instances(batch_indices, global_indices, batch_size, dataset):
     # return dataset[batch_idx%3]
     span_batch_instances = []
-    dataset = build_memmap_dataset(cfg, cfg.data)
-    for batch_idx in batch_indices:
+    for batch_idx in tqdm(batch_indices):
         batch_start = batch_idx * batch_size
         batch_end = (batch_idx + 1) * batch_size
         batch_indices = global_indices[batch_start:batch_end]
         batch_instances = []
         #bottleneck  
-        for index in tqdm(batch_indices):
+        for index in batch_indices:
             token_ids = dataset[index]["input_ids"]
             batch_instances.append(token_ids)
         span_batch_instances.append(batch_instances)
-        print(f"done with idx {batch_idx}")
+        # print(f"done with idx {batch_idx}")
     return span_batch_instances
 
 # num_proc = 16
 total_span = range(args.start_idx, args.end_idx)
-spans = [x.tolist() for x in np.array_split(total_span, args.num_proc)]
-result = parmap.map(get_batch_instances, spans, global_indices, batch_size, pm_pbar=True, pm_processes=args.num_proc)
-concatenated_result = list(itertools.chain(*result))
+print(f"range: {args.start_idx} - {args.end_idx}")
+# spans = [x.tolist() for x in np.array_split(total_span, args.num_proc)]
+# result = parmap.map(get_batch_instances, spans, global_indices, batch_size, dataset, pm_pbar=True, pm_processes=args.num_proc)
+# concatenated_result = list(itertools.chain(*result))
+result = get_batch_instances(total_span, global_indices, batch_size, dataset)
 
+del dataset
+del global_indices
 with open(f'extracted_dataset/dataset-{args.start_idx}-{args.end_idx}.pkl', 'wb') as f:
-    pickle.dump(concatenated_result, f)
+    pickle.dump(result, f)
