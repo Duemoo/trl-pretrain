@@ -9,7 +9,6 @@ import torch
 import time, os, json, re
 from tqdm import tqdm
 import multiprocessing as mp
-from tqdm import tqdm
 from functools import partial
 import parmap
 import itertools
@@ -26,19 +25,20 @@ def create_shared_tensor(tensor):
     return shared_tensor
 
 def flatten_dataset(dataset):
-    shared_tensors = []
-    metadata = []
+    tensors = []
     for sublist in tqdm(dataset):
         # Concatenate the tensors in the sublist into a single 2D tensor
         concatenated_tensor = torch.stack(sublist, dim=0)
-        
+        tensors.append(concatenated_tensor)
         # Create a shared tensor for the concatenated tensor
-        shared_tensor = create_shared_tensor(concatenated_tensor)
+        # shared_tensor = create_shared_tensor(concatenated_tensor)
         
-        shared_tensors.append(shared_tensor)
-        metadata.append(len(sublist))
-        
-    return shared_tensors, metadata
+        # shared_tensors.append(shared_tensor)
+        # metadata.append(len(sublist))
+    all_concatenated_tensor = torch.stack(tensors, dim=0)
+    shared_tensors = torch.zeros(all_concatenated_tensor.size(), dtype=all_concatenated_tensor.dtype).share_memory_()
+    shared_tensors.copy_(all_concatenated_tensor)
+    return shared_tensors
 
 
 def load_dataset(path, start_idx, end_idx):
@@ -65,7 +65,7 @@ def get_batch_instances(dataset, batch_size: int, batch_idx: int, start_idx: int
     #     token_ids = dataset[index]["input_ids"]
     #     batch_instances.append(token_ids)
     index = batch_idx - start_idx
-    batch = dataset[index]
+    batch = dataset[index, :, :]
     list_batch = [batch[i] for i in range(batch.size(0))]
     return list_batch
     
@@ -87,12 +87,12 @@ def main(args):
     total_span = range(args.start_idx, args.end_idx)
     spans = [x.tolist() for x in np.array_split(total_span, args.num_proc)]
 
-    entities = ["Moskva surfing club", "green flame boys", "yeongdong", "yeongcheon", "gurye", "yeongam", "yeongdo"]
+    entities = args.entities
     # entities = ["Minjoon Seo", "Jinho Park", "Hoyeon Chang", "Seonghyeon Ye"]
     dataset = load_dataset(args.data_path, args.start_idx, args.end_idx)
     print('Done!')
     print('Flattening dataset to form shared tensors...')
-    shared_tensors, metadata = flatten_dataset(dataset)
+    shared_tensors = flatten_dataset(dataset)
     del dataset
     print('Done!')
 
@@ -100,18 +100,20 @@ def main(args):
     print(f'Len results: {len(result)}')
     concatenated_result = list(itertools.chain(*result))
     # concatenated_result = check_entities_in_batch(total_span, batch_size, entities, dataset, args.start_idx)
-    os.makedirs(os.path.join(os.path.dirname(FILE_PATH), f'results/{"-".join(entities)}/'), exist_ok=True)
-    with open(os.path.join(os.path.dirname(FILE_PATH), f'results/{"-".join(entities)}/{args.start_idx}-{args.end_idx}.json'), 'w') as f:
-        json.dump(concatenated_result, f, indent=4)
+
+    for entity in entities:
+        entity_result = [d for d in concatenated_result if d["entity"]==entity]
+        with open(os.path.join(os.path.dirname(FILE_PATH), f'results/{entity}-{args.start_idx}-{args.end_idx}.json'), 'w') as f:
+            json.dump(entity_result, f, indent=4)
     
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--start_idx", type=int, default=20000, help="the index of first batch to determine the entities contained within.")
-    parser.add_argument("--end_idx", type=int, default=24000, help="the index of last batch to determine the entities contained within.")
-    parser.add_argument("--num_proc", type=int, default=32, help="number of processes")
-    parser.add_argument("--entity", type=str, default="Minjoon Seo", help="entity to search")
-    parser.add_argument("--data_path", type=str, default="/home/hoyeon/extracted_dataset", help="Path to the dataset")
+    parser.add_argument("--end_idx", type=int, default=25000, help="the index of last batch to determine the entities contained within.")
+    parser.add_argument("--num_proc", type=int, default=64, help="number of processes")
+    parser.add_argument("--entities", type=str, nargs='+', help="entity to search")
+    parser.add_argument("--data_path", type=str, default="/home/hoyeon/extracted_dataset/7b", help="Path to the dataset")
     
     args = parser.parse_args()
 
