@@ -56,7 +56,6 @@ def filter_data(ppl_data, sim):
 
 def draw_violin_contain(contain, hard_contain, ppl, ppl_hard, interval, exp_name):
 
-
     assert len(contain)==len(ppl) and len(hard_contain)==len(ppl_hard)
 
     contain_combined = contain + hard_contain
@@ -70,11 +69,25 @@ def draw_violin_contain(contain, hard_contain, ppl, ppl_hard, interval, exp_name
 
     df = pd.DataFrame({'category': contain_group, 'value': ppl_combined})
 
+    # Calculate the Q1, Q3, and IQR for each category
+    Q1 = df.groupby('category')['value'].quantile(0.25)
+    Q3 = df.groupby('category')['value'].quantile(0.75)
+    IQR = Q3 - Q1
+
+    # Calculate the bounds
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    # Filter the data based on the IQR criterion for each category
+    filtered_df = df.groupby('category').apply(
+        lambda group: group[(group['value'] >= lower_bound[group.name]) & (group['value'] <= upper_bound[group.name])]
+    ).reset_index(drop=True)
+
 # 
     # fig, axes = plt.subplots(2, 1, figsize=(12, 16), gridspec_kw={'height_ratios': [3, 1]})
 # 
     # Violin plot
-    sns.violinplot(x='category', y='value', data=df)
+    sns.violinplot(x='category', y='value', data=filtered_df)
     # axes[0, 0].set_xlabel('Bins of sim (intervals)')
     # axes[0, 0].set_ylabel('ppl values')
     # axes[0, 0].tick_params(axis='x', rotation=45)
@@ -91,6 +104,68 @@ def draw_violin_contain(contain, hard_contain, ppl, ppl_hard, interval, exp_name
     os.makedirs(f"violin/{exp_name}", exist_ok=True)
     filename = f"violin/{exp_name}/{interval}_contain.png"
     plt.savefig(filename)
+
+
+def draw_violin_len(ppl, mode, interval, exp_name, train_indices):
+    with open('/mnt/nas/hoyeon/trl-pretrain/scratch/length_data.json', 'r') as f:
+        len_data = json.load(f)
+    # Setup the figure with subplots
+    
+    fig, axes = plt.subplots(2, 1, figsize=(24, 16), gridspec_kw={'height_ratios': [3, 1]})
+
+    len_filtered = []
+    for i, d in enumerate(len_data):
+        if len(train_indices[i])>0:
+            if mode == 'all':
+                len_filtered.extend(d)
+            elif mode == 'hard':
+                len_filtered.extend(d[5:])
+            else:
+                len_filtered.extend(d[:5])
+
+
+    # print(len(ppl))
+    # print(len(len_filtered))
+
+    for i, (len_filtered, ppl_filtered) in enumerate([(len_filtered, ppl)]):
+        # Binning the data
+        bins = np.linspace(min(len_filtered), max(len_filtered), num=9)
+        bin_labels = [f"{bins[i]:.2f} - {bins[i+1]:.2f}" for i in range(len(bins)-1)]
+        bin_map = {label: bins[i] for i, label in enumerate(bin_labels)}
+        sim_binned = np.digitize(len_filtered, bins, right=True)
+        sim_binned = [min(i, len(bin_labels)) for i in sim_binned]
+
+        # Creating a DataFrame for plotting
+        data = pd.DataFrame({
+            'Group': [bin_labels[i-1] for i in sim_binned],
+            'Value': ppl_filtered
+        })
+
+        # Add a numerical column for sorting
+        data['SortKey'] = data['Group'].map(bin_map)
+        data.sort_values('SortKey', inplace=True)
+
+        # Now use 'Group' for plotting labels but sort by 'SortKey'
+        sns.violinplot(ax=axes[0], x='Group', y='Value', data=data, order=sorted(data['Group'].unique(), key=lambda x: bin_map[x]))
+        axes[0].set_xlabel('Length')
+        axes[0].set_ylabel('ppl values')
+        axes[0].tick_params(axis='x', rotation=45)
+
+        # Histogram
+        sns.histplot(ax=axes[1], x=len_filtered, bins=bins, kde=False)
+        # axes[1, i].set_title(f'Histogram of {label}')
+        # axes[1, i].set_xlabel(label)
+        axes[1].set_ylabel('Count')
+        axes[1].set_xticks(bins)
+        axes[1].tick_params(axis='x', rotation=45)
+
+        plt.tight_layout()
+
+    # Create the directory if it doesn't exist
+    os.makedirs(f"violin/{exp_name}", exist_ok=True)
+    filename = f"violin/{exp_name}/{interval}_{mode}_len.png"
+    plt.savefig(filename)
+
 
 
 def draw_violin(sim_dict, ppl, ppl_success, hard, interval, exp_name):
@@ -229,15 +304,15 @@ def remove_outliers_iqr(data, multiplier=1.5, log=False):
     upper_bound = q3 + multiplier * iqr
 
     filtered_data = [x for x in data if lower_bound <= x <= upper_bound]
-    if log:
-        print(f"{len(data)-len(filtered_data)}/{len(data)} datapoints removed")
+    # if log:
+    #     print(f"{len(data)-len(filtered_data)}/{len(data)} datapoints removed")
     return filtered_data
 
 
 def load_json(path):
     with open(path) as f:
-        data = [json.loads(l.strip()) for l in f]
-        # data = json.load(f)
+        # data = [json.loads(l.strip()) for l in f]
+        data = json.load(f)
     return data
 
 
@@ -339,6 +414,7 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
     gen_freq_per_ex = []
     mem_learnability_per_ex = []
     gen_learnability_per_ex = []
+    gen_learnability_all_per_ex = []
     gen_learnability_easy_per_ex = []
     gen_learnability_hard_per_ex = []
     gen_success_learnability_easy_per_ex = []
@@ -380,13 +456,13 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
                 generalizability.append((1-min_ppl/init_ppl)*100)
 
                 # Freq analysis
-                freq_x, freq_y = spectrum_analysis(ppls[sp:sp+400])
-                freq = freq_x 
+                # freq_x, freq_y = spectrum_analysis(ppls[sp:sp+400])
+                # freq = freq_x 
                 if interval>0:
                     last_ppl=ppls[round(sp+interval)]
                 else:
                     last_ppl=ppls[sp+interval]
-                gen_freq_per_ex.append(freq_y)
+                # gen_freq_per_ex.append(freq_y)
                 gen_learnability_per_ex.append((1-last_ppl/init_ppl))
 
                 values_with_prev = ppls[train_idx[-1]-2:train_idx[-1]+margin]
@@ -402,6 +478,7 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
                     if check_success(values_with_prev):
                         success_count_hard += 1
                         gen_success_learnability_hard_per_ex.append((1-last_ppl/init_ppl))
+                gen_learnability_all_per_ex.append((1-last_ppl/init_ppl))
                 # gen_fluc_per_ex.append(1-last_ppl/min_ppl)
                 # segment = ppls[sp:sp+400]
                 # gen_fluc = calculate_fluc(segment)
@@ -476,9 +553,10 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
 
             mem_fluc_per_ex.append((train_ppl[round(500+interval)]-min_ppl)/abs(train_ppl[500]-min_ppl))
 
-    # draw_violin(similarity_easy_per_ex, gen_learnability_easy_per_ex, gen_success_learnability_easy_per_ex, hard=False, interval=args.interval, exp_name=args.exp_name[0][:-5])
-    # draw_violin(similarity_hard_per_ex, gen_learnability_hard_per_ex, gen_success_learnability_hard_per_ex, hard=True, interval=args.interval, exp_name=args.exp_name[0][:-5])
-    draw_violin_contain(contain, hard_contain, gen_learnability_easy_per_ex, gen_learnability_hard_per_ex, interval=args.interval, exp_name=args.exp_name[0][:-5])
+    draw_violin_len(gen_learnability_easy_per_ex, mode='easy', interval=args.interval, exp_name=args.exp_name[0][:-5], train_indices=train_indices)
+    draw_violin_len(gen_learnability_hard_per_ex, mode='hard', interval=args.interval, exp_name=args.exp_name[0][:-5], train_indices=train_indices)
+    draw_violin_len(gen_learnability_all_per_ex, mode='all', interval=args.interval, exp_name=args.exp_name[0][:-5], train_indices=train_indices)
+    # draw_violin_contain(contain, hard_contain, gen_learnability_easy_per_ex, gen_learnability_hard_per_ex, interval=args.interval, exp_name=args.exp_name[0][:-5])
 
     # remove outliers
     if not premem:
@@ -538,14 +616,14 @@ def measure_scores(result, train_indices, premem=False, interval=10000):
         # print(f"generalizability: mean {mean(generalizability)} / {statistics.pstdev(generalizability)}")
         # print(f"gen_learnability: {mean(gen_learnability_per_ex)}")
         # print(f"gen_learnability_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
-        print()
+        # print()
         print(f"gen_learnability_easy: {mean(gen_learnability_easy_per_ex)}")
         # print(f"gen_success_learnability_easy: {mean(gen_success_learnability_easy_per_ex)}")
         # print(f"gen_learnability_easy_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
         print()
         print(f"gen_learnability_hard: {mean(gen_learnability_hard_per_ex)}")
         # print(f"gen_success_learnability_hard: {mean(gen_success_learnability_hard_per_ex)}")
-        print()
+        # print()
         # print(f"easy success fraction: {success_count_easy/orig_len}")
         # print(f"hard success fraction: {success_count_hard/orig_len}")
         # print(f"gen_learnability_hard_stdev: {statistics.pstdev(gen_learnability_per_ex)}")
@@ -652,8 +730,8 @@ def main(args):
     measure_indices = range(156)
 
     results=[load_json(os.path.join(args.base_dir, 'results/logs/', exp_name)) for exp_name in args.exp_name]
-    with open(os.path.join(args.base_dir, 'results/logs/', args.text_log), 'r') as f:
-        text_log = json.load(f)
+    # with open(os.path.join(args.base_dir, 'results/logs/', args.text_log), 'r') as f:
+    #     text_log = json.load(f)
 
 
     
@@ -672,11 +750,13 @@ def main(args):
     # print(ref_texts)
 
     train_indices=[[] for i in range(len(ref_texts))]
-    for step, texts in tqdm(text_log.items()):
-        if int(step)<=100:
-            continue
-        for text in texts:
-            if wiki:
+    with open(args.text_log, 'r') as f:
+        train_indices = json.load(f)
+    # for step, texts in tqdm(text_log.items()):
+    #     if int(step)<=100:
+    #         continue
+    #     for text in texts:
+    #         if wiki:
                 # index = None
                 # for i, ref in enumerate(ref_texts):
                 #     # print(text[:128], ref[:128])
@@ -688,10 +768,16 @@ def main(args):
                 #     train_indices[index].append(int(step))
 
                 # Pre-computed
-                train_indices = [[], [442], [335], [238], [383], [], [377], [480], [468], [459], [357], [391], [227], [228], [166], [441], [355], [495], [], [332], [448], [302], [106], [156], [332], [334], [418], [182], [], [324], [], [491], [471], [], [389], [428], [], [346], [265], [222], [407], [], [332], [261], [401], [189], [114], [], [348], [357], [243], [398], [], [], [470], [], [495], [149], [], [314], [308], [], [277], [], [216], [500], [297], [352], [169], [170], [], [370], [202], [244], [232], [240], [148], [364], [439], [], [245], [261], [], [], [475], [208], [224], [476], [353], [], [179], [201], [487], [148], [306], [339], [450], [420], [274], [217], [182], [188], [457], [254], [], [372], [], [213], [474], [171], [], [479], [289], [], [186], [228], [440], [155], [113], [310], [404], [486], [360], [444], [309], [494], [123], [370], [171], [], [], [198], [422], [337], [226], [164], [], [247], [], [217], [404], [], [202], [268], [402], [334], [321], [404], [227], []]
-            else:
-                with open('precomputed_idx_64.json', 'r') as f:
-                    train_indices = json.load(f)
+                # train_indices = [[], [442], [335], [238], [383], [], [377], [480], [468], [459], [357], [391], [227], [228], [166], [441], [355], [495], [], [332], [448], [302], [106], [156], [332], [334], [418], [182], [], [324], [], [491], [471], [], [389], [428], [], [346], [265], [222], [407], [], [332], [261], [401], [189], [114], [], [348], [357], [243], [398], [], [], [470], [], [495], [149], [], [314], [308], [], [277], [], [216], [500], [297], [352], [169], [170], [], [370], [202], [244], [232], [240], [148], [364], [439], [], [245], [261], [], [], [475], [208], [224], [476], [353], [], [179], [201], [487], [148], [306], [339], [450], [420], [274], [217], [182], [188], [457], [254], [], [372], [], [213], [474], [171], [], [479], [289], [], [186], [228], [440], [155], [113], [310], [404], [486], [360], [444], [309], [494], [123], [370], [171], [], [], [198], [422], [337], [226], [164], [], [247], [], [217], [404], [], [202], [268], [402], [334], [321], [404], [227], []]
+            # else:
+            #     with open(args.text_log, 'r') as f:
+            #             train_indices = json.load(f)
+                # if '121' in args.text_log:
+                #     with open('precomputed_idx_64_121.json', 'r') as f:
+                #         train_indices = json.load(f)
+                # else:
+                #     with open('precomputed_idx_64.json', 'r') as f:
+                #         train_indices = json.load(f)
     #             try:
     #                 index = ref_texts.index(text)
     #                 train_indices[index].append(int(step))
@@ -708,9 +794,12 @@ def main(args):
     #             if index and index not in train_indices[index]:
     #                 train_indices[index].append(int(step))
     # print(len(train_indices))
-    # with open('precomputed_idx_64.json', 'w') as f:
-    #     json.dump(train_indices, f, indent=4)
-    # assert False
+    # if '121' in args.text_log:
+    #     with open('precomputed_idx_8_121.json', 'w') as f:
+    #         json.dump(train_indices, f, indent=4)
+    # else:
+    #     with open('precomputed_idx_64.json', 'w') as f:
+    #         json.dump(train_indices, f, indent=4)
     # assert False
 
     if args.mode=='draw_figures':
