@@ -25,8 +25,8 @@ parser.add_argument("--num_proc", type=int, default=1, help="the index of last b
 args = parser.parse_args()
 
 FILE_PATH = os.path.realpath(__file__)
-data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-1B.yaml")    
+data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-medium/wvc30anm/train_data/global_indices.npy")
+train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-7B.yaml")    
 cfg = TrainConfig.load(train_config_path)
 batch_size = cfg.global_train_batch_size
 global_indices = np.memmap(data_order_file_path, mode="r+", dtype=np.uint32)

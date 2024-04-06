@@ -3,26 +3,16 @@ import numpy as np
 
 from cached_path import cached_path
 from olmo.config import TrainConfig
-from olmo.data import build_memmap_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
-import time, os, json, re
+import os, json
 from tqdm import tqdm
-import multiprocessing as mp
-from functools import partial
 import parmap
 import itertools
 import argparse
 import pickle
 
 FILE_PATH = os.path.realpath(__file__)
-
-
-def create_shared_tensor(tensor):
-    # Create a shared tensor with the same size and dtype as the original tensor
-    shared_tensor = torch.zeros(tensor.size(), dtype=tensor.dtype).share_memory_()
-    shared_tensor.copy_(tensor)
-    return shared_tensor
 
 def flatten_dataset(dataset):
     tensors = []
@@ -88,9 +78,9 @@ def main(args):
     spans = [x.tolist() for x in np.array_split(total_span, args.num_proc)]
 
     entities = args.entities
-    # entities = ["Minjoon Seo", "Jinho Park", "Hoyeon Chang", "Seonghyeon Ye"]
+    print(f"entities : {entities}")
     dataset = load_dataset(args.data_path, args.start_idx, args.end_idx)
-    print('Done!')
+    # print('Done!')
     print('Flattening dataset to form shared tensors...')
     shared_tensors = flatten_dataset(dataset)
     del dataset
@@ -103,7 +93,7 @@ def main(args):
 
     for entity in entities:
         entity_result = [d for d in concatenated_result if d["entity"]==entity]
-        with open(os.path.join(os.path.dirname(FILE_PATH), f'results/{entity}-{args.start_idx}-{args.end_idx}.json'), 'w') as f:
+        with open(os.path.join(os.path.dirname(FILE_PATH), f'results/entity/7b/{entity}-{args.start_idx}-{args.end_idx}.json'), 'w') as f:
             json.dump(entity_result, f, indent=4)
     
 
@@ -114,15 +104,17 @@ if __name__=="__main__":
     parser.add_argument("--num_proc", type=int, default=64, help="number of processes")
     parser.add_argument("--entities", type=str, nargs='+', help="entity to search")
     parser.add_argument("--data_path", type=str, default="/home/hoyeon/extracted_dataset/7b", help="Path to the dataset")
+    parser.add_argument("--model_size", type=str, default="7b")
     
     args = parser.parse_args()
 
-
-    data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
-    train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-1B.yaml")    
-    # cfg = TrainConfig.load(train_config_path)
+    if args.model_size == "7b":
+        data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-medium/wvc30anm/train_data/global_indices.npy")
+        train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-7B.yaml")
+    else:   # OLMo-1b
+        data_order_file_path = cached_path("https://olmo-checkpoints.org/ai2-llm/olmo-small/46zc5fly/train_data/global_indices.npy")
+        train_config_path = os.path.join(os.path.dirname(FILE_PATH), "OLMo_config/OLMo-1B.yaml")
     batch_size = 2048
-    # batch_size = cfg.global_train_batch_size
 
     main(args)
     
