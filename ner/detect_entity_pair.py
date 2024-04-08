@@ -5,7 +5,9 @@ FILE_PATH = os.path.realpath(__file__)
 
 def main(args):
     json_path = glob.glob(os.path.join(os.path.dirname(FILE_PATH), f"results/entity/7b/{args.root_entity}*_refined.json"))
-    assert len(json_path) == 1, "Before run, you have to merge multiple json file"
+    if len(json_path) != 1:
+        raise Exception(f"Before run, you have to merge multiple json file : {json_path}")
+    # assert len(json_path) == 1, 
     json_path = json_path[0]
     start_idx = os.path.splitext(os.path.basename(json_path))[0].split("-")[1]
     end_idx = os.path.splitext(os.path.basename(json_path))[0].split("-")[2].split('_')[0]
@@ -15,7 +17,7 @@ def main(args):
     result = []
     for step in data:
         for candidate in args.candidates:
-            if candidate in step["passage"]:
+            if candidate.lower() in step["passage"].lower():
                 result.append({"entity_pair": f"{step['entity']} & {candidate}", "step": step["step"], "passage": step["passage"]})
 
     for candidate in args.candidates:
